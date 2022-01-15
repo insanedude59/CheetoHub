@@ -1,5 +1,4 @@
 --Credits: https://v3rmillion.net/showthread.php?tid=1153274
-
 local Library = {}
 
 local NeverloseVersion = "v1.1A."
@@ -238,7 +237,7 @@ function Library:Window(options)
         tabSection.Size = UDim2.new(0, 189, 0, 22)
 
         local function ResizeTS(num)
-            tabSection.Size += UDim2.new(0, 0, 0, num)
+            tabSection.Size = tabSection.Size + UDim2.new(0, 0, 0, num)
         end
 
         tabSectionLabel.Name = "tabSectionLabel"
@@ -399,7 +398,7 @@ function Library:Window(options)
                 sectionSizeConstraint.MinSize = Vector2.new(215, 35)
 
                 local function Resize(num)
-                    sectionSizeConstraint.MinSize += Vector2.new(0, num)
+                    sectionSizeConstraint.MinSize = sectionSizeConstraint.MinSize + Vector2.new(0, num)
                 end
 
                 local elements = {}
@@ -789,7 +788,7 @@ function Library:Window(options)
                         clickEffect({button = dropdownBtn, amount = 5})
 
                         Count = Count + 1
-                        dropdownList.ZIndex -= Count
+                        dropdownList.ZIndex = Count - Count
                         DropYSize = DropYSize + 18
 
                         dropdownBtn.MouseButton1Click:Connect(function()
