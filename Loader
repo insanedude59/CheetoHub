@@ -1,15 +1,12 @@
 local ids = {1962086868,2569453732,286090429,3102144307}
+local id
+
 for i,v in pairs(ids) do
-    if game.PlaceId == v then
-        local a = true
-        else
-            a = false
+    if game.PlaceId == ids[i] then
+        id = ids[i]
+        a = true
         if a == true then
-           loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/Main"))() 
-        end
-        if not a then
-            setclipboard("discord.gg/dXbARw9G")
-           game.Players.LocalPlayer:Kick("Cheeto Hub | Game not supported. Check back later and your game may be supported!")
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/Main"))() 
+            end
         end
     end
-end
