@@ -4,7 +4,5 @@ for i,v in pairs(ids) do
     if game.PlaceId == tonumber(v) then
         print('HELLO')
         loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..v))()
-        else
-            game.Players.LocalPlayer:Kick("Game not supported. Did you join the wrong game? If not then maybe come back some other time and your game may be supported.")
     end
 end
