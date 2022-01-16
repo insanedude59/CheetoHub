@@ -2121,6 +2121,7 @@ end)
 
 
 Tab1:AddButton( "Disable Anticheat",  function()
+    wait(0.1)
     for _,v in pairs(getgc()) do
     if type(v) == "function" and getfenv(v).script == game:GetService("Players").LocalPlayer.PlayerScripts.LocalScript then
         if debug.getinfo(v).name == "kick" then
@@ -2129,7 +2130,7 @@ Tab1:AddButton( "Disable Anticheat",  function()
         end
     end
 end
-
+wait(0.1)
 for _,v in pairs(getgc()) do
     if type(v) == "function" and getfenv(v).script == game:GetService("Players").LocalPlayer.PlayerScripts.LocalScript2 then
         if debug.getinfo(v).name == "FindFirstChild" then
@@ -2172,4 +2173,3 @@ game:GetService("UserInputService").JumpRequest:connect(function()
 	    end
     end)
 end)
-
