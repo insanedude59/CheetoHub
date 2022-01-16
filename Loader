@@ -4,7 +4,7 @@ for i,v in pairs(ids) do
         local a = true
         if a then
            loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/Main"))() 
-           else
+           elseif a == nil then
                game.Players.LocalPlayer:Kick("Cheeto Hub | Game not supported. Come back later and see if your script is supported.")
         end
     end
