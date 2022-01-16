@@ -2,10 +2,14 @@ local ids = {1962086868,2569453732,286090429,3102144307}
 for i,v in pairs(ids) do
     if game.PlaceId == v then
         local a = true
-        if a then
+        else
+            a = false
+        if a == true then
            loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/Main"))() 
-           elseif a == nil then
-               game.Players.LocalPlayer:Kick("Cheeto Hub | Game not supported. Come back later and see if your script is supported.")
+        end
+        if not a == true then
+            setclipboard("discord.gg/dXbARw9G")
+           game.Players.LocalPlayer:Kick("Cheeto Hub | Game not supported. Check back later and your game may be supported!")
         end
     end
 end
