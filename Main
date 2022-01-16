@@ -1,7 +1,7 @@
-local ids = {"1962086868","2569453732","286090429","3102144307"}
+local ids = {1962086868,2569453732,286090429,3102144307}
 
 for i,v in pairs(ids) do
-    if game.PlaceId == tonumber(v) then
+    if game.PlaceId == v then
         print('HELLO')
         loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..v))()
     end
