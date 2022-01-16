@@ -7,7 +7,7 @@ for i,v in pairs(ids) do
         if a == true then
            loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/Main"))() 
         end
-        if not a == true then
+        if not a then
             setclipboard("discord.gg/dXbARw9G")
            game.Players.LocalPlayer:Kick("Cheeto Hub | Game not supported. Check back later and your game may be supported!")
         end
