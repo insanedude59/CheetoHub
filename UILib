@@ -2017,10 +2017,7 @@ function library:AddWindow(title, options)
 				v.ZIndex = v.ZIndex + (windows * 10)
 			end
 		end
-		return library
 	end
 
 	return window_data, Window
 end
-
-
