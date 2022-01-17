@@ -72,7 +72,7 @@ end
 
 
 
-tab1:AddSwitch("Autofarm",function(value)
+tab1:AddSwitch("Autofarm Region",function(value)
     autofarm = value
         while autofarm  do wait()
         if not workspace:FindFirstChild("CombatFolder")  then
