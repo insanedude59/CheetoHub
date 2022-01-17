@@ -1,0 +1,171 @@
+local library = loadstring(game:HttpGet("http://cindering.xyz/message.txt"))()
+
+local Window = library:AddWindow("Ninja Legends")
+
+local tab1 = Window:AddTab("Main")
+local tab2 = Window:AddTab("Teleports")
+local tab3 = Window:AddTab("Eggs")
+local tab4 = Window:AddTab("Misc")
+local tab5 = Window:AddTab("Credits")
+tab5:AddLabel("slixx#001 for script hub")
+tab5:AddLabel("Singularity#5490 for UI library")
+tab5:AddButton("Copy Discord Invite To Clipboard",function()
+    if setclipboard then setclipboard("discord.gg/dXbARw9G") end
+end)
+
+local ranks = {}
+for i,v in pairs(game:GetService("ReplicatedStorage").Ranks.Ground:GetChildren()) do
+    table.insert(ranks,tostring(v))
+end
+
+
+
+
+local crystals = {}
+for i,v in pairs(game:GetService("ReplicatedStorage").gameCrystals:GetChildren()) do
+    table.insert(crystals,v)
+end
+
+
+
+
+local teleports = {}
+for i,v in pairs(game:GetService("Workspace").areaTeleportParts:GetChildren()) do
+    table.insert(teleports,v)
+end
+
+
+
+
+
+
+
+tab1:AddSwitch("Autofarm",function(value)
+    tog = value
+    while tog do wait(0.2)
+    local ohString1 = "swingKatana"
+
+game:GetService("Players").LocalPlayer.ninjaEvent:FireServer(ohString1)
+    end
+end)
+
+tab1:AddSwitch("Auto Sell x35",function(value)
+    sell = value
+    while sell do wait()
+        game:GetService("Workspace").sellAreaCircles.sellAreaCircle16.circleInner.CFrame = CFrame.new(50,50,50)
+    game:GetService("Workspace").sellAreaCircles.sellAreaCircle16.circleInner.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+
+    end
+end)
+
+
+
+tab1:AddSwitch("Auto Buy Swords",function(value)
+    sword = value
+    while sword do wait(0.2)
+local ohString1 = "buyAllSwords"
+local ohString2 = "Blazing Vortex Island"
+
+game:GetService("Players").LocalPlayer.ninjaEvent:FireServer(ohString1, ohString2)
+    end
+end)
+
+tab1:AddSwitch("Auto Buy Belts",function(value)
+    belts = value
+    while belts do wait(0.2)
+local ohString1 = "buyAllBelts"
+local ohString2 = "Blazing Vortex Island"
+
+game:GetService("Players").LocalPlayer.ninjaEvent:FireServer(ohString1, ohString2)
+    end
+end)
+
+
+tab1:AddSwitch("Auto Buy Ranks",function(value)
+    buyranks = value
+    while buyranks do wait(0.5)
+for i = 1,#ranks do 
+local ohString1 = "buyRank"
+local ohString2 = ranks[i]
+
+game:GetService("Players").LocalPlayer.ninjaEvent:FireServer(ohString1, ohString2)
+            end
+        end
+end)
+
+
+
+tab1:AddSwitch("Auto Buy Skills",function(value)
+    autobuyskills = value
+    while autobuyskills do wait(0.2)
+local ohString1 = "buyAllSkills"
+local ohString2 = "Blazing Vortex Island"
+
+game:GetService("Players").LocalPlayer.ninjaEvent:FireServer(ohString1, ohString2)
+    end
+end)
+
+
+
+
+
+local tp = tab2:AddDropdown("Teleport Islands",function(value)
+    selected = value
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(workspace.areaTeleportParts[selected].Position)
+end)
+for i = 1,#teleports do
+    tp:Add(teleports[i])
+end
+
+
+tab2:AddButton("Discover all Islands",function()
+    for i = 1,#teleports do 
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(teleports[i].Position)
+wait()
+    end
+end)
+
+
+local crystal = tab3:AddDropdown("Select Crystal",function(selected)
+    selectedcrystal = selected
+end)
+
+for i = 1,#crystals do
+    crystal:Add(crystals[i])
+end
+
+
+tab3:AddSwitch("Auto Open Crystal",function(value)
+    tog2 = value
+    while tog2 do wait(0.1)
+local ohString1 = "openCrystal"
+local ohString2 = selectedcrystal
+
+game:GetService("ReplicatedStorage").rEvents.openCrystalRemote:InvokeServer(ohString1, ohString2)
+    end
+end)
+
+
+
+tab4:AddSwitch("Collect Hoops",function(value)
+    tog3 = value
+        if tog3 == true then
+    for i,v in pairs(game:GetService("Workspace").Hoops:GetChildren()) do
+        v.touchPart.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+        wait(0.02)
+            end
+        end
+end)
+
+tab4:AddSwitch("Auto Collect Chests",function(value)
+    tog4 = value
+        if tog4 == true then
+            for i,v in pairs(game:GetService("Workspace"):GetChildren()) do
+            if string.match(v.Name,"Chest") and v:IsA("Model") then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.circleOuter.Position)
+                game.Players.LocalPlayer.Character.Humanoid.Jump = true
+                wait(0.5)
+                end
+            end
+        end
+end)
