@@ -1,7 +1,7 @@
 local lib = loadstring(game:HttpGet("http://cindering.xyz/message.txt"))()
 
 
-local Window = lib:AddWindow('Cheeto Hub | Critical Legends')
+local Window = lib:AddWindow('Critical Legends')
 
 local tab1 = Window:AddTab("Main")
 
@@ -32,9 +32,11 @@ end)
 tab1:AddSwitch("Auto Tp to Damage Sword Thing",function(value)
     tog2 = value
     while tog2 do wait()
+        if workspace:FindFirstChild("CombatFolder") then
     for i,v in pairs(game:GetService("Workspace").CombatFolder[game.Players.LocalPlayer.Name]:GetChildren()) do
         if v.Name == "SwordOrb" then
             rootpart.CFrame = CFrame.new(v.HitBox.Position)
+                end
             end
         end
     end
