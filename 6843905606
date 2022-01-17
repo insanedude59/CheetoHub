@@ -1,7 +1,7 @@
 local lib = loadstring(game:HttpGet("http://cindering.xyz/message.txt"))()
 
 
-local Window = lib:AddWindow('Critical Legends')
+local Window = lib:AddWindow('Cheeto Hub | Critical Legends')
 
 local tab1 = Window:AddTab("Main")
 
