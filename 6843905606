@@ -32,11 +32,9 @@ end)
 tab1:AddSwitch("Auto Tp to Damage Sword Thing",function(value)
     tog2 = value
     while tog2 do wait()
-        if workspace:FindFirstChild("CombatFolder") then
     for i,v in pairs(game:GetService("Workspace").CombatFolder[game.Players.LocalPlayer.Name]:GetChildren()) do
         if v.Name == "SwordOrb" then
             rootpart.CFrame = CFrame.new(v.HitBox.Position)
-                end
             end
         end
     end
@@ -74,7 +72,7 @@ end
 
 
 
-tab1:AddSwitch("Autofarm Region",function(value)
+tab1:AddSwitch("Autofarm",function(value)
     autofarm = value
         while autofarm  do wait()
         if not workspace:FindFirstChild("CombatFolder")  then
