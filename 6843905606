@@ -5,6 +5,10 @@ local Window = lib:AddWindow('Cheeto Hub | Critical Legends')
 
 local tab1 = Window:AddTab("Main")
 
+local tab2 = Window:AddTab("Teleports")
+
+
+
 local rootpart = game.Players.LocalPlayer.Character.HumanoidRootPart
 
 
@@ -93,3 +97,15 @@ tab1:AddSwitch("Autofarm Selected Region",function(value)
         end)
     end
 end)
+
+
+local thingy = tab2:AddDropdown("Select Teleport",function(selected)
+    teleport = selected
+    rootpart.CFrame = workspace.Enemies[tostring(teleport)].Enemy.EnemyLocation.CFrame + Vector3.new(25,0,25)
+    end)
+
+for i = 1,#region do
+    thingy:Add(region[i])
+end
+
+
