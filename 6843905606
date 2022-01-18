@@ -29,11 +29,11 @@ tab1:AddSwitch("Auto Chests",function(value)
     end
 end)
 
-tab1:AddSwitch("Auto Tp to Damage Sword Thing",function(value)
+tab1:AddSwitch("Auto Tp to Damage Orb",function(value)
     tog2 = value
     while tog2 do wait()
     for i,v in pairs(game:GetService("Workspace").CombatFolder[game.Players.LocalPlayer.Name]:GetChildren()) do
-        if v.Name == "SwordOrb" then
+        if string.match(tostring(v),"Orb") then
             rootpart.CFrame = CFrame.new(v.HitBox.Position)
             end
         end
@@ -71,7 +71,6 @@ end
 
 
 
-
 tab1:AddSwitch("Autofarm Selected Region",function(value)
     autofarm = value
         while autofarm  do wait()
@@ -86,7 +85,7 @@ tab1:AddSwitch("Autofarm Selected Region",function(value)
     spawn(function()
         if workspace:FindFirstChild("CombatFolder") and autofarm then
                 for i,v in pairs(game:GetService("Workspace").CombatFolder[game.Players.LocalPlayer.Name]:GetChildren()) do
-        if v.Name == "SwordOrb" then
+        if string.match(tostring(v),"Orb") then
             rootpart.CFrame = CFrame.new(v.HitBox.Position)
                     end
                 end
