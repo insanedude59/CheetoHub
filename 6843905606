@@ -110,12 +110,13 @@ tab1:AddSwitch("Autofarm Selected Region",function(value)
     end
 end)
 local thingy = tab2:AddDropdown("Select Teleport",function(selected)
-    ttt = selected
-    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = workspace.WorldMap[ttt]:GetModelCFrame()
+    teleport = selected
+    rootpart.CFrame = workspace.Enemies[tostring(teleport)].Enemy.EnemyLocation.CFrame + Vector3.new(25,0,25)
     end)
+
 for i = 1,#region do
     thingy:Add(region[i])
-    end
+end
 
 local thingy2 = tab3:AddDropdown("Select Style",function(selected)
     selectedstyle = selected
