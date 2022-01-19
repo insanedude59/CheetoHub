@@ -1,12 +1,11 @@
-local ids = {1962086868,918677693,286090429,3102144307,3956818381,6843905606}
-local id
+pcall(function()
+   if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId) then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId))()
+    end 
+end)
 
-for i,v in pairs(ids) do
-    if game.PlaceId == ids[i] or game.GameId == ids[i] then
-        id = ids[i]
-        a = true
-        if a == true then
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/Main"))() 
-            end
-        end
+pcall(function()
+if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.GameId) then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.GameId))()
     end
+end)
