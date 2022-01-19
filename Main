@@ -1,1 +1,2 @@
- loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId))()
+ local thing = loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId))() or  loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.GameId))()
+
