@@ -1,8 +1,8 @@
-local ids = {1962086868,2569453732,286090429,3102144307,3956818381,6843905606}
+local ids = {1962086868,918677693,286090429,3102144307,3956818381,6843905606}
 local id
 
 for i,v in pairs(ids) do
-    if game.PlaceId == ids[i] then
+    if game.PlaceId == ids[i] or game.GameId == ids[i] then
         id = ids[i]
         a = true
         if a == true then
