@@ -10,7 +10,7 @@ local tab2 = Window:AddTab("Teleports")
 local tab3 = Window:AddTab("Combat Style Changer")
 
 local styles = {}
-for i,v in pairs(game:GetService("ReplicatedStorage")["CS_Keys"]["CS_Storage_Key"]:GetChildren()) do
+for i,v in pairs(game:GetService("ReplicatedStorage")["CS_Icon_Key"]:GetChildren()) do
     table.insert(styles,v.Name)
 end
 
@@ -38,7 +38,7 @@ tab1:AddSwitch("Auto Chests",function(value)
     while chest do wait(0.1)
         for i,v in pairs(game:GetService("Workspace").Chests:GetChildren()) do
             if not v:FindFirstChildOfClass("IntValue") then
-            rootpart.CFrame = CFrame.new(v.Giver.Position)
+            rootpart.CFrame = CFrame.new(v:FindFirstChild("Giver").Position)
             wait()
             end
         end
@@ -123,10 +123,10 @@ local thingy2 = tab3:AddDropdown("Select Style",function(selected)
 end)
 
 for i = 1,#styles do
-    thingy2:Add(tostring(game.ReplicatedStorage["CS_Keys"]["CS_Storage_Key"][styles[i]].Value))
+    thingy2:Add(tostring(game:GetService("ReplicatedStorage")["CS_Icon_Key"][styles[i]].Value))
 end
 tab3:AddButton("Change Style",function()
-    for i,v in pairs(game:GetService("ReplicatedStorage")["CS_Keys"]["CS_Storage_Key"]:GetChildren()) do
+    for i,v in pairs(game:GetService("ReplicatedStorage")["CS_Icon_Key"]:GetChildren()) do
         if v.Value == selectedstyle then
     local ohString1 = "CombatStyle"
 local ohTable2 = {
