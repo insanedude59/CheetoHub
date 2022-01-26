@@ -1,0 +1,190 @@
+--Anime Fighting Simulator
+
+local library = loadstring(game:HttpGet("http://cindering.xyz/message.txt"))()
+local win = library:AddWindow('Cheeto Hub | Anime Fighters Simulator')
+
+local tab1 = win:AddTab("Main")
+
+local eggs = {}
+for i,v in pairs(game:GetService("Workspace").Shops:GetChildren()) do
+    if v.Name:match("SaiyanPod") then
+        table.insert(eggs,tostring(v))
+    end
+end
+
+table.sort(eggs)
+
+local zones = {}
+for i,v in pairs(game:GetService("Workspace").MiscModels:GetChildren()) do
+    table.insert(zones,v)
+end
+
+
+
+local autofarms = tab1:AddFolder("Autofarms")
+
+local eggsthing = tab1:AddFolder("Auto Egg")
+
+local teleports = tab1:AddFolder("Zone Teleports")
+
+autofarms:AddSwitch("Auto Farm Physical Strength",function(value)
+    tog = value
+    while tog do wait()
+        
+local ohString1 = "SpecialAction"
+local ohTable2 = {
+	["Request"] = "Click"
+}
+
+game:GetService("ReplicatedStorage").RSPackage.Events.GeneralEvent:FireServer(ohString1, ohTable2)
+
+
+local ohString1 = "Stat"
+local ohString2 = "Strength"
+
+game:GetService("ReplicatedStorage").RSPackage.Events.StatFunction:InvokeServer(ohString1, ohString2)
+    end
+end)
+
+autofarms:AddSwitch("Auto Farm Durability",function(value)
+    tog2 = value
+    while tog2 do wait()
+local ohString1 = "SpecialAction"
+local ohTable2 = {
+	["Request"] = "Click"
+}
+
+game:GetService("ReplicatedStorage").RSPackage.Events.GeneralEvent:FireServer(ohString1, ohTable2)
+
+
+local ohString1 = "Stat"
+local ohString2 = "Durability"
+
+game:GetService("ReplicatedStorage").RSPackage.Events.StatFunction:InvokeServer(ohString1, ohString2)
+    end
+end)
+
+
+
+
+
+autofarms:AddSwitch("Auto Farm Chakra",function(value)
+    tog3 = value
+    while tog3 do wait()
+local ohString1 = "SpecialAction"
+local ohTable2 = {
+	["Request"] = "Click"
+}
+
+game:GetService("ReplicatedStorage").RSPackage.Events.GeneralEvent:FireServer(ohString1, ohTable2)
+
+
+local ohString1 = "Stat"
+local ohString2 = "Chakra"
+
+game:GetService("ReplicatedStorage").RSPackage.Events.StatFunction:InvokeServer(ohString1, ohString2)
+    end
+end)
+
+
+
+
+autofarms:AddSwitch("Auto Farm Sword Skill (Have sword equipped)",function(value)
+    tog4 = value
+    while tog4 do wait()
+local ohString1 = "SpecialAction"
+local ohTable2 = {
+	["Request"] = "Click"
+}
+
+game:GetService("ReplicatedStorage").RSPackage.Events.GeneralEvent:FireServer(ohString1, ohTable2)
+
+
+local ohString1 = "Stat"
+local ohString2 = "Sword"
+game:GetService("ReplicatedStorage").RSPackage.Events.StatFunction:InvokeServer(ohString1, ohString2)
+    end
+end)
+
+
+
+autofarms:AddSwitch("Auto Farm Agility",function(value)
+    tog5 = value
+    while tog5 do wait()
+        game.Players.LocalPlayer.Character.Humanoid.Jump = true
+    end
+end)
+
+autofarms:AddSwitch("Auto Farm Speed",function(value)
+    originalpos = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+    tog6 = value
+        if tog6 == true then
+            local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+ 
+local localPlayer = Players.LocalPlayer
+ 
+RunService:BindToRenderStep("move",
+    Enum.RenderPriority.Character.Value + 1,
+    function()
+   	 if localPlayer.Character then
+   		 local humanoid = localPlayer.Character:FindFirstChild("Humanoid")
+   		 if humanoid and tog6 == true then
+   			 humanoid:Move(Vector3.new(0, 0, -1), true)
+           	    end
+   	        end
+        end)
+    else
+        RunService:UnbindFromRenderStep("move")
+    end
+end)
+
+
+autofarms:AddSwitch("Auto Collect Rewards",function(value)
+    ss = value
+    if ss == true then 
+    for i,v in pairs(game:GetService("Workspace").Scriptable.Rewards:GetChildren()) do
+        if v.Name == "Part" then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.Position)
+            wait()
+            end
+        end
+    end
+end)
+
+
+local selectegg = eggsthing:AddDropdown("Select Egg",function(value)
+    selected = value
+end)
+for i = 1,#eggs do
+    selectegg:Add(eggs[i])
+end
+
+
+eggsthing:AddSwitch("Auto Open Egg",function(value)
+    eggtog = value
+    while eggtog do wait()
+        for i,v in next,eggs do
+            if eggs[i] == selected then
+local ohString1 = "ChOb"
+local ohNumber2 = i
+
+game:GetService("ReplicatedStorage").RSPackage.Events.GeneralFunction:InvokeServer(ohString1, ohNumber2)
+            end
+        end
+    end
+end)
+
+local teleportdrop = teleports:AddDropdown("Teleport to Zone",function(value)
+    selected = value
+    for i = 1,#zones do
+        if tostring(zones[i]) == tostring(selected) then
+           local cframe = zones[i]:GetModelCFrame()
+           game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = cframe + Vector3.new(0,5,0)
+        end
+    end
+end)
+
+for i = 1,#zones do
+   teleportdrop:Add(zones[i])
+end
