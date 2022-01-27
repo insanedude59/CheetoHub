@@ -1,42 +1,53 @@
 local library = loadstring(game:HttpGet("http://cindering.xyz/message.txt"))()
 
-local window = library:AddWindow('Cheeto Hub | Clicker Simulator')
+local window = library:AddWindow('Cheeto Hub | Weapon Fighting Simulator')
 
 local tab1 = window:AddTab("Main")
 
 
 local folder1 = tab1:AddFolder("Farms")
 
+folder1:AddSwitch("Autofarm",function(value)
+    tog = value
+        function closest()
+				local dist = math.huge 
+				local target = nil 
+				for i,v in pairs (game:GetService("Workspace").Fight.ClientChests:GetChildren()) do
+							local magnitude = (v.Root.Position - game.Players.LocalPlayer.Character.Head.Position).magnitude
+							if magnitude < dist then
+								dist = magnitude
+								target = v
+						end
+				    end
+			return target
+        end
+        local selected = closest()
+     
 
-folder1:AddSwitch("Auto Collect Coins",function(value)
-  tog = value
-    while tog do wait(0.1)
-for i,v in pairs(game:GetService("Workspace").Map.Coins:GetChildren()) do
-    if v then
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
-        wait(0.5)
-        game.Players.LocalPlayer.Character.Humanoid.Jump = true
-        wait(1.5)
-            end
+
+        spawn(function()
+        while tog do wait()
+        if selected == nil then
+            selected = closest()
         end
     end
 end)
+   spawn(function()
+    while tog == true do wait()
+local ohNumber1 = 0
+local ohString2 = tostring(selected)
 
-
-folder1:AddSwitch("Get Gamepasses (Might be client-sided)",function(value)
-gamepasses = value
-for i,v in pairs(game:GetService("ReplicatedStorage").userData[game.Players.LocalPlayer.Name.."'s Data"].Gamepasses:GetChildren()) do
-if gamepasses == true then
-    v.Value = true
-    else
-        v.Value = false
+workspace.Fight.Events.FightAttack:InvokeServer(ohNumber1, ohString2)
         end
-    end
+    end)
 end)
 
-folder1:AddButton("Discover all Areas (Gives Money)",function()
-for i,v in pairs(game:GetService("Workspace").DiscoveryZones:GetChildren()) do
-    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
-    wait(0.5)
+folder1:AddSwitch("Auto Collect",function(value)
+    tog2 = value
+    while tog2 do wait()
+        for i,v in pairs(game:GetService("Workspace").Rewards:GetChildren()) do
+            v.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+            game.Players.LocalPlayer.Character.Humanoid.Jump = true
+        end
     end
 end)
