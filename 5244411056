@@ -1,0 +1,45 @@
+
+
+function firebutton(button)
+   for i,signal in next, getconnections(button.MouseButton1Click) do
+     signal:Fire()
+   end
+   for i,signal in next, getconnections(button.MouseButton1Down) do
+     signal:Fire()
+   end
+   for i,signal in next, getconnections(button.Activated) do
+     signal:Fire()
+   end
+ end
+
+
+
+
+
+local library = loadstring(game:HttpGet("http://cindering.xyz/message.txt"))()
+
+local Window = library:AddWindow("Cheeto Hub | OP Ninja Sim")
+
+local tab1 = Window:AddTab("Main")
+
+tab1:AddSwitch("Auto Marker",function(value)
+    tog = value
+ local cards = game:GetService("Players").LocalPlayer.PlayerGui.Bingo.StaticDisplayArea.Cards
+while tog do
+   wait(2)
+   for i,v in pairs(cards.PlayerArea.Cards.Container.SubContainer:GetDescendants()) do
+   if (v:IsA("TextButton") or v:IsA("ImageButton"))then
+           firebutton(v)
+            end
+        end
+    end
+end)
+
+tab1:AddSwitch("Auto Bingo",function(value)
+    tog2 = value
+    while tog2 do wait(0.1)
+     for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.Bingo.StaticDisplayArea.Cards.PlayerArea.Cards.Container.SubContainer.Buttons:GetChildren()) do
+           firebutton(v.Parent.ClaimButton)
+        end
+    end
+end)
