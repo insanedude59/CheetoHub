@@ -1,7 +1,7 @@
 --Anime Fighting Simulator
 
 local library = loadstring(game:HttpGet("http://cindering.xyz/message.txt"))()
-local win = library:AddWindow('Cheeto Hub | Anime Fighters Simulator')
+local win = library:AddWindow('Cheeto Hub | Anime Fighting Simulator')
 
 local tab1 = win:AddTab("Main")
 
