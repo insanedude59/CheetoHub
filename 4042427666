@@ -5,6 +5,8 @@ local win = library:AddWindow('Cheeto Hub | Anime Fighting Simulator')
 
 local tab1 = win:AddTab("Main")
 
+local tab2 = win:AddTab("Player")
+
 local eggs = {}
 for i,v in pairs(game:GetService("Workspace").Shops:GetChildren()) do
     if v.Name:match("SaiyanPod") then
@@ -188,3 +190,19 @@ end)
 for i = 1,#zones do
    teleportdrop:Add(zones[i])
 end
+
+
+tab2:AddTextBox("WalkSpeed",function(value)
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
+end)
+
+
+tab2:AddTextBox("JumpPower",function(value)
+    game.Players.LocalPlayer.Character.Humanoid.JumpPower = value
+end)
+
+tab2:AddSwitch("Inf Jump",function(value)
+    
+end)
+
+
