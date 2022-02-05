@@ -201,8 +201,6 @@ tab2:AddTextBox("JumpPower",function(value)
     game.Players.LocalPlayer.Character.Humanoid.JumpPower = value
 end)
 
-tab2:AddSwitch("Inf Jump",function(value)
-    
-end)
+
 
 
