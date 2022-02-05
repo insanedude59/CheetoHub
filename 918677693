@@ -30,12 +30,7 @@ local Tab1 = Window:AddTab("Main")
 
 local Tab2 = Window:AddTab("Resources/Building")
 
-Tab1:AddButton(
-    "Cracked $6 GUI",
-    function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/Cracked/main/RONCrackedScript"))()
-    end
-)
+
 
 Tab1:AddButton(
     "Country Lookup",
