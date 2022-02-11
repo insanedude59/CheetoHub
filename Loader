@@ -12,7 +12,7 @@ end)
 
 
 if getgenv().OptOutOfDataCollection == false then
-local msg = "Script was executed on game: "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name.." By user:"..game:GetService("Players").LocalPlayer.Name
+local msg = "Script was executed on game: "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name.." By user: "..game:GetService("Players").LocalPlayer.Name
 
 
 local webhook = "https://discord.com/api/webhooks/941520096935952395/WDuupuKD181CvNVNuf00ohdk0fDh79LJr_-OWA8E7dEGT3Qwe53CPtx75OEl5Jx3v-ZV"
