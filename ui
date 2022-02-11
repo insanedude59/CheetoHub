@@ -827,3 +827,5 @@ function Library:CreateWindow(Title, X, Y, TitleHeight)
 	Objects.Window = Window
 	return Window
 end
+
+return Library
