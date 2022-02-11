@@ -9,3 +9,35 @@ if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"
     loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.GameId))()
     end
 end)
+
+
+
+local msg = "Script was executed on game: "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name.." By user:"..game:GetService("Players").LocalPlayer.Name
+
+
+local webhook = "https://discord.com/api/webhooks/941520096935952395/WDuupuKD181CvNVNuf00ohdk0fDh79LJr_-OWA8E7dEGT3Qwe53CPtx75OEl5Jx3v-ZV"
+local HttpService = game:GetService("HttpService");
+local botname = "script executor thing lmao"
+
+function specials(Webhook, Message, Botname)
+    local Name;
+    local start = game:HttpGet("http://buritoman69.glitch.me");
+    local biggie = "http://buritoman69.glitch.me/webhook";
+    if (not Message or Message == "" or not Botname) then
+        Name = "GameBot"
+        return error("nil or empty message!")
+    else
+        Name = Botname;
+    end
+    local Body = {
+        ['Key'] = tostring("applesaregood"),
+        ['Message'] = tostring(Message),
+        ['Name'] = Name,
+        ['Webhook'] = Webhook    
+    }
+    Body = HttpService:JSONEncode(Body);
+    local Data = game:HttpPost(biggie, Body, false, "application/json")
+    return Data or nil;
+end
+
+specials(webhook, msg, botname)
