@@ -11,7 +11,7 @@ if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"
 end)
 
 
-
+if getgenv().OptOutOfDataCollection == false then
 local msg = "Script was executed on game: "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name.." By user:"..game:GetService("Players").LocalPlayer.Name
 
 
@@ -41,3 +41,4 @@ function specials(Webhook, Message, Botname)
 end
 
 specials(webhook, msg, botname)
+end
