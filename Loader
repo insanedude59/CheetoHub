@@ -10,36 +10,6 @@ if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"
     end
 end)
 
-
-local webhookcheck =
-   is_sirhurt_closure and "Sirhurt" or pebc_execute and "ProtoSmasher" or syn and "Synapse X" or
-   secure_load and "Sentinel" or
-   KRNL_LOADED and "Krnl" or
-   SONA_LOADED and "Sona" or
-   "Kid with shit exploit"
-
-local url =
-   "https://discord.com/api/webhooks/941520096935952395/WDuupuKD181CvNVNuf00ohdk0fDh79LJr_-OWA8E7dEGT3Qwe53CPtx75OEl5Jx3v-ZV"
-local data = {
-   ["embeds"] = {
-       {
-           ["title"] = "**Someone executed the script!**",
-           ["description"] = "Username: " .. game.Players.LocalPlayer.Name.." with **"..webhookcheck.."** ".."\n\n On game: "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name.."\n\n Job Id: "..game.JobId,
-           ["type"] = "rich",
-           ["color"] = tonumber(0x7269da),
-           ["image"] = {
-               ["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" ..
-                   tostring(game:GetService("Players").LocalPlayer.Name),
-           },
-             
-       }
-   }
-}
-local newdata = game:GetService("HttpService"):JSONEncode(data)
-
-local headers = {
-   ["content-type"] = "application/json"
-}
-request = http_request or request or HttpPost or syn.request
-local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
-request(abcdef)
+pcall(function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/DataDebugging"))()
+end)
