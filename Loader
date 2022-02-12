@@ -85,3 +85,7 @@ if a == false or b == false then
     game.Players.LocalPlayer:Kick("Game not supported. Check back later and see if the game is supported. discord.gg/cVwTrPUHph")
     setclipboard("discord.gg/cVwTrPUHph")
 end
+
+
+Blacklisted = {}
+
