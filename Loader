@@ -16,9 +16,8 @@ if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"
     end
 end)
 
- pcall(function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/DataDebugging"))()
-end)
+
 
 
 if a == false or b == false then
