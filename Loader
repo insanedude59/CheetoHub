@@ -18,6 +18,7 @@ if ip == v then
    end
 end)
 
+Blacklisted = {}
 
 pcall(function()
    if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId) then
@@ -85,6 +86,4 @@ if a == false or b == false then
     setclipboard("discord.gg/cVwTrPUHph")
 end
 
-
-Blacklisted = {}
 
