@@ -53,7 +53,8 @@ if debounce == true then
 
 
 local url =
-   "https://discord.com/api/webhooks/941520096935952395/WDuupuKD181CvNVNuf00ohdk0fDh79LJr_-OWA8E7dEGT3Qwe53CPtx75OEl5Jx3v-ZV"
+   "https://discord.com/api/webhooks/942207985755762758/gk4H6SEk8U87pCNg3Eya94lh229jJOJDsjwTSaxhluqubMBhrPxitBsOReGmAmyl1AGy"
+   
 local data = {
    ["embeds"] = {
        {
