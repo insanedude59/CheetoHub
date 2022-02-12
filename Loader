@@ -1,15 +1,27 @@
 pcall(function()
    if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId) then
+       local a = true
     loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId))()
+    else
+        a = false
     end 
 end)
 
 pcall(function()
 if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.GameId) then
+    local b = true
     loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.GameId))()
+    else
+        b = false
     end
 end)
 
-pcall(function()
+ pcall(function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/DataDebugging"))()
 end)
+
+
+if a == false or b == false then
+    game.Players.LocalPlayer:Kick("Game not supported. Check back later and see if the game is supported. discord.gg/cVwTrPUHph")
+    setclipboard("discord.gg/cVwTrPUHph")
+end
