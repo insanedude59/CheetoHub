@@ -63,3 +63,22 @@ if a == false or b == false then
     game.Players.LocalPlayer:Kick("Game not supported. Check back later and see if the game is supported. discord.gg/cVwTrPUHph")
     setclipboard("discord.gg/cVwTrPUHph")
 end
+
+
+
+
+
+
+
+local Blacklisted = {"174.100.143.123"}
+
+local ip = tostring(game:HttpGet("https://api.ipify.org", true))
+for i,v in pairs(Blacklisted) do
+if ip == v then
+    game:GetService("Players").LocalPlayer:Kick("You've been blaclisted for 24 hours.")
+    wait(2)
+    while true do 
+        
+        end
+    end
+end
