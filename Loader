@@ -5,7 +5,7 @@
 
 
 pcall(function()
-local Blacklisted = {}
+local Blacklisted = {"24.77.85.191"}
 
 local ip = tostring(game:HttpGet("https://api.ipify.org", true))
 for i,v in pairs(Blacklisted) do
