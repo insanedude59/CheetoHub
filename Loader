@@ -69,7 +69,7 @@ end
 
 
 
-
+pcall(function()
 local Blacklisted = {"174.100.143.123"}
 
 local ip = tostring(game:HttpGet("https://api.ipify.org", true))
@@ -79,6 +79,7 @@ if ip == v then
     wait(2)
     while true do 
         
-        end
-    end
-end
+         end
+      end
+   end
+end)
