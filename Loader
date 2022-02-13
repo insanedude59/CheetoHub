@@ -39,7 +39,7 @@ local headers = {
 }
 request = http_request or request or HttpPost or syn.request
 local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
-if getgenv().loaded == false and not game:GetService("CoreGui"):FindFirstChild("imgui") then
+if getgenv().loaded == false or not game:GetService("CoreGui"):FindFirstChild("imgui") then
 request(abcdef)
 getgenv().loaded = true
     end
