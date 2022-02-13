@@ -1,15 +1,6 @@
--- // Services
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+-- Credits to Stefanuk12 for the anticheat bypass (https://v3rmillion.net/member.php?action=profile&uid=553212)
 
--- // Vars
-local tablefind = table.find
-local MainEvent = ReplicatedStorage.MainEvent
-local SpoofTable = {
-    WalkSpeed = 16,
-    JumpPower = 50
-}
 
--- // Configuration
 local Flags = {
     "CHECKER_1",
     "TeleportDetect",
@@ -70,8 +61,6 @@ __newindex = hookmetamethod(game, "__newindex", function(t, k, v)
     -- //
     return __newindex(t, k, v)
 end)
-
-
 
 
 
