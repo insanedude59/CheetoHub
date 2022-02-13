@@ -1,13 +1,39 @@
 
+--Tower of Hell 1962086868
 
--- bypasses (humanoid,walkspeed, godmode)
+
+
+-- bypasses
+
+
+for _,v in pairs(getgc()) do
+    if type(v) == "function" and getfenv(v).script == game:GetService("Players").LocalPlayer.PlayerScripts.LocalScript then
+        if debug.getinfo(v).name == "kick" then
+        hookfunction(v, function(...)
+            end)
+        end
+    end
+end
+wait(0.1)
+for _,v in pairs(getgc()) do
+    if type(v) == "function" and getfenv(v).script == game:GetService("Players").LocalPlayer.PlayerScripts.LocalScript2 then
+        if debug.getinfo(v).name == "FindFirstChild" then
+        hookfunction(v, function(...)
+                end)
+            end
+        end
+end
+
+
+
+
 function godmode()
 local mt = getrawmetatable(game)
 setreadonly(mt,false)
 local old = mt.__index
 mt.__index = newcclosure(function(self,vis)
     if self == "kills" and vis == "Parent" then
-        return vis.Parent
+        return nil
     end
     return old(self,vis)
 end)
@@ -37,164 +63,80 @@ mt.__index = newcclosure(function(self,ww)
     return old(self,ww)
 end)
 
+
 local library = loadstring(game:HttpGet("http://cindering.xyz/message.txt"))()
 
 
-
-local tb = {}
-
-for i,v in pairs(game:GetService("Workspace").Eggs:GetChildren()) do
-    table.insert(tb,v)
-end
+local Window = library:AddWindow("Cheeto Hub | Tower of Hell")
 
 
+local Tab1 = Window:AddTab("Main")
 
 
-local upgrades = {}
-for i,v in pairs(require(game:GetService("ReplicatedStorage").Library.Modules.Upgrades)) do
-    table.insert(upgrades,i)
-end
-
-
-local bosses = {}
-for i,v in pairs(game:GetService("Workspace").BossZones:GetChildren()) do
- table.insert(bosses,v)
-end
+local Tab2 = Window:AddTab("Misc")
 
 
 
 
 
-local teleport = {}
-
-
-for i,v in pairs(game:GetService("Workspace").Worlds:GetChildren()) do
-    table.insert(teleport,v)
-end
-
-local thing = {}
-
-for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.Frames.Rebirths.ImageLabel.Tabs.Rebirths:GetChildren()) do
-    if v:IsA("ImageButton") then
-table.insert(thing,v.InfoLabel.Text)
-wait()
+Tab1:AddSwitch("Godmode", function(s)
+        for i,v in pairs(workspace.tower:GetDescendants()) do
+            if v.Name == "kills" then
+                print(v.Parent)
+                v:Destroy()
+            end
         end
+end)
+
+
+
+
+Tab1:AddButton( "Tp to Top",  function()
+local ts = game:GetService("TweenService")
+for i,v in pairs(workspace:GetDescendants()) do
+    if v.Name == "start" and v.Parent.Parent.Name == "sections" then
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.Position)
+        wait()
     end
-
-local Window = library:AddWindow("Cheeto Hub | Anime Clickers | RightShift UI Toggle Key", {
-		main_color = Color3.fromRGB(41, 74, 122),
-		min_size = Vector2.new(500, 600),
-		toggle_key = Enum.KeyCode.RightControl,
-		can_resize = true,
-	})
-
-local tab1 = Window:AddTab("Main")
-local tab2 = Window:AddTab("Egg")
-local tab3 = Window:AddTab("Teleports")
-local tab4 = Window:AddTab("Rebirth")
-local tab5 = Window:AddTab("Upgrades")
-
-
-tab1:AddSwitch( "Auto Click",function(value)
-   autoclick = value
-while autoclick do wait(0.1)
-local ohBoolean1 = true
-local ohString2 = "Clicker!"
-
-game:GetService("ReplicatedStorage").Remotes.ClickRemote:FireServer(ohBoolean1, ohString2)
-    end
-end)
-
-local selectauto = tab1:AddDropdown("Select Auto Click Boss",function(selected)
-    boss = selected
-end)
-
-for i = 1,#bosses do
-    local upd = selectauto:Add(bosses[i])
-end
-
-tab1:AddSwitch("Auto Click Boss",function(value)
-    clickboss = value
-    while clickboss do wait(0.1)
-local ohBoolean1 = true
-local ohString2 = "Clicker!"
-local ohString3 =  boss
-
-game:GetService("ReplicatedStorage").Remotes.ClickRemote:FireServer(ohBoolean1, ohString2, ohString3)
-    end
-end)
-
-
-
-local dropdown = tab2:AddDropdown("Select Egg to Open", function(text)
-  selected = text
-end)
-for i = 1,#tb do
-local a = dropdown:Add(tb[i])
 end
 
 
-tab2:AddSwitch("Auto Egg Open",function(value)
-    autoopen = value
-    while autoopen do wait(0.1)
-local ohString1 = selected
-local ohBoolean2 = false
-local ohBoolean3 = false
-
-game:GetService("ReplicatedStorage").Remotes.OpenEgg:InvokeServer(ohString1, ohBoolean2, ohBoolean3)
-    end
+ts:Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new(1, Enum.EasingStyle.Linear), {CFrame = game:GetService("Workspace").tower.finishes:FindFirstChild("Finish").CFrame}):Play()
 end)
 
 
 
 
 
-local ports = tab3:AddDropdown("Teleports",function(text)
-    teleports = text
-    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(game:GetService("Workspace").Worlds[teleports].Spawn.Position)
-    
-end)
-for i = 1,#teleport do
-local a = ports:Add(teleport[i])
-end
 
-
-local rebirths = tab4:AddDropdown("Select Auto Rebirth",function(text)
-    rebirth = text
-
-end)
-
-    for i,v in pairs(thing) do
-    local hello = rebirths:Add(thing[i])
-end
-
-
-
-
-tab4:AddSwitch("Auto Rebirth",function(value)
-    tog2 = value
-    while tog2 do wait()
-    for i = 1,#rebirth do
-    local ohNumber1 = #rebirth - i
-game:GetService("ReplicatedStorage").Remotes.RebirthRemote:FireServer(ohNumber1)
+Tab1:AddButton( "Delete all Kill Parts",  function()
+      for k,v in pairs(game:GetService("Workspace").tower:GetDescendants()) do
+    if string.match(v.Name,"kill") then
+        print(v)
+        v:Destroy()
         end
     end
 end)
-    
-tab4:AddLabel("Reexecute the script if you upgrade your rebirths. It doesn't auto update")
-tab4:AddLabel("because there's no update dropdown function in the UI library.")
+
+Tab2:AddTextBox("WalkSpeed", function(text)
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = text
+		end, {
+			["clear"] = false, -- Default: true (options are optional)
+		})
+
+Tab2:AddTextBox("JumpPower", function(text)
+		game.Players.LocalPlayer.Character.Humanoid.JumpPower = text
+		end, {
+			["clear"] = false, -- Default: true (options are optional)
+		})
 
 
-local  upgradedropdown = tab5:AddDropdown("Select Upgrade",function(selectedd)
-    selectedupgrade = selectedd
-end)
 
-for i = 1,#upgrades do
-local thingwingy = upgradedropdown:Add(upgrades[i])
-end
-
-tab5:AddSwitch("Auto Upgrade",function(value)
-local ohString1 = selectedupgrade
-
-game:GetService("ReplicatedStorage").Remotes.RequestUpgrade:FireServer(ohString1)
+Tab2:AddSwitch( "Inf Jump",  function(value)
+    tog = value
+game:GetService("UserInputService").JumpRequest:connect(function()
+	if tog == true then
+		game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
+	    end
+    end)
 end)
