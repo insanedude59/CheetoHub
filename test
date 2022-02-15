@@ -222,6 +222,21 @@ end)
 getgenv().loaded = true
 
 
+if game.PlaceId == 8204899140 then
+        getgenv().a = true
+        getgenv().b = true
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId))()
+    end
+    
+
+
+
+if getgenv().a == false or getgenv().b == false then
+    
+    game.Players.LocalPlayer:Kick("Game not supported. Check back later and see if the game is supported. discord.gg/cVwTrPUHph")
+    setclipboard("discord.gg/cVwTrPUHph")
+        end
+
 
 
 if a == false or b == false then
@@ -274,9 +289,12 @@ if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"
         getgenv().b = false
     end
 end)
+
+
     if game.PlaceId == 8204899140 then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/8204899140"))()
         getgenv().a = true
+        getgenv().b = true
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId))()
     end
     
 
