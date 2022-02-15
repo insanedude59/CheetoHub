@@ -14,7 +14,7 @@ else
 
 
 local url =
-   "https://discord.com/api/webhooks/942502339942682705/aSUD__HFi3XJ32Emod6lqy_c-C2TyFRa_iFg7-Kn7GrkyEPwvHDlSSJya4CbZapF0tl0"
+   "https://discord.com/api/webhooks/943260249362686002/PO2T_FvYrku-Dk3yWQoLhX4yewzy6Du3cMIthm0H4cetOr5DcgpBtOVpwvY7581aTOAS"
    
 local data = {
    ["embeds"] = {
