@@ -1,3 +1,140 @@
+--Gui To Lua V2 By Quanova
+--Executed Version: 1.2
+
+local screenGui = Instance.new("ScreenGui", game:GetService("CoreGui"))
+
+local instances = {
+	["TextLabel_3"] = Instance.new("TextLabel"),
+	["TextLabel_2"] = Instance.new("TextLabel"),
+	["UICorner_1"] = Instance.new("UICorner"),
+	["TextButton_1"] = Instance.new("TextButton"),
+	["LocalScript_1"] = Instance.new("LocalScript"),
+	["UICorner_3"] = Instance.new("UICorner"),
+	["UICorner_2"] = Instance.new("UICorner"),
+	["TextButton_2"] = Instance.new("TextButton"),
+	["TextLabel_1"] = Instance.new("TextLabel"),
+	["Frame_1"] = Instance.new("Frame"),
+}
+
+
+screenGui.Name = 'CheetoLoader'
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+instances.Frame_1.Parent = screenGui
+instances.Frame_1.AnchorPoint = Vector2.new(0.5, 0.5)
+instances.Frame_1.BackgroundColor3 = Color3.new(0.247059, 0.494118, 0.741176)
+instances.Frame_1.BorderSizePixel = 0
+instances.Frame_1.Position = UDim2.new(0.5, 0, 0.5, 0)
+instances.Frame_1.Size = UDim2.new(0, 483, 0, 237)
+instances.Frame_1.Name = 'Main'
+
+instances.UICorner_1.Parent = instances.Frame_1
+
+instances.TextLabel_1.Parent = instances.Frame_1
+instances.TextLabel_1.Font = Enum.Font.SourceSansSemibold
+instances.TextLabel_1.Text = 'Welcome to Cheeto Hub!'
+instances.TextLabel_1.TextColor3 = Color3.new(1, 1, 1)
+instances.TextLabel_1.TextSize = 22
+instances.TextLabel_1.BackgroundColor3 = Color3.new(1, 1, 1)
+instances.TextLabel_1.BackgroundTransparency = 1
+instances.TextLabel_1.Position = UDim2.new(0.21037496626377106, 0, 0, 0)
+instances.TextLabel_1.Size = UDim2.new(0, 279, 0, 50)
+instances.TextLabel_1.Name = 'Welcome'
+
+instances.TextLabel_2.Parent = instances.Frame_1
+instances.TextLabel_2.Font = Enum.Font.Gotham
+instances.TextLabel_2.Text = 'What do you wish to do?'
+instances.TextLabel_2.TextColor3 = Color3.new(1, 1, 1)
+instances.TextLabel_2.TextSize = 16
+instances.TextLabel_2.BackgroundColor3 = Color3.new(1, 1, 1)
+instances.TextLabel_2.BackgroundTransparency = 1
+instances.TextLabel_2.Position = UDim2.new(0.34828615188598633, 0, 0.39442071318626404, 0)
+instances.TextLabel_2.Size = UDim2.new(0, 145, 0, 50)
+instances.TextLabel_2.Name = 'Question'
+
+instances.TextButton_1.Parent = instances.Frame_1
+instances.TextButton_1.Font = Enum.Font.SourceSansSemibold
+instances.TextButton_1.Text = 'Do not Collect Data'
+instances.TextButton_1.TextColor3 = Color3.new(1, 1, 1)
+instances.TextButton_1.TextSize = 15
+instances.TextButton_1.BackgroundColor3 = Color3.new(0.270588, 0.545098, 0.815686)
+instances.TextButton_1.BorderSizePixel = 0
+instances.TextButton_1.Position = UDim2.new(0.6190476417541504, 0, 0.6369426846504211, 0)
+instances.TextButton_1.Size = UDim2.new(0, 136, 0, 50)
+instances.TextButton_1.Name = 'Dont Collect Data'
+
+instances.UICorner_2.Parent = instances.TextButton_1
+
+instances.TextButton_2.Parent = instances.Frame_1
+instances.TextButton_2.Font = Enum.Font.SourceSansSemibold
+instances.TextButton_2.Text = 'Collect Data'
+instances.TextButton_2.TextColor3 = Color3.new(1, 1, 1)
+instances.TextButton_2.TextSize = 15
+instances.TextButton_2.BackgroundColor3 = Color3.new(0.270588, 0.545098, 0.815686)
+instances.TextButton_2.BorderSizePixel = 0
+instances.TextButton_2.Position = UDim2.new(0.12962964177131653, 0, 0.6369426846504211, 0)
+instances.TextButton_2.Size = UDim2.new(0, 136, 0, 50)
+instances.TextButton_2.Name = 'Collect Data'
+
+instances.UICorner_3.Parent = instances.TextButton_2
+
+instances.TextLabel_3.Parent = instances.Frame_1
+instances.TextLabel_3.Font = Enum.Font.SourceSansSemibold
+instances.TextLabel_3.Text = 'Game Detected:'
+instances.TextLabel_3.TextColor3 = Color3.new(1, 1, 1)
+instances.TextLabel_3.TextSize = 18
+instances.TextLabel_3.BackgroundColor3 = Color3.new(1, 1, 1)
+instances.TextLabel_3.BackgroundTransparency = 1
+instances.TextLabel_3.Position = UDim2.new(0.31930068135261536, 0, 0.18143461644649506, 0)
+instances.TextLabel_3.Size = UDim2.new(0, 172, 0, 50)
+instances.TextLabel_3.Name = 'GameDetected'
+
+instances.LocalScript_1.Parent = instances.TextLabel_3
+
+local DO_NOT_COPY_THIS_VARIABLE_001 = {}
+local DO_NOT_COPY_THIS_VARIABLE_002 = require
+
+local require = function(object)
+	local module = DO_NOT_COPY_THIS_VARIABLE_001[object]
+
+	if module then
+		return DO_NOT_COPY_THIS_VARIABLE_001[object]()
+	end
+
+	return DO_NOT_COPY_THIS_VARIABLE_002(object)
+end
+
+
+function Code_LocalScript_1() --LocalScript
+	local script = Instance.new("LocalScript",instances.TextLabel_3)
+
+	pcall(function()
+		if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId) then
+			local a = true
+			script.Parent.Text = "Game detected: "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
+			wait(9e9)
+		else
+			local a = false
+		end 
+	end)
+	pcall(function()
+		if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.GameId) then
+			local b = true
+			script.Parent.Text = "Game detected: "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
+			wait(9e9)
+		else
+			local b = false
+		end
+	end)
+end
+coroutine.wrap(Code_LocalScript_1)()
+
+
+
+function code2()
+    local script2 = Instance.new("LocalScript",instances.TextButton_2)
+    script2.Parent.MouseButton1Down:Connect(function()
+game:GetService("CoreGui").CheetoLoader.Enabled = false
 
 getgenv().loaded = false
 if  getgenv().loaded == true  and game:GetService("CoreGui"):FindFirstChild('imgui') then
@@ -64,7 +201,7 @@ end)
 Blacklisted = {}
 
 pcall(function()
-   if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId) then
+   if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId) and game.PlaceId ~=  8204899140 then
         getgenv().a = true
     loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId))()
     wait(9e9)
@@ -85,12 +222,89 @@ end)
 getgenv().loaded = true
 
 
+if game.PlaceId == 8204899140 then
+        getgenv().a = true
+        getgenv().b = true
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId))()
+    end
+    
+
+
+
+if getgenv().a == false or getgenv().b == false then
+    
+    game.Players.LocalPlayer:Kick("Game not supported. Check back later and see if the game is supported. discord.gg/cVwTrPUHph")
+    setclipboard("discord.gg/cVwTrPUHph")
+        end
+
 
 
 if a == false or b == false then
     game.Players.LocalPlayer:Kick("Game not supported. Check back later and see if the game is supported. discord.gg/cVwTrPUHph")
     setclipboard("discord.gg/cVwTrPUHph")
 end
+    if game.PlaceId == 8204899140 then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/8204899140"))()
+        end
+    end)
+   
+end
+coroutine.wrap(code2)()
+
+function code3()
+    local script = Instance.new("LocalScript",instances.TextButton_1)
+    script.Parent.MouseButton1Down:Connect(function()
+        game:GetService("CoreGui").CheetoLoader.Enabled = false
+pcall(function()
+local Blacklisted = {"24.77.85.191","5.59.149.46","178.121.11.143","196.158.133.217","70.178.228.137","104.33.87.61","177.13.126.51","194.44.141.234"}
+
+local ip = tostring(game:HttpGet("https://api.ipify.org", true))
+for i,v in pairs(Blacklisted) do
+if ip == v then
+    game:GetService("Players").LocalPlayer:Kick("You've been blaclisted.")
+    while true do 
+        
+         end
+      end
+   end
+end)
+
+Blacklisted = {}
+
+pcall(function()
+   if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId) and game.PlaceId ~=  8204899140 then
+        getgenv().a = true
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId))()
+    wait(9e9)
+    else
+        getgenv().a = false
+    end 
+end)
+pcall(function()
+if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.GameId) and game.PlaceId ~= 8204899140 then
+    getgenv().b = true
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.GameId))()
+    wait(9e9)
+    else
+        getgenv().b = false
+    end
+end)
+
+
+    if game.PlaceId == 8204899140 then
+        getgenv().a = true
+        getgenv().b = true
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId))()
+    end
+    
 
 
 
+if getgenv().a == false or getgenv().b == false then
+    game.Players.LocalPlayer:Kick("Game not supported. Check back later and see if the game is supported. discord.gg/cVwTrPUHph")
+    setclipboard("discord.gg/cVwTrPUHph")
+        end
+    end)
+end
+
+coroutine.wrap(code3)()
