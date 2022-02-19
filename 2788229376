@@ -368,25 +368,24 @@ end)
 
 section2:TextBox("WalkSpeed", function(text)
 		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = text
-		end, {
-			["clear"] = false, -- Default: true (options are optional)
-		})
-
+end)
+	
 section2:TextBox("JumpPower", function(text)
 		game.Players.LocalPlayer.Character.Humanoid.JumpPower = text
-		end, {
-			["clear"] = false, -- Default: true (options are optional)
-		})
-
+end)
+	
 
 
 section2:Toggle( "Inf Jump",  function(value)
-    tog = value
+tog = Value
+end)
+
+spawn(function()
+while true do wait()
 game:GetService("UserInputService").JumpRequest:connect(function()
 	if tog == true then
 		game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
-	    end
-    end)
+	        end
+        end)
+    end
 end)
-
-
