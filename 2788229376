@@ -1,5 +1,6 @@
--- Credits to Stefanuk12 for the anticheat bypass (https://v3rmillion.net/member.php?action=profile&uid=553212)
+-- Credits to Stefanuk12 for the anticheat bypass(https://v3rmillion.net/member.php?action=profile&uid=553212
 
+--Da Hood
 
 local Flags = {
     "CHECKER_1",
