@@ -1,0 +1,34 @@
+local Fun = loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/newlib))()
+
+
+local a = Fun.Create('hi')
+
+local tab1 = a:Tab("hii")
+
+local section1 = tab1:Section('section')
+
+section1:Toggle("toggle",function(value)
+    print(value)
+end)
+
+section1:Button("yoo",function()
+    print("yoo")
+end)
+
+section1:Slider("slider",16,50,function(value)
+    num = value
+    print(num)
+end)
+
+
+section1:Dropdown("dropdown",{"hi","hi2","hi3"},function(val)
+    print(val)
+end)
+
+section1:Label("textlabel")
+
+section1:TextBox("textbox",function(text)
+print(text)
+end)
+
+section1:Label('hello')
