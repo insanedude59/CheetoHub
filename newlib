@@ -1,3 +1,12 @@
+for i,v in pairs(game:GetService("CoreGui"):GetChildren()) do
+    if v.Name == "nightmarefun" then
+        v:Destroy()
+    end
+ end
+
+
+
+
 local Fun = {}
 
 local input = game:GetService("UserInputService")
@@ -485,7 +494,7 @@ function Fun.Create(title)
                 checkBoxInfo.Size = UDim2.new(0, 200, 0, 19)
                 checkBoxInfo.Font = Enum.Font.Gotham
                 checkBoxInfo.Text = togInfo
-                checkBoxInfo.TextColor3 = Color3.fromRGB(62, 62, 74)
+                checkBoxInfo.TextColor3 = Color3.fromRGB(150,150,150)
                 checkBoxInfo.TextSize = 14.000
                 checkBoxInfo.TextXAlignment = Enum.TextXAlignment.Left
                 local clickDe = false
@@ -1088,4 +1097,5 @@ function Fun.Create(title)
     end
     return tabHandling
 end
+
 return Fun
