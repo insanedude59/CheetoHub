@@ -122,8 +122,8 @@ function Fun.Create(title)
     nightmares.Font = Enum.Font.Gotham
     nightmares.Text = " "..title
     nightmares.TextColor3 = Color3.fromRGB(92, 53, 93)
-    nightmares.TextSize = 20.000
-    nightmares.TextWrapped = true
+    nightmares.TextSize = 15
+    nightmares.TextWrapped = false
 
     fun.Name = "fun"
     fun.Parent = mainSide
@@ -1097,5 +1097,4 @@ function Fun.Create(title)
     end
     return tabHandling
 end
-
 return Fun
