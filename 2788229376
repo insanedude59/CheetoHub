@@ -82,39 +82,43 @@ uis.InputEnded:Connect(function(key)
 end)
 
 
+local Fun = loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/newlib"))()
 
 
-local library = loadstring(game:HttpGet("http://cindering.xyz/message.txt"))()
-local win = library:AddWindow('Cheeto Hub | Da Hood | RightShift toggle key')
+local win = Fun.Create('Cheeto Hub | Da Hood | RightShift toggle key')
 
-local tab1 = win:AddTab("Aiming")
-local tab2 = win:AddTab("Player")
-local tab3 = win:AddTab("Shop")
+local tab1 = win:Tab("Aiming")
+local section1 = tab1:Section("Aiming")
+
+local tab2 = win:Tab("Player")
+local section2 = tab2:Section("Player")
+
+local tab3 = win:Tab("Shop")
+local section3 = tab3:Section("Shop")
 
 local shops = {}
 
 for i,v in pairs(game:GetService("Workspace").Ignored.Shop:GetChildren()) do
    if not table.find(shops,v) then
-       table.insert(shops,v)
+       table.insert(shops,tostring(v))
     end
 end
 
-local drop1 = tab3:AddDropdown("Select Buying Item",function(selected)
+
+
+section3:Dropdown("Select Buying Item",shops,function(selected)
     selectbuy = selected
 end)
 
-for i = 1,#shops do
-    drop1:Add(shops[i])
-end
 
-tab3:AddButton("Buy Item",function()
+section3:Button("Buy Item",function()
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(game:GetService("Workspace").Ignored.Shop[selectbuy]:FindFirstChildOfClass("Part").Position)
     wait(0.5)
     fireclickdetector(game:GetService("Workspace").Ignored.Shop[selectbuy].ClickDetector)
 end)
 
 
-tab1:AddSwitch("Silent Aim",function(value)
+section1:Toggle("Silent Aim",function(value)
     
 local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/tayodevelup/imsoniac/main/silent2"))()
 Aiming.TeamCheck(false)
@@ -180,7 +184,7 @@ end)
 
 
 
-tab1:AddSwitch("Aimlock",function(value)
+section1:Toggle("Aimlock",function(value)
     tog2 = value
 	getgenv().AimPart = "HumanoidRootPart"
 	getgenv().AimlockKey = "q"
@@ -362,13 +366,13 @@ tab1:AddSwitch("Aimlock",function(value)
 	end)
 end)
 
-tab2:AddTextBox("WalkSpeed", function(text)
+section2:TextBox("WalkSpeed", function(text)
 		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = text
 		end, {
 			["clear"] = false, -- Default: true (options are optional)
 		})
 
-tab2:AddTextBox("JumpPower", function(text)
+section2:TextBox("JumpPower", function(text)
 		game.Players.LocalPlayer.Character.Humanoid.JumpPower = text
 		end, {
 			["clear"] = false, -- Default: true (options are optional)
@@ -376,7 +380,7 @@ tab2:AddTextBox("JumpPower", function(text)
 
 
 
-tab2:AddSwitch( "Inf Jump",  function(value)
+section2:Toggle( "Inf Jump",  function(value)
     tog = value
 game:GetService("UserInputService").JumpRequest:connect(function()
 	if tog == true then
@@ -385,111 +389,4 @@ game:GetService("UserInputService").JumpRequest:connect(function()
     end)
 end)
 
-tab2:AddSwitch("E to Fly",function(value)
-sex2 = value
-local Max = 0
-local Players = game.Players
-local LP = Players.LocalPlayer
-local Mouse = LP:GetMouse()
-Mouse.KeyDown:connect(function(k)
-if k:lower() == 'e' then
-Max = Max + 1
-getgenv().Fly = false
-if sex2 then
-local T = LP.Character.UpperTorso
-local S = {
-F = 0,
-B = 0,
-L = 0,
-R = 0
-}
-local S2 = {
-F = 0,
-B = 0,
-L = 0,
-R = 0
-}
-local SPEED = 5
-local function FLY()
-getgenv().Fly = true
-local BodyGyro = Instance.new('BodyGyro', T)
-local BodyVelocity = Instance.new('BodyVelocity', T)
-BodyGyro.P = 9e4
-BodyGyro.maxTorque = Vector3.new(9e9, 9e9, 9e9)
-BodyGyro.cframe = T.CFrame
-BodyVelocity.velocity = Vector3.new(0, 0.1, 0)
-BodyVelocity.maxForce = Vector3.new(9e9, 9e9, 9e9)
-spawn(function()
-repeat
-wait()
-LP.Character.Humanoid.PlatformStand = false
-if S.L + S.R ~= 0 or S.F + S.B ~= 0 then
-SPEED = 200
-elseif not (S.L + S.R ~= 0 or S.F + S.B ~= 0) and SPEED ~= 0 then
-SPEED = 0
-end
-if (S.L + S.R) ~= 0 or (S.F + S.B) ~= 0 then
-BodyVelocity.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (S.F + S.B)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(S.L + S.R, (S.F + S.B) * 0.2, 0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p)) * SPEED
-S2 = {
-F = S.F,
-B = S.B,
-L = S.L,
-R = S.R
-}
-elseif (S.L + S.R) == 0 and (S.F + S.B) == 0 and SPEED ~= 0 then
-BodyVelocity.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (S2.F + S2.B)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(S2.L + S2.R, (S2.F + S2.B) * 0.2, 0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p)) * SPEED
-else
-BodyVelocity.velocity = Vector3.new(0, 0.1, 0)
-end
-BodyGyro.cframe = game.Workspace.CurrentCamera.CoordinateFrame
-until not getgenv().Fly
-S = {
-F = 0,
-B = 0,
-L = 0,
-R = 0
-}
-S2 = {
-F = 0,
-B = 0,
-L = 0,
-R = 0
-}
-SPEED = 0
-BodyGyro:destroy()
-BodyVelocity:destroy()
-LP.Character.Humanoid.PlatformStand = false
-end)
-end
-Mouse.KeyDown:connect(function(k)
-if k:lower() == 'w' then
-S.F = 1
-elseif k:lower() == 's' then
-S.B = -1
-elseif k:lower() == 'a' then
-S.L = -1
-elseif k:lower() == 'd' then
-S.R = 1
-end
-end)
-Mouse.KeyUp:connect(function(k)
-if k:lower() == 'w' then
-S.F = 0
-elseif k:lower() == 's' then
-S.B = 0
-elseif k:lower() == 'a' then
-S.L = 0
-elseif k:lower() == 'd' then
-S.R = 0
-end
-end)
-FLY()
-if Max == 2 then
-getgenv().Fly = false
-Max = 0
-end
-end
-end
-end)
-end)
 
