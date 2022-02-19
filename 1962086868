@@ -40,23 +40,24 @@ mt.__index = newcclosure(function(self,ww)
     return old(self,ww)
 end)
 
+local Fun = loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/newlib"))()
 
-local library = loadstring(game:HttpGet("http://cindering.xyz/message.txt"))()
-
-
-local Window = library:AddWindow("Cheeto Hub | Tower of Hell")
+local Window = Fun.Create("Cheeto Hub | Tower of Hell")
 
 
-local Tab1 = Window:AddTab("Main")
+local Tab1 = Window:Tab("Main")
 
 
-local Tab2 = Window:AddTab("Misc")
+local Tab2 = Window:Tab("Misc")
+
+
+local Section1 = Tab1:Section("Main")
+
+local Section2 = Tab2:Section("Misc")
 
 
 
-
-
-Tab1:AddSwitch("Godmode", function(s)
+Section1:Toggle("Godmode", function(s)
         for i,v in pairs(workspace.tower:GetDescendants()) do
             if v.Name == "kills" then
                 print(v.Parent)
@@ -68,7 +69,7 @@ end)
 
 
 
-Tab1:AddButton( "Tp to Top",  function()
+Section1:Button( "Tp to Top",  function()
 for _,v in pairs(game:GetService("Workspace").tower.finishes:GetChildren()) do
     if _ == 1 and v.Name == "Finish" then
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.Position)
@@ -77,7 +78,7 @@ for _,v in pairs(game:GetService("Workspace").tower.finishes:GetChildren()) do
 end)
 
 
-Tab1:AddSwitch( "AutoTp to Top", function(value)
+Section1:Toggle( "AutoTp to Top", function(value)
     tog = value
     while tog do wait(0.1)
     for i,v in pairs(game:GetService("Workspace").tower.finishes:GetChildren()) do
@@ -90,7 +91,7 @@ Tab1:AddSwitch( "AutoTp to Top", function(value)
 end)
 
 
-Tab1:AddButton( "Disable Anticheat",  function()
+Section1:Button( "Disable Anticheat",  function()
     wait(0.1)
     for _,v in pairs(getgc()) do
     if type(v) == "function" and getfenv(v).script == game:GetService("Players").LocalPlayer.PlayerScripts.LocalScript then
@@ -112,7 +113,7 @@ end
 game:GetService("Players").LocalPlayer.PlayerScripts.LocalPartScript:Destroy()
 end)
 
-Tab1:AddButton( "Delete all Kill Parts",  function()
+Section1:Button( "Delete all Kill Parts",  function()
       for k,v in pairs(game:GetService("Workspace").tower:GetDescendants()) do
     if string.match(v.Name,"kill") then
         print(v)
@@ -121,21 +122,19 @@ Tab1:AddButton( "Delete all Kill Parts",  function()
     end
 end)
 
-Tab2:AddTextBox("WalkSpeed", function(text)
+Section2:TextBox("WalkSpeed", function(text)
 		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = text
-		end, {
-			["clear"] = false, -- Default: true (options are optional)
-		})
+end)
+	
 
-Tab2:AddTextBox("JumpPower", function(text)
+Section2:TextBox("JumpPower", function(text)
 		game.Players.LocalPlayer.Character.Humanoid.JumpPower = text
-		end, {
-			["clear"] = false, -- Default: true (options are optional)
-		})
+end)
+	
 
 
 
-Tab2:AddSwitch( "Inf Jump",  function(value)
+Section2:Toggle( "Inf Jump",  function(value)
     tog = value
 game:GetService("UserInputService").JumpRequest:connect(function()
 	if tog == true then
