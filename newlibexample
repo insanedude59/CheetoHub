@@ -1,6 +1,9 @@
 local Fun = loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/newlib"))()
 
 
+--newlib 
+
+
 local a = Fun.Create('hi')
 
 local tab1 = a:Tab("hii")
