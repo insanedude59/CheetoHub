@@ -79,15 +79,7 @@ end)
 
 
 Section1:Toggle( "AutoTp to Top", function(value)
-    tog = value
-    while tog do wait(0.1)
-    for i,v in pairs(game:GetService("Workspace").tower.finishes:GetChildren()) do
-    if i == 1 and v.Name == "Finish" then
-        print('hi')
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.Position)
-            end
-        end
-    end
+    tog2 = value
 end)
 
 
@@ -136,9 +128,25 @@ end)
 
 Section2:Toggle( "Inf Jump",  function(value)
     tog = value
-game:GetService("UserInputService").JumpRequest:connect(function()
+end)
+
+
+spawn(function()
+while true do wait()
+game:GetService("UserInputService").JumpRequest:Connect(function()
 	if tog == true then
 		game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
-	    end
-    end)
+	        end
+        end)
+    end
 end)
+spawn(function()
+while true do wait(0.1)
+    for i,v in pairs(game:GetService("Workspace").tower.finishes:GetChildren()) do
+    if i == 1 and v.Name == "Finish" and tog2 == true then
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.Position)
+            end
+        end
+    end
+end)
+
