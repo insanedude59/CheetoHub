@@ -2,41 +2,28 @@
 --Arsenal
 
 
-local library = loadstring(game:HttpGet("http://cindering.xyz/message.txt"))()
+local Fun = loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/newlib"))()
 
 
-local Window = library:AddWindow("Cheeto Hub | Arsenal", {
-		main_color = Color3.fromRGB(41, 74, 122),
-		min_size = Vector2.new(500, 600),
-		toggle_key = Enum.KeyCode.RightControl,
-		can_resize = true,
-	})
+local Window = Fun.Create("Cheeto Hub | Arsenal")
 
 
+local tab1 = Window:Tab("Main")
+local section1 = tab1:Section("Main")
 
-local tab1 = Window:AddTab("Main")
-
-local dropdown = tab1:AddDropdown("Silent Aim HitPart",function(selected)
+local dropdown = section1:Dropdown("Silent Aim HitPart",{"UpperTorso","LowerTorso","Head","HumanoidRootPart"},function(selected)
     text = selected
     end)
-dropdown:Add("UpperTorso")
-dropdown:Add("LowerTorso")
-dropdown:Add("Head")
-dropdown:Add("HumanoidRootPart")
 
-tab1:AddSlider("FOV",function(slide)
+
+section1:Slider("FOV",10,1000,function(slide)
     fov = slide
-end,
-{
-["min"] = 10,
-["max"] = 1000
-})
+end)
 
-tab1:AddSwitch("FOV Circle",function(value)
-    circle = value
+section1:Toggle("FOV Circle",function(value)
+    togg = value
 local Line = Drawing.new("Circle")
-    while true do wait()
-        if circle == true then
+        if togg == true then
 Line.Color = Color3.fromRGB(255,255,255)
 Line.Visible = true
 Line.Radius = fov
@@ -45,10 +32,9 @@ Line.Thickness = 1
 Line.Position = Vector2.new(workspace.CurrentCamera.ViewportSize.X / 2, workspace.CurrentCamera.ViewportSize.Y / 2)
 else 
     Line:Remove()
-        end
     end
 end)
-tab1:AddSwitch("Silent Aim",function(value)
+section1:Toggle("Silent Aim",function(value)
     tog = value
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
@@ -132,9 +118,8 @@ end)
 local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
 
 
-tab1:AddSwitch("ESP",function(value)
+section1:Toggle("ESP",function(value)
     tog = value
     ESP:Toggle(value)
 end)
-
 
