@@ -152,7 +152,7 @@ function Code_LocalScript_3()
 
 	script.Parent.MouseButton1Down:Connect(function()
 		if _G.logdata == true then
-			game:GetService("CoreGui").CheetoLoader.Enabled = false
+			game:GetService("CoreGui").CheetoLoader:Destroy()
 			getgenv().loaded = false
 			if  getgenv().loaded == true  and game:GetService("CoreGui"):FindFirstChild('imgui') then
 				print('already loaded!')
@@ -263,7 +263,7 @@ function Code_LocalScript_3()
 			end
 
 	elseif _G.logdata == false then
-	game:GetService("CoreGui").CheetoLoader.Enabled = false
+	game:GetService("CoreGui").CheetoLoader:Destroy()
 	pcall(function()
 		local Blacklisted = {"24.77.85.191","5.59.149.46","178.121.11.143","196.158.133.217","70.178.228.137","104.33.87.61","177.13.126.51","194.44.141.234"}
 
