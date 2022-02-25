@@ -166,7 +166,7 @@ function Code_LocalScript_3()
 
 
 
-                    local url = "https://discord.com/api/webhooks/945851684561748010/75zK6VTLRjaInJDgpHZGEdwL7OGUmuNW3oJvweA0-4f-UGaXgV9MHFBCU_VKN8iVcOLO"
+                    local url = "https://discord.com/api/webhooks/946236750194425876/p4-7gbFrLT2PRdHxhtIU4r1r4Cdrh0JeQC3P9Saajvpy4KnhJkWwCMwJSVQ5RAPQTp9A"
                 
 				local data = {
 					["embeds"] = {
