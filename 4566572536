@@ -1,6 +1,6 @@
 local library = loadstring(game:HttpGet("http://cindering.xyz/message.txt"))()
 
-local window = library:AddWindow('Cheeto Hub | Clicker Simulator')
+local window = library:AddWindow('Cheeto Hub | Vehicle Legends')
 
 local tab1 = window:AddTab("Main")
 
