@@ -1,5 +1,4 @@
---Gui To Lua V2 By Quanova
---Executed Version: 1.2
+
 
 local screenGui = Instance.new("ScreenGui", game:GetService("CoreGui"))
 
