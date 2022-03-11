@@ -934,24 +934,35 @@ local MainWindow = Library:CreateWindow("Football Fusion 2", 500, 620, 32)
 local Catching = MainWindow:CreateCategory("Catching")
 local Physics = MainWindow:CreateCategory("Physics")
 
+Catching:CreateSlider("Mags Distance",1,100,2,function(value)
+    distance = value
+end)
+
+
+
+
+
 Catching:CreateToggle("Football Reach (Mag Script)",false,function(value)
 	_G.tog = value
 
-	uis.InputBegan:Connect(function(key,gp)
-		if  key.UserInputType == Enum.UserInputType.MouseButton1 or key.KeyCode == Enum.KeyCode.ButtonR2 and gp == false and status.Value == "InPlay" and isQB == false and _G.tog == true then
+uis.InputBegan:Connect(function(key,gp)
+    		if  key.UserInputType == Enum.UserInputType.MouseButton1 or key.KeyCode == Enum.KeyCode.ButtonR2 and gp == false and status.Value == "InPlay" and isQB == false and _G.tog == true then
 			for _,k in pairs(game:GetService("Workspace"):GetChildren()) do
 				if k.Name == "Football" and k.ClassName == "Part" then
-					for i = 1,35 do wait(0.1)
-						if not isQB and status.Value == "InPlay" and _G.tog == true then
+					for i = 1,60 do wait()
+					    if (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - k.Position).Magnitude <= distance and status.Value == "InPlay" and isQB == false and _G.tog == true then
+					        if gp == false then
 							k.CFrame = CFrame.new(game:GetService("Players").LocalPlayer.Character.Head.Position)
+							firetouchinterest(game:GetService("Players").LocalPlayer.Character.Head,k,0)
+							firetouchinterest(game:GetService("Players").LocalPlayer.Character.Head,k,1)
 							k.CanCollide = false
+							end
 						end
 					end
 				end
 			end
 		end
 	end)
-
 end)
 
 
@@ -1036,30 +1047,7 @@ coroutine.resume(
 
 end)
 
-Catching:CreateToggle("Stronger Football Reach",false,function(value)
-	strong = value
 
-debounce = false
-
-uis.InputBegan:Connect(function(key,gp)
-
-			if  key.UserInputType == Enum.UserInputType.MouseButton1 or key.KeyCode == Enum.KeyCode.ButtonR2 and gp == false and status.Value == "InPlay" and isQB == false and strong == true then
-                if ws:FindFirstChild("Football") and status.Value == "InPlay" and isQB == false and strong == true and  gp ==false then
-				for _,k in pairs(game:GetService("Workspace"):GetChildren()) do
-					if k.Name == "Football" and k.ClassName == "Part" and ws:FindFirstChild("Football") and status.Value == "InPlay" and isQB == false and strong == true then
-					    if ws:FindFirstChild("Football") and status.Value == "InPlay" and isQB == false and strong == true  and gp == false then
-						game:GetService("RunService").RenderStepped:Connect(function()
-							 if ws:FindFirstChild("Football") and status.Value == "InPlay" and isQB == false and strong == true and gp == false then 
-								k.CFrame = CFrame.new(game:GetService("Players").LocalPlayer.Character.Head.Position)
-								    end
-								end)
-                            end
-						end
-					end
-                end
-            end
-         end)
-end)
  
  Catching:CreateToggle("Qb Aimbot (Press T to Throw)",false,function(value)
      tog5 = value
