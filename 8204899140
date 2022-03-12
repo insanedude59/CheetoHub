@@ -1,4 +1,172 @@
 
+local get = function(x)
+    return game:GetService(x)
+end
+local players = get "Players"
+local ws = get "Workspace"
+local rs = get "ReplicatedStorage"
+local rus = get "RunService"
+local uis = get "UserInputService"
+local coregui = get "CoreGui"
+local http = get "HttpService"
+local ts = get "TeleportService"
+local lighting = get "Lighting"
+local plr = players.LocalPlayer
+local char = (plr and (plr.Character or plr.CharacterAdded:Wait()) or nil)
+local hrp = plr and (char:WaitForChild "HumanoidRootPart") or nil
+local hum = plr and (char:WaitForChild "Humanoid") or nil
+if plr then
+    plr.CharacterAdded:Connect(
+        function(c)
+            char = c
+            hrp = c:WaitForChild "HumanoidRootPart"
+            hum = c:WaitForChild "Humanoid"
+        end
+    )
+end
+local cf = CFrame
+local v3 = Vector3
+local ud2 = UDim2
+local c3 = Color3
+local rgb = c3.fromRGB
+local step = rus.Stepped
+local rstep = rus.RenderStepped
+local heartbeat = rus.Heartbeat
+local function bind(k, callback)
+    return uis.InputBegan:Connect(
+        function(io, gpe)
+            if Enum.UserInputType[k] then
+                if io.UserInputType == Enum.UserInputType[k] then
+                    callback()
+                end
+            elseif Enum.KeyCode[k] then
+                if io.KeyCode == Enum.KeyCode[k] then
+                    callback()
+                end
+            end
+        end
+    )
+end
+local function bindToStep(callback, doDebounce, debounceWait)
+    local debounce = false
+    step:Connect(
+        function()
+            if not debounce then
+                debounce = doDebounce == nil
+                callback()
+                if debounceWait and doDebounce then
+                    wait(debounceWait)
+                end
+                debounce = false
+            end
+        end
+    )
+end
+local function bindToRenderStep(callback, doDebounce, debounceWait)
+    local debounce = false
+    rstep:Connect(
+        function()
+            if not debounce then
+                debounce = doDebounce == nil
+                callback()
+                if debounceWait and doDebounce then
+                    wait(debounceWait)
+                end
+                debounce = false
+            end
+        end
+    )
+end
+local function bindToHeartbeat(callback, doDebounce, debounceWait)
+    local debounce = false
+    heartbeat:Connect(
+        function()
+            if not debounce then
+                debounce = doDebounce == nil
+                callback()
+                if debounceWait and doDebounce then
+                    wait(debounceWait)
+                end
+                debounce = false
+            end
+        end
+    )
+end
+local JSON = {stringify = function(...)
+        return http:JSONEncode(...)
+    end, parse = function(...)
+        return http:JSONDecode(...)
+    end}
+local tws = get "TweenService"
+local stats = get("Stats")
+local plrgui = plr:WaitForChild("PlayerGui")
+local mouse = plr:GetMouse()
+local models = ws.Models
+local values = rs.Values
+local carrier = values.Carrier
+local status = values.Status
+local playtype = values.PlayType
+local thrown = values.Thrown
+local qb = values.QB
+local cc = ws.CurrentCamera
+local finishLine = models.LockerRoomA.FinishLine
+local initVoting = plrgui.MainGui.InitVoting
+local mainRemote = rs.Remotes.CharacterSoundEvent
+local function getPing()
+    return stats.PerformanceStats.Ping:GetValue()
+end
+local function getServerPing()
+    return stats.Network.ServerStatsItem["Data Ping"]:GetValue()
+end
+local function getPosInXSeconds(currentPos, direction, speed, seconds)
+    local dist = speed * seconds
+    local pos = currentPos + direction * dist
+    return pos
+end
+local function getTime(dist, speed)
+    return dist / speed
+end
+local function getJumpHeightFromJumpPower()
+    return hum.JumpPower ^ 2 / (2 * ws.Gravity)
+end
+local function removeVectorComponent(vector, component)
+    if component:lower() == "y" then
+        return vector * v3.new(1, 0, 1)
+    elseif component:lower() == "x" then
+        return vector * v3.new(0, 1, 1)
+    elseif component:lower() == "z" then
+        return vector * v3.new(1, 1, 0)
+    end
+end
+local function jump()
+    hum.Jump = true
+    keypress(0x20)
+    wait()
+    keyrelease(0x20)
+end
+
+
+wait(.1)
+
+--[[ char.Humanoid.Died:Connect(function()
+    game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId,game.JobId)
+end) ]]
+
+-- Functions
+local function create(class, parent, props, children)
+    props = props or {}
+    children = children or {}
+    parent = parent or nil
+    local thing = Instance.new(class, parent)
+    for i, v in pairs(props) do
+        thing[i] = v
+    end
+    for _, v in pairs(children) do
+        v.Parent = thing
+    end
+    return thing
+end
+
 
 if (not getrawmetatable or  not hookmetamethod or not Drawing.new) then
 	game.Players.LocalPlayer:Kick("Your exploit is not supported. use Krnl (best free exploit) or Synapse X (best paid exploit) for it to work.") 
@@ -1161,17 +1329,113 @@ Catching:CreateSlider("Pull Vector Distance",1,25,0,function(value)
     pulldist = value
 end)
 
+ function create(class, parent, props, children)
+    props = props or {}
+    children = children or {}
+    parent = parent or nil
+    local thing = Instance.new(class, parent)
+    for i, v in pairs(props) do
+        thing[i] = v
+    end
+    for _, v in pairs(children) do
+        v.Parent = thing
+    end
+    return thing
+end
 
  Catching:CreateToggle("Pull Vector",false,function(value)
      pullvector = value
-game:GetService("UserInputService").InputBegan:Connect(function(key)
+     
+         local function getball()
+                return workspace:FindFirstChild("Football")
+         end
+        
+uis.InputBegan:Connect(function(key,gp)
     if key.UserInputType == Enum.UserInputType.MouseButton1 and pullvector == true then
-            if workspace:FindFirstChild("Football") and status.Value == "InPlay" then
-                if (workspace:FindFirstChild("Football").Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= pulldist then
-                    if workspace:FindFirstChild("Football") and (workspace:FindFirstChild("Football").Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= pulldist and status.Value == "InPlay" then
-                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(workspace:FindFirstChild("Football").Position)
+                    pcall(
+                        function()
+                            char["Catch Left"].Size = char["Catch Left"].Size.Unit * 10
+                            char["Catch Right"].Size = char["Catch Right"].Size.Unit * 10
+                        end
+                    )
+                    local balltppart =
+                        create(
+                        "Part",
+                        ws,
+                        {
+                            Anchored = true,
+                            CanCollide = false,
+                            Transparency = 1,
+                            Size = v3.new(1, 1, 1)
+                        }
+                    )
+                    local fb = getball()
+                    
+                    local function create(class, parent, props, children)
+    props = props or {}
+    children = children or {}
+    parent = parent or nil
+    local thing = Instance.new(class, parent)
+    for i, v in pairs(props) do
+        thing[i] = v
+    end
+    for _, v in pairs(children) do
+        v.Parent = thing
+    end
+    return thing
+end
+
+
+
+                    local function check1()
+                        return getball() and status.Value == "InPlay" and qb.Value ~= plr
                     end
-                end
+                    if check1() and (fb.Position - hrp.Position).Magnitude <= pulldist then
+                        balltppart.Position = fb.Position
+                        fb.Size = fb.Size.Unit * 10
+                        local p1 = fb.Position
+                        wait(.1)
+                        local p2 = fb.Position
+                        local dir = (p2 - p1).Unit
+                        local ping = getPing() * 2 + getServerPing()
+                        local att0 = create("Attachment", hrp)
+                        local att1 =
+                            create(
+                            "Attachment",
+                            balltppart,
+                            {
+                                Position = pos
+                            }
+                        )
+                        local rope =
+                            create(
+                            "RopeConstraint",
+                            balltppart,
+                            {
+                                Length = 0,
+                                Restitution = 0,
+                                Attachment0 = att0,
+                                Attachment1 = att1,
+                                Enabled = true
+                            }
+                        )
+                        repeat
+                            if playtype.Value == "normal" then
+                                local p1 = fb.Position
+                                wait(.1)
+                                local p2 = fb.Position
+                                local dir = (p2 - p1).Unit
+                                local pos = getPosInXSeconds(fb.Position, dir, fb.Velocity.Magnitude, ping / 1000)
+                                balltppart.Position = pos
+                            else
+                                balltppart.Position = fb.Position
+                            end
+                            step:wait()
+                        until status.Value == "DeadPlay" or not getball()
+                        att0:Destroy()
+                        att1:Destroy()
+                        rope:Destroy()
+                        balltppart:Destroy()
             end
         end
     end)
