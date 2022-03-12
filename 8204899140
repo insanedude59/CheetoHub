@@ -933,8 +933,9 @@ end
 local MainWindow = Library:CreateWindow("Football Fusion 2", 500, 620, 32)
 local Catching = MainWindow:CreateCategory("Catching")
 local Physics = MainWindow:CreateCategory("Physics")
+local QB = MainWindow:CreateCategory("QB")
 
-Catching:CreateSlider("Mags Distance",1,100,2,function(value)
+Catching:CreateSlider("Mags Distance",1,100,0,function(value)
     distance = value
 end)
 
@@ -944,13 +945,15 @@ end)
 
 Catching:CreateToggle("Football Reach (Mag Script)",false,function(value)
 	_G.tog = value
-
+    magging = nil;
+    
 uis.InputBegan:Connect(function(key,gp)
     		if  key.UserInputType == Enum.UserInputType.MouseButton1 or key.KeyCode == Enum.KeyCode.ButtonR2 and gp == false and status.Value == "InPlay" and isQB == false and _G.tog == true then
 			for _,k in pairs(game:GetService("Workspace"):GetChildren()) do
 				if k.Name == "Football" and k.ClassName == "Part" then
 					for i = 1,60 do wait()
-					    if (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - k.Position).Magnitude <= distance and status.Value == "InPlay" and isQB == false and _G.tog == true then
+					    magging = true
+					    if game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - k.Position).Magnitude <= distance and status.Value == "InPlay" and isQB == false and _G.tog == true then
 					        if gp == false then
 							k.CFrame = CFrame.new(game:GetService("Players").LocalPlayer.Character.Head.Position)
 							firetouchinterest(game:GetService("Players").LocalPlayer.Character.Head,k,0)
@@ -959,6 +962,7 @@ uis.InputBegan:Connect(function(key,gp)
 							end
 						end
 					end
+					magging = false
 				end
 			end
 		end
@@ -1049,7 +1053,7 @@ end)
 
 
  
- Catching:CreateToggle("Qb Aimbot (Press T to Throw)",false,function(value)
+ QB:CreateToggle("Qb Aimbot (Press T to Throw)",false,function(value)
      tog5 = value
      local uis = game:GetService("UserInputService")
 
@@ -1101,19 +1105,23 @@ end)
  end)
  
  Physics:CreateToggle("Forward Teleport 2 Studs, Keybind is F",false,function(value)
+     forwardtp = value
+     
      local Players = game:GetService("Players")
 local ContextActionService = game:GetService("ContextActionService")
  
 local function doTeleport()
+    if forwardtp == true then
 	local player = Players.LocalPlayer
 	local character = player.Character
 	if character and character.Parent then
 		local currentPivot = character:GetPivot()
 		character:PivotTo(currentPivot * CFrame.new(0, 0, -2))
+		end
 	end
 end
  _G.tog = value
- if _G.tog == true then
+ if _G.tog == true  then
 ContextActionService:BindAction("Teleport", doTeleport, true, Enum.KeyCode.F)
 else
     ContextActionService:UnbindAction("Teleport")
@@ -1149,6 +1157,25 @@ end
 		end
 	end)
 
+Catching:CreateSlider("Pull Vector Distance",1,25,0,function(value)
+    pulldist = value
+end)
+
+
+ Catching:CreateToggle("Pull Vector",false,function(value)
+     pullvector = value
+game:GetService("UserInputService").InputBegan:Connect(function(key)
+    if key.UserInputType == Enum.UserInputType.MouseButton1 and pullvector == true then
+            if workspace:FindFirstChild("Football") and status.Value == "InPlay" then
+                if (workspace:FindFirstChild("Football").Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= pulldist then
+                    if workspace:FindFirstChild("Football") and (workspace:FindFirstChild("Football").Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= pulldist and status.Value == "InPlay" then
+                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(workspace:FindFirstChild("Football").Position)
+                    end
+                end
+            end
+        end
+    end)
+end)
  
 MainWindow:Init()
 MainWindow:ChangeCategory(Main)
