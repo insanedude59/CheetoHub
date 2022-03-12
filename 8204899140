@@ -1102,6 +1102,9 @@ local MainWindow = Library:CreateWindow("Football Fusion 2", 500, 620, 32)
 local Catching = MainWindow:CreateCategory("Catching")
 local Physics = MainWindow:CreateCategory("Physics")
 local QB = MainWindow:CreateCategory("QB")
+local Visuals = MainWindow:CreateCategory("Visuals")
+
+
 
 Catching:CreateSlider("Mags Distance",1,100,0,function(value)
     distance = value
@@ -1345,24 +1348,6 @@ end
 
  Catching:CreateToggle("Pull Vector",false,function(value)
      pullvector = value
-game:GetService("UserInputService").InputBegan:Connect(function(key)
-    if key.UserInputType == Enum.UserInputType.MouseButton1 and pullvector == true then
-            if workspace:FindFirstChild("Football") and status.Value == "InPlay" then
-                if (workspace:FindFirstChild("Football").Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= pulldist then
-                    if workspace:FindFirstChild("Football") and (workspace:FindFirstChild("Football").Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= pulldist and status.Value == "InPlay" then
-                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(workspace:FindFirstChild("Football").Position)
-                    end
-                end
-            end
-        end
-    end)
-end)
-
-
-
-
- Catching:CreateToggle("Experimental Pull Vector (May be more buggy)",false,function(value)
-     pullvector = value
      
          local function getball()
                 return workspace:FindFirstChild("Football")
@@ -1458,6 +1443,46 @@ end
         end
     end)
 end)
+ 
+ local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+
+
+
+ Visuals:CreateToggle("Football ESP",false,function(value)
+     
+
+
+
+ESP:AddObjectListener(workspace, {
+    Name = "Football",
+    CustomName = "Football",
+    Color = Color3.fromRGB(255,255,255),
+    IsEnabled = "FootballESP"
+})
+
+ESP.FootballESP = true
+
+footballesp = value
+ESP:Toggle(footballesp)
+ end)
+ 
+ Visuals:CreateToggle("Player ESP",false,function(value)
+     players = value
+        if not ESP.FootballESP == true then
+     ESP:Toggle(true)
+        end
+ 
+     ESP.Players = players
+ end)
+ 
+ Visuals:CreateToggle("ESP Boxes",false,function(value)
+     ESP.Boxes = value
+ end)
+ Visuals:CreateToggle("Use Team Color",false,function(value)
+     ESP.TeamColor = value
+ end)
+ 
+ 
  
 MainWindow:Init()
 MainWindow:ChangeCategory(Main)
