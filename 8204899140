@@ -1103,7 +1103,7 @@ local Catching = MainWindow:CreateCategory("Catching")
 local Physics = MainWindow:CreateCategory("Physics")
 local QB = MainWindow:CreateCategory("QB")
 local Visuals = MainWindow:CreateCategory("Visuals")
-
+local Extras = MainWindow:CreateCategory("Extras")
 
 
 Catching:CreateSlider("Mags Distance",1,100,0,function(value)
@@ -1444,11 +1444,11 @@ end
     end)
 end)
  
- local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
 
 
 
- Visuals:CreateToggle("Football ESP",false,function(value)
+Visuals:CreateToggle("Football ESP",false,function(value)
      
 
 
@@ -1481,6 +1481,20 @@ ESP:Toggle(footballesp)
  Visuals:CreateToggle("Use Team Color",false,function(value)
      ESP.TeamColor = value
  end)
+ 
+ Extras:CreateToggle("Advertise Script",false,function(value)
+     advertise = value
+     while advertise do wait(1.5)
+         
+local ohString1 = "use cheeto hub for the best hacks for football fusion 2, inv: .gg/Cp4U3xtApN "
+local ohString2 = "All"
+
+game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(ohString1, ohString2)
+    end
+ end)
+ 
+ 
+ 
  
  
  
