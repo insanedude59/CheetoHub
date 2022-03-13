@@ -1,4 +1,3 @@
-
 local get = function(x)
     return game:GetService(x)
 end
@@ -262,7 +261,6 @@ mt.__index = hookmetamethod(game,"__index",function(self,b)
 	end
 	return old(s,b)
 end)
-
 
 
 
@@ -1098,6 +1096,9 @@ function Library:CreateWindow(Title, X, Y, TitleHeight)
 	return Window
 end
 
+
+
+
 local MainWindow = Library:CreateWindow("Football Fusion 2", 500, 620, 32)
 local Catching = MainWindow:CreateCategory("Catching")
 local Physics = MainWindow:CreateCategory("Physics")
@@ -1228,7 +1229,7 @@ coroutine.resume(
             until tog3 == false
             while rstep:wait() do
                 if tog3 == true then
-                    local fb = ws:FindFirstChild("Football")
+                    local fb = workspace:FindFirstChild("Football")
                     if status.Value == "InPlay" and fb then
                         local fbpos = fb.Position
                         if fbpos.Y >= 7 and fbpos.Y <= hrp.Position.Y + getJumpHeightFromJumpPower() + 10 then
@@ -1344,7 +1345,7 @@ end
 							local oldCanCllide = v.CanCollide
 							while step:wait() and v:IsA("BasePart") do
 								local enabled = tog3
-								if enabled and ws:FindFirstChild("Football") and status.Value == "InPlay" and playtype.Value ~= "fieldgoal" then
+								if enabled and workspace:FindFirstChild("Football") and status.Value == "InPlay" and playtype.Value ~= "fieldgoal" then
 									v.CanCollide = false
 								else
 									v.CanCollide = oldCanCllide
@@ -1373,8 +1374,22 @@ end)
     end
     return thing
 end
+Catching:CreateToggle("Pull Vector",false,function(value)
+     pullvector = value
+game:GetService("UserInputService").InputBegan:Connect(function(key)
+    if key.UserInputType == Enum.UserInputType.MouseButton1 and pullvector == true then
+            if workspace:FindFirstChild("Football") and status.Value == "InPlay" then
+                if (workspace:FindFirstChild("Football").Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= pulldist then
+                    if workspace:FindFirstChild("Football") and (workspace:FindFirstChild("Football").Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= pulldist and status.Value == "InPlay" then
+                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(workspace:FindFirstChild("Football").Position)
+                    end
+                end
+            end
+        end
+    end)
+end)
 
- Catching:CreateToggle("Pull Vector",false,function(value)
+ Catching:CreateToggle("Experimental Pull Vector (May be buggy and detected)",false,function(value)
      pullvector = value
      
          local function getball()
@@ -1552,6 +1567,20 @@ end)
 end)
  
 
+ 
+Catching:CreateToggle("Increased Football Size",false,function(value)
+    fbsize = value
+end)
+
+ spawn(function()
+    while true do wait()
+    if fbsize == true and workspace:FindFirstChild("Football") then
+        workspace:FindFirstChild('Football').Size = Vector3.new(10,10,10)
+    elseif fbsize == false and workspace:FindFirstChild("Football") then
+        workspace:FindFirstChild("Football").Size = Vector3.new(0.85, 1.2, 0.85)
+        end
+    end
+ end)
  
 MainWindow:Init()
 MainWindow:ChangeCategory(Main)
