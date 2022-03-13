@@ -1142,6 +1142,34 @@ end)
 
 
 
+Catching:CreateToggle("Stable Football Mags (Use if you crash with normal mags)",false,function(value)
+	_G.tog2 = value
+    magging = nil;
+    
+uis.InputBegan:Connect(function(key,gp)
+    		if  key.UserInputType == Enum.UserInputType.MouseButton1 or key.KeyCode == Enum.KeyCode.ButtonR2 and gp == false and status.Value == "InPlay" and isQB == false and _G.tog2 == true then
+			for _,k in pairs(game:GetService("Workspace"):GetChildren()) do
+				if k.Name == "Football" and k.ClassName == "Part" then
+					for i = 1,60 do wait()
+					    magging = true
+					    if game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - k.Position).Magnitude <= distance and status.Value == "InPlay" and isQB == false and _G.tog2 == true then
+					        if gp == false then
+							k.CFrame = CFrame.new(game:GetService("Players").LocalPlayer.Character.Head.Position)
+
+							k.CanCollide = false
+							end
+						end
+					end
+					magging = false
+				end
+			end
+		end
+	end)
+end)
+
+
+
+
 Physics:CreateToggle("Auto Hands",false,function(value)
 	tog2 = value
 	rus.Stepped:Connect(function()
@@ -1516,9 +1544,9 @@ end)
 
       if bounds == true then
         if workspace.Models:FindFirstChild("Boundaries") then
-            workspace.Models:FindFirstChild("Boundaries").Parent = nil
-        else
-            workspace.Models:FindFirstChild("Boundaries").Parent = oldParent
+            workspace.Models:FindFirstChild("Boundaries").Parent = game:GetService("BadgeService")
+        elseif bounds == false then
+            game:GetService("BadgeService"):FindFirstChild("Boundaries").Parent = workspace.Models
         end
     end           
 end)
