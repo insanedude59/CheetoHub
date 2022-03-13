@@ -1376,10 +1376,10 @@ end)
 end
 Catching:CreateToggle("Pull Vector",false,function(value)
      pullvector = value
-game:GetService("UserInputService").InputBegan:Connect(function(key)
-    if key.UserInputType == Enum.UserInputType.MouseButton1 and pullvector == true then
+game:GetService("UserInputService").InputBegan:Connect(function(key,gp)
+    if key.UserInputType == Enum.UserInputType.MouseButton1 and pullvector == true and gp == false then
             if workspace:FindFirstChild("Football") and status.Value == "InPlay" then
-                if (workspace:FindFirstChild("Football").Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= pulldist then
+                if (workspace:FindFirstChild("Football").Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= pulldist and gp == false then
                     if workspace:FindFirstChild("Football") and (workspace:FindFirstChild("Football").Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= pulldist and status.Value == "InPlay" then
                         game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(workspace:FindFirstChild("Football").Position)
                     end
@@ -1581,6 +1581,27 @@ end)
         end
     end
  end)
+ 
+ Extras:CreateToggle("Tackle Aimbot",false,function(value)
+     tacklebot = value
+        local hrp = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+local uis = game:GetService("UserInputService")
+
+uis.InputBegan:Connect(function(key,gp)
+    if key.UserInputType == Enum.UserInputType.MouseButton1 then
+        for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+            if game:GetService("ReplicatedStorage").Values.Carrier.Value ~= nil and tacklebot then
+                if v == game:GetService("ReplicatedStorage").Values.Carrier.Value and v.TeamColor ~= game:GetService("Players").LocalPlayer.TeamColor then
+                    if (hrp.Position - v.Character.HumanoidRootPart.Position).Magnitude <= 12 and tacklebot then
+                        hrp.CFrame = CFrame.new(v.Character.HumanoidRootPart.Position)
+                        end
+                    end
+                end
+            end
+        end
+    end)
+end)
+ 
  
 MainWindow:Init()
 MainWindow:ChangeCategory(Main)
