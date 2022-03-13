@@ -1103,7 +1103,7 @@ local Catching = MainWindow:CreateCategory("Catching")
 local Physics = MainWindow:CreateCategory("Physics")
 local QB = MainWindow:CreateCategory("QB")
 local Visuals = MainWindow:CreateCategory("Visuals")
-local Extras = MainWindow:CreateCategory("Extras")
+local Extras = MainWindow:CreateCategory("Trolling")
 
 
 Catching:CreateSlider("Mags Distance",1,100,0,function(value)
@@ -1482,21 +1482,42 @@ ESP:Toggle(footballesp)
      ESP.TeamColor = value
  end)
  
- Extras:CreateToggle("Advertise Script",false,function(value)
-     advertise = value
-     while advertise do wait(1.5)
-         
-local ohString1 = "use cheeto hub for the best hacks for football fusion 2, inv: .gg/Cp4U3xtApN "
+ Extras:CreateToggle("Advertise Script in Chat",false,function(value)
+     Advertise = value
+     while Advertise == true do wait(2)
+local ohString1 = "use cheeto hub for the best hacks for football fusion 2, inv: .gg/Cp4U3xtApN"
 local ohString2 = "All"
 
 game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(ohString1, ohString2)
     end
  end)
+
  
+Extras:CreateToggle("No QB Boundaries",false,function(value)
+    boundaries = value 
+    local oldCanCollide = workspace:FindFirstChild("ScrambleWall").CanCollide
+    
+    if boundaries then
+        workspace:FindFirstChild("ScrambleWall").CanCollide = not oldCanCollide
+     else
+        workspace:FindFirstChild("ScrambleWall").CanCollide = oldCanCollide
+    end
+end)
+
+ Extras:CreateToggle("No Out Of Bounds",false,function(value)
+     bounds = value
+     local oldParent = workspace.Models.Boundaries.Parent
+     
+      if bounds == true then
+        if workspace.Models:FindFirstChild("Boundaries") then
+            workspace.Models:FindFirstChild("Boundaries").Parent = nil
+        else
+            workspace.Models:FindFirstChild("Boundaries").Parent = oldParent
+        end
+    end           
+end)
  
- 
- 
- 
+
  
 MainWindow:Init()
 MainWindow:ChangeCategory(Main)
