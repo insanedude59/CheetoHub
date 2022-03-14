@@ -752,6 +752,10 @@ end)
     end
  end)
  
+ Extras:Slider("Tackle Aimbot Distance",1,1,15,function(value)
+    tackledist = value 
+ end)
+ 
  Extras:Toggle("Tackle Aimbot",false,function(value)
      tacklebot = value
         local hrp = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
@@ -762,7 +766,7 @@ uis.InputBegan:Connect(function(key,gp)
         for i,v in pairs(game:GetService("Players"):GetPlayers()) do
             if game:GetService("ReplicatedStorage").Values.Carrier.Value ~= nil and tacklebot then
                 if v == game:GetService("ReplicatedStorage").Values.Carrier.Value and v.TeamColor ~= game:GetService("Players").LocalPlayer.TeamColor then
-                    if (hrp.Position - v.Character.HumanoidRootPart.Position).Magnitude <= 15 and tacklebot then
+                    if (hrp.Position - v.Character.HumanoidRootPart.Position).Magnitude <= tackledist and tacklebot then
                         hrp.CFrame = CFrame.new(v.Character.HumanoidRootPart.Position)
                         end
                     end
