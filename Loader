@@ -243,9 +243,6 @@ function Code_LocalScript_3()
 				game.Players.LocalPlayer:Kick("Game not supported. Check back later and see if the game is supported. discord.gg/cVwTrPUHph")
 				setclipboard("discord.gg/cVwTrPUHph")
 			end
-			if game.PlaceId == 8204899140 then
-				loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/8204899140"))()
-			end
 
 	elseif _G.logdata == false then
 	game:GetService("CoreGui").CheetoLoader:Destroy()
@@ -260,7 +257,7 @@ function Code_LocalScript_3()
 		end 
 	end)
 	pcall(function()
-		if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.GameId) and game.PlaceId ~= 8204899140 then
+		if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.GameId) then
 			getgenv().b = true
 			loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.GameId))()
 			wait(9e9)
@@ -269,12 +266,6 @@ function Code_LocalScript_3()
 		end
 	end)
 
-
-	if game.PlaceId == 8204899140 then
-		getgenv().a = true
-		getgenv().b = true
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId))()
-	end
 
 
 
