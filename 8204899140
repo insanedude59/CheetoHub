@@ -1,3 +1,6 @@
+local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+
+
 
 local get = function(x)
     return game:GetService(x)
@@ -644,39 +647,47 @@ end
     end)
 end)
  
-local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
 
 
 
-Visuals:Toggle("Football ESP",false,function(value)
+
+
+ 
+
+ Visuals:Toggle("Football ESP",false,function(value)
      
 
 
-
 ESP:AddObjectListener(workspace, {
-    Name = "Football",
+    Name = "Football" ,
     CustomName = "Football",
     Color = Color3.fromRGB(255,255,255),
+    Recursive = true,
     IsEnabled = "FootballESP"
 })
+
 
 ESP.FootballESP = true
 
 footballesp = value
-if ESP.Enabled == false then
+
 ESP:Toggle(footballesp)
-    end
- end)
+ESP.Players = false
+end)
  
  Visuals:Toggle("Player ESP",false,function(value)
      players = value
         if not ESP.FootballESP == true then
      ESP:Toggle(true)
+     ESP.Players = true
         end
- 
      ESP.Players = players
  end)
  
+ 
+ 
+
+
  Visuals:Toggle("ESP Boxes",true,function(value)
      ESP.Boxes = value
  end)
@@ -804,9 +815,8 @@ Visuals:Toggle("Change Weather To Rain",false,function(value)
 		end
 	end
 end)
+wait(1)
 
-
-game:GetService("Players").LocalPlayer.PlayerGui["Cheeto Hub | Football Fusion 2"].Main.Background.BorderSizePixel = 1
 
 local t = 10; 
 
@@ -819,3 +829,5 @@ RunService:BindToRenderStep("Rainbow", 1000, function()
 	local color = fromHSV(hue, 1, 1)
 	Frame.BackgroundColor3 = color
 end)
+
+
