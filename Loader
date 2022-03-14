@@ -248,7 +248,7 @@ function Code_LocalScript_3()
 	game:GetService("CoreGui").CheetoLoader:Destroy()
 
 	pcall(function()
-		if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId) and game.PlaceId ~=  8204899140 then
+		if game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId) then
 			getgenv().a = true
 			loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/"..game.PlaceId))()
 			wait(9e9)
