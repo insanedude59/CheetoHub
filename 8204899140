@@ -264,7 +264,8 @@ local Library =
 
 game:GetService("RunService").Stepped:Connect(function()
     if game:GetService("CoreGui"):FindFirstChild("Cheeto Hub | Football Fusion 2") then
-    game:GetService("CoreGui")["Cheeto Hub | Football Fusion 2"].Parent = game:GetService('Players').LocalPlayer.PlayerGui
+        game:GetService("CoreGui")["Cheeto Hub | Football Fusion 2"].Parent = game:GetService('Players').LocalPlayer.PlayerGui
+                game:GetService('Players').LocalPlayer.PlayerGui["Cheeto Hub | Football Fusion 2"].ResetOnSpawn = false
     end
 end)
 
@@ -525,6 +526,8 @@ end)
     end
     return thing
 end
+
+
 Catching:Toggle("Pull Vector",false,function(value)
      pullvector = value
 game:GetService("UserInputService").InputBegan:Connect(function(key,gp)
@@ -533,6 +536,9 @@ game:GetService("UserInputService").InputBegan:Connect(function(key,gp)
                 if (workspace:FindFirstChild("Football").Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= pulldist and gp == false then
                     if workspace:FindFirstChild("Football") and (workspace:FindFirstChild("Football").Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= pulldist and status.Value == "InPlay" then
                         game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(workspace:FindFirstChild("Football").Position)
+                        firetouchinterest(hrp,workspace:FindFirstChild("Football"):FindFirstChild("TouchInterest"),0)
+                        wait()
+                        firetouchinterest(hrp,workspace:FindFirstChild("Football"):FindFirstChild("TouchInterest"),1)
                     end
                 end
             end
@@ -657,7 +663,9 @@ ESP:AddObjectListener(workspace, {
 ESP.FootballESP = true
 
 footballesp = value
+if ESP.Enabled == false then
 ESP:Toggle(footballesp)
+    end
  end)
  
  Visuals:Toggle("Player ESP",false,function(value)
@@ -669,10 +677,10 @@ ESP:Toggle(footballesp)
      ESP.Players = players
  end)
  
- Visuals:Toggle("ESP Boxes",false,function(value)
+ Visuals:Toggle("ESP Boxes",true,function(value)
      ESP.Boxes = value
  end)
- Visuals:Toggle("Use Team Color",false,function(value)
+ Visuals:Toggle("Use Team Color",true,function(value)
      ESP.TeamColor = value
  end)
  
@@ -752,6 +760,52 @@ uis.InputBegan:Connect(function(key,gp)
         end
     end)
 end)
+
+
+
+
+local SkyWeather = game.Workspace.SkyWeather
+Visuals:Toggle("Change Weather To Snow",false,function(value)
+	isSnow = value 
+
+	if isSnow  == true then
+
+
+		for i,v in pairs(SkyWeather:GetChildren()) do
+			if v.Name == "Snow" then
+				v.Enabled = true
+			end
+		end
+	else
+		for i,v in pairs(SkyWeather:GetChildren()) do
+			if v.Name == "Snow" then
+				v.Enabled = false
+			end
+		end
+	end
+end)
+
+Visuals:Toggle("Change Weather To Rain",false,function(value)
+	isRain = value 
+	
+	local Raining = game.Workspace.Models.Field.Ground
+	
+	if isRain  == true then
+		for i,v in pairs(SkyWeather:GetChildren()) do
+			if v.Name == "Rain" then
+				v.Enabled = true
+			end
+		end
+	elseif isRain == false  then
+		for i,v in pairs(SkyWeather:GetChildren()) do
+			if v.Name == "Rain" then
+				v.Enabled = false
+			end
+		end
+	end
+end)
+
+
 game:GetService("Players").LocalPlayer.PlayerGui["Cheeto Hub | Football Fusion 2"].Main.Background.BorderSizePixel = 1
 
 local t = 10; 
