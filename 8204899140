@@ -270,7 +270,7 @@ end)
 
 
 uis.InputBegan:Connect(function(key)
-    if key.KeyCode == Enum.KeyCode.RigbtAlt then
+    if key.KeyCode == Enum.KeyCode.RightAlt then
         game:GetService("Players").LocalPlayer.PlayerGui["Cheeto Hub | Football Fusion 2"]:Destroy()
     end
 end)
@@ -479,7 +479,7 @@ end)
 
  end)
  
- Physics:Toggle("Forward Teleport 2 Studs, Keybind is F",false,function(value)
+ Physics:Toggle("Quick TP (F is the keybind)",false,function(value)
      forwardtp = value
      
      local Players = game:GetService("Players")
