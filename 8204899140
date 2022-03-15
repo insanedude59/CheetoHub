@@ -1,6 +1,49 @@
 local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
 
+local screenGui = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer.PlayerGui)
 
+local instances = {
+	["UICorner_1"] = Instance.new("UICorner"),
+	["TextLabel_1"] = Instance.new("TextLabel"),
+	["Frame_1"] = Instance.new("Frame"),
+	["TextLabel_2"] = Instance.new("TextLabel"),
+}
+
+
+screenGui.Name = 'SelectedPlayer'
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGui.Enabled = false
+
+instances.Frame_1.Parent = screenGui
+instances.Frame_1.BackgroundColor3 = Color3.new(0.0941177, 0.0941177, 0.0941177)
+instances.Frame_1.BorderSizePixel = 0
+instances.Frame_1.Position = UDim2.new(0.44146010279655457, 0, 0.8224077224731445, 0)
+instances.Frame_1.Size = UDim2.new(0, 293, 0, 113)
+instances.Frame_1.Name = 'main'
+
+instances.TextLabel_1.Parent = instances.Frame_1
+instances.TextLabel_1.Font = Enum.Font.GothamSemibold
+instances.TextLabel_1.Text = 'cheeto hub'
+instances.TextLabel_1.TextColor3 = Color3.new(1, 1, 1)
+instances.TextLabel_1.TextSize = 20
+instances.TextLabel_1.BackgroundColor3 = Color3.new(1, 1, 1)
+instances.TextLabel_1.BackgroundTransparency = 1
+instances.TextLabel_1.Position = UDim2.new(0, 0, 0.19372233748435974, 0)
+instances.TextLabel_1.Size = UDim2.new(0, 293, 0, 20)
+instances.TextLabel_1.Name = 'cheeto'
+
+instances.TextLabel_2.Parent = instances.Frame_1
+instances.TextLabel_2.Font = Enum.Font.Gotham
+instances.TextLabel_2.Text = 'select the player bro (keybind is Q)'
+instances.TextLabel_2.TextColor3 = Color3.new(1, 1, 1)
+instances.TextLabel_2.TextSize = 14
+instances.TextLabel_2.TextWrapped = true
+instances.TextLabel_2.BackgroundColor3 = Color3.new(1, 1, 1)
+instances.TextLabel_2.BackgroundTransparency = 1
+instances.TextLabel_2.Position = UDim2.new(0, 0, 0.7138947248458862, 0)
+instances.TextLabel_2.Size = UDim2.new(0, 292, 0, 22)
+
+instances.UICorner_1.Parent = instances.Frame_1
 
 local get = function(x)
     return game:GetService(x)
@@ -258,8 +301,11 @@ mt.__index = hookmetamethod(game,"__index",function(self,b)
 	end
 	return old(s,b)
 end)
-
-
+spawn(function()
+while true do wait()
+    game:GetService("Players").LocalPlayer:FindFirstChildOfClass("Vector3Value").Value = Vector3.new()
+    end
+end)
 
 local Library =
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Attrixx/FreeScripts/main/YTUILib1.lua"))():init(
@@ -288,10 +334,15 @@ local Physics = Tab:Section("Physics")
 local QB = Tab:Section("QB")
 local Visuals = Tab:Section("Visuals")
 local Extras = Tab:Section("Trolling")
+local Automatic = Tab:Section("Automatics")
 
 uis.InputBegan:Connect(function(key)
     if key.KeyCode == Enum.KeyCode.LeftControl then
-        game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("Cheeto Hub | Football Fusion 2").Enabled = not game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("Cheeto Hub | Football Fusion 2").Enabled
+        for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetDescendants()) do
+            if v.Name:match("Cheeto Hub") and v:IsA("ScreenGui") then
+                v.Enabled = not v.Enabled
+            end
+        end
     end
 end)
 
@@ -351,32 +402,38 @@ uis.InputBegan:Connect(function(key,gp)
 		end
 	end)
 end)
-
-Physics:Toggle("Auto Hands",false,function(value)
-	tog2 = value
-	rus.Stepped:Connect(function()
-		local fb = game:GetService("Workspace"):FindFirstChild("Football")
-		if fb and tog2 == true then
-			if tog2 == true and
-				values.Status.Value == "InPlay" and values.QB.Value ~= game:GetService("Players").LocalPlayer and
-				values.PlayType.Value == "normal" and
-				(hrp.Position - fb.Position).Magnitude <= 20
-			then
-				mouse1click()
-			end
-		elseif
-			values.Carrier.Value and values.QB.Value and
-			values.QB.Value == values.Carrier.Value and
-			values.Carrier.Value.Team ~= plr.Team and
-			(values.QB.Value.Character.HumanoidRootPart.Position - hrp.Position).Magnitude <= 30
-		then
-			repeat
-				step:wait()
-			until thrown.Value
-		end
-	end)
+Automatic:Slider("Auto Catch Distance",1,1,30.1,function(value)
+    catchdist = value
 end)
-Physics:Toggle("Auto Jump",false,function(value)
+
+
+Automatic:Toggle("Auto Catch",false,function(value)
+	tog2 = value
+end)
+
+spawn(function()
+local rs = game:GetService("ReplicatedStorage")
+local values = rs.Values
+local status = values.Status
+
+local rstep = game:GetService("RunService").RenderStepped
+local vu = game:GetService("VirtualUser")
+
+
+while rstep:wait() do
+repeat wait()
+    if workspace:FindFirstChild("Football") and game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart") and status.Value == "InPlay" and tog2 then
+       if (workspace:FindFirstChild("Football").Position - game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Position).Magnitude <= catchdist and status.Value =="InPlay" and tog2 then
+           mouse1click()
+                end
+            end
+        until tog2 == false or not workspace:FindFirstChild("Football")
+    end
+end)
+
+
+
+Automatic:Toggle("Auto Jump",false,function(value)
 	tog3 = value
 	local function removeVectorComponent(vector, component)
     if component:lower() == "y" then
@@ -416,7 +473,7 @@ coroutine.resume(
                                 (removeVectorComponent(fb.Position, "Y") - removeVectorComponent(hrp.Position, "Y")).Magnitude
                             local distX = (fb.Position * v3.new(1, 0, 0) - hrp.Position * v3.new(1, 0, 0)).Magnitude
                             local distZ = (fb.Position * v3.new(0, 0, 1) - hrp.Position * v3.new(0, 0, 1)).Magnitude
-                            if distX <= 10 and distZ <= fb.Position.Y then
+                            if distX <= 15 and distZ <= fb.Position.Y then
                                 jump()
                             end
                         end
@@ -758,7 +815,7 @@ end)
  
  Extras:Toggle("Tackle Aimbot",false,function(value)
      tacklebot = value
-        local hrp = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+local hrp = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
 local uis = game:GetService("UserInputService")
 
 uis.InputBegan:Connect(function(key,gp)
@@ -819,6 +876,140 @@ Visuals:Toggle("Change Weather To Rain",false,function(value)
 		end
 	end
 end)
+
+Automatic:Toggle("Auto Follow Player GUI",false,function(value)
+    
+local uis = game:GetService("UserInputService")
+local LPlayer = game:GetService("Players").LocalPlayer
+local LMouse = LPlayer:GetMouse()
+
+local Camera = game:GetService("Workspace").CurrentCamera
+
+local function GetClosestPlayer()
+    local ClosestDistance, ClosestPlayer = math.huge, nil;
+    for _,Player in next, game:GetService("Players"):GetPlayers() do
+        if Player ~= LPlayer then
+            local Character = Player.Character
+            if Character and Character.Humanoid.Health > 1 and Player.TeamColor ~= LPlayer.TeamColor then
+                local ScreenPosition, IsVisibleOnViewPort = Camera:WorldToViewportPoint(Character.HumanoidRootPart.Position)
+                if IsVisibleOnViewPort then
+                    local MDistance = (Vector2.new(LMouse.X, LMouse.Y) - Vector2.new(ScreenPosition.X, ScreenPosition.Y)).Magnitude
+                    if MDistance < ClosestDistance then
+                        ClosestPlayer = Player
+                        ClosestDistance = MDistance
+                    end
+                end
+            end
+        end
+    end
+    return ClosestPlayer
+end
+
+
+_G.toggle3 = value
+_G.stopfollow = false
+
+uis.InputBegan:Connect(function(key,gp)
+    if key.KeyCode == Enum.KeyCode.Q and _G.toggle3 and screenGui.Enabled == true then
+        instances.TextLabel_2.Text = tostring(GetClosestPlayer())
+         repeat wait()
+            game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid"):MoveTo(game:GetService("Players")[instances.TextLabel_2.Text].Character:FindFirstChild("HumanoidRootPart").Position)
+        until _G.toggle3 == false  or instances.TextLabel_2.Text == 'select the player bro (keybind is Q)'
+    end
+end)
+
+uis.InputBegan:Connect(function(key,gp)
+    if key.KeyCode == Enum.KeyCode.G and instances.TextLabel_2.Text ~= 'select the player bro (keybind is Q)' and _G.toggle3 and screenGui.Enabled == true then
+        _G.stopfollow = true
+        instances.TextLabel_2.Text = 'select the player bro (keybind is Q)'
+        game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid"):MoveTo(game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Position)
+    end
+end)
+
+game:GetService("Players").LocalPlayer.PlayerGui.SelectedPlayer.Enabled = not game:GetService("Players").LocalPlayer.PlayerGui.SelectedPlayer.Enabled 
+end)
+
+
+Physics:Toggle("Remove Ball Trail",false,function(value)
+    balltrail = value
+end)
+spawn(function()
+     while true do wait(0.1)
+            if balltrail then
+        if workspace:FindFirstChild("Football") and workspace:FindFirstChild("Football"):FindFirstChild("Trail") and balltrail then
+        workspace:FindFirstChild("Football"):FindFirstChild("Trail"):Destroy()
+            end
+        end
+     end
+end)
+
+
+
+Automatic:Toggle("Auto Captain",false,function(value)
+captain = value
+end)
+
+spawn(function()
+    while true do task.wait(.5) 
+    if captain and models.LockerRoomA:FindFirstChild("FinishLine") and models.LockerRoomA:FindFirstChild("FinishLine"):FindFirstChildOfClass("TouchTransmitter") then
+        hrp.CFrame = CFrame.new(models.LockerRoomA:FindFirstChild("FinishLine").Position)
+        end
+     end
+end)
+Physics:Toggle("No Freeze",false,function(value)
+    nofreeze = value
+end)
+spawn(function()
+while true do wait()
+    if nofreeze then
+        game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = 20
+        end
+    end
+end)
+
+
+Automatic:Slider("Auto Block Distance",1,2,5,function(value)
+    blockdist = value
+end)
+
+
+
+function getclosest()
+    local dist,char = math.huge
+    for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+        if v.Character and v.Character:FindFirstChild("Humanoid") and v.Character:FindFirstChild("HumanoidRootPart") and v.Name ~= game:GetService("Players").LocalPlayer.Name and v.TeamColor ~= game:GetService("Players").LocalPlayer.TeamColor then
+        local magnitude = (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).Magnitude
+        if magnitude < dist then
+            dist = magnitude
+            char = v
+            end
+        end
+    end
+    return char
+    end
+
+
+
+
+
+Automatic:Toggle("Auto Block",false,function(value)
+    blocktog = value
+end)
+
+
+local VirtualInputManager = game:GetService('VirtualInputManager')
+
+spawn(function()
+    while true do wait()
+    if blocktog and (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - getclosest().Character.HumanoidRootPart.Position).Magnitude <= blockdist then
+        VirtualInputManager:SendKeyEvent(true, "X", false, game)
+        end
+    end
+end)
+
+
+
+
 wait(1)
 
 
@@ -833,5 +1024,3 @@ RunService:BindToRenderStep("Rainbow", 1000, function()
 	local color = fromHSV(hue, 1, 1)
 	Frame.BackgroundColor3 = color
 end)
-
-
