@@ -934,7 +934,7 @@ end)
 
 uis.InputBegan:Connect(function(key,gp)
     if uis:GetFocusedTextBox() then return end
-    if  key.KeyCode == Enum.KeyCode.LeftAlt then
+    if  key.KeyCode == Enum.KeyCode.RightAlt then
         for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetDescendants()) do
             if v:IsA("ScreenGui") and v.Name:match("Cheeto") then
                 v:Destroy()
