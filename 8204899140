@@ -395,7 +395,7 @@ Catching:Toggle("Legit Mags (Won't TP ball)",false,function(value)
 end)
     game:GetService("RunService").RenderStepped:Connect(function()
     if fbsize == true and workspace:FindFirstChild("Football")   then
-        workspace:FindFirstChild('Football').Size = Vector3.new(7,7,7)
+        workspace:FindFirstChild('Football').Size = Vector3.new(10,10,10)
     elseif fbsize == false and workspace:FindFirstChild("Football") then
         workspace:FindFirstChild("Football").Size = Vector3.new(0.85, 1.2, 0.85)
     end
