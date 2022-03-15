@@ -388,21 +388,16 @@ uis.InputBegan:Connect(function(key,gp)
 	end)
 end)
 
-Catching:Slider("Legit Mags Power",2,2,15,function(value)
-    shsh = value
-end)
+
 
 Catching:Toggle("Legit Mags (Won't TP ball)",false,function(value)
     fbsize = value
 end)
-
- spawn(function()
-    while true do wait()
+    game:GetService("RunService").RenderStepped:Connect(function()
     if fbsize == true and workspace:FindFirstChild("Football")   then
-        workspace:FindFirstChild('Football').Size = Vector3.new(shsh,shsh,shsh)
+        workspace:FindFirstChild('Football').Size = Vector3.new(7,7,7)
     elseif fbsize == false and workspace:FindFirstChild("Football") then
         workspace:FindFirstChild("Football").Size = Vector3.new(0.85, 1.2, 0.85)
-        end
     end
  end)
 
