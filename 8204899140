@@ -319,13 +319,6 @@ game:GetService("RunService").Stepped:Connect(function()
 end)
 
 
-uis.InputBegan:Connect(function(key)
-    if key.KeyCode == Enum.KeyCode.RightAlt then
-        game:GetService("Players").LocalPlayer.PlayerGui["Cheeto Hub | Football Fusion 2"]:Destroy()
-    end
-end)
-
-
 
  local Tab = Library:Tab("Main")
 
@@ -336,15 +329,7 @@ local Visuals = Tab:Section("Visuals")
 local Extras = Tab:Section("Trolling")
 local Automatic = Tab:Section("Automatics")
 
-uis.InputBegan:Connect(function(key)
-    if key.KeyCode == Enum.KeyCode.LeftControl then
-        for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetDescendants()) do
-            if v.Name:match("Cheeto Hub") and v:IsA("ScreenGui") then
-                v.Enabled = not v.Enabled
-            end
-        end
-    end
-end)
+
 
 
 
@@ -402,6 +387,22 @@ uis.InputBegan:Connect(function(key,gp)
 		end
 	end)
 end)
+
+Catching:Toggle("Legit Mags (Won't TP ball)",false,function(value)
+    fbsize = value
+end)
+
+ spawn(function()
+    while true do wait()
+    if fbsize == true and workspace:FindFirstChild("Football")   then
+        workspace:FindFirstChild('Football').Size = Vector3.new(10,10,10)
+    elseif fbsize == false and workspace:FindFirstChild("Football") then
+        workspace:FindFirstChild("Football").Size = Vector3.new(0.85, 1.2, 0.85)
+        end
+    end
+ end)
+
+
 Automatic:Slider("Auto Catch Distance",1,1,30.1,function(value)
     catchdist = value
 end)
@@ -594,11 +595,13 @@ game:GetService("UserInputService").InputBegan:Connect(function(key,gp)
     if key.UserInputType == Enum.UserInputType.MouseButton1 and pullvector == true and gp == false then
             if workspace:FindFirstChild("Football") and status.Value == "InPlay" then
                 if (workspace:FindFirstChild("Football").Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= pulldist and gp == false then
+                    for k = 1,2 do wait()
                     if workspace:FindFirstChild("Football") and (workspace:FindFirstChild("Football").Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= pulldist and status.Value == "InPlay" then
                         game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(workspace:FindFirstChild("Football").Position)
-                        firetouchinterest(hrp,workspace:FindFirstChild("Football"):FindFirstChild("TouchInterest"),0)
+                        firetouchinterest(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart,workspace:FindFirstChild("Football"):FindFirstChild("TouchInterest"),0)
                         wait()
-                        firetouchinterest(hrp,workspace:FindFirstChild("Football"):FindFirstChild("TouchInterest"),1)
+                        firetouchinterest(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart,workspace:FindFirstChild("Football"):FindFirstChild("TouchInterest"),1)
+                        end
                     end
                 end
             end
@@ -719,7 +722,6 @@ ESP:AddObjectListener(workspace, {
     Name = "Football" ,
     CustomName = "Football",
     Color = Color3.fromRGB(255,255,255),
-    Recursive = true,
     IsEnabled = "FootballESP"
 })
 
@@ -792,22 +794,10 @@ end)
         end
     end           
 end)
+
  
 
  
-Catching:Toggle("Increased Football Size",false,function(value)
-    fbsize = value
-end)
-
- spawn(function()
-    while true do wait()
-    if fbsize == true and workspace:FindFirstChild("Football") then
-        workspace:FindFirstChild('Football').Size = Vector3.new(10,10,10)
-    elseif fbsize == false and workspace:FindFirstChild("Football") then
-        workspace:FindFirstChild("Football").Size = Vector3.new(0.85, 1.2, 0.85)
-        end
-    end
- end)
  
  Extras:Slider("Tackle Aimbot Distance",1,1,15,function(value)
     tackledist = value 
@@ -819,11 +809,11 @@ local hrp = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
 local uis = game:GetService("UserInputService")
 
 uis.InputBegan:Connect(function(key,gp)
-    if key.UserInputType == Enum.UserInputType.MouseButton1 then
+    if key.UserInputType == Enum.UserInputType.MouseButton1 and workspace:FindFirstChild(game:GetService('Players').LocalPlayer.Name):FindFirstChild("HumanoidRootPart") then
         for i,v in pairs(game:GetService("Players"):GetPlayers()) do
             if game:GetService("ReplicatedStorage").Values.Carrier.Value ~= nil and tacklebot then
                 if v == game:GetService("ReplicatedStorage").Values.Carrier.Value and v.TeamColor ~= game:GetService("Players").LocalPlayer.TeamColor then
-                    if (hrp.Position - v.Character.HumanoidRootPart.Position).Magnitude <= tackledist and tacklebot then
+                    if (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).Magnitude <= tackledist and tacklebot then
                         hrp.CFrame = CFrame.new(v.Character.HumanoidRootPart.Position)
                         end
                     end
@@ -961,7 +951,7 @@ Physics:Toggle("No Freeze",false,function(value)
 end)
 spawn(function()
 while true do wait()
-    if nofreeze then
+    if nofreeze and game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
         game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = 20
         end
     end
@@ -1024,3 +1014,30 @@ RunService:BindToRenderStep("Rainbow", 1000, function()
 	local color = fromHSV(hue, 1, 1)
 	Frame.BackgroundColor3 = color
 end)
+
+game:GetService("Players").LocalPlayer.PlayerGui["Cheeto Hub | Football Fusion 2"].Main.Top.Label.Font = Enum.Font.Gotham
+
+
+
+uis.InputBegan:Connect(function(key,gp)
+    if uis:GetFocusedTextBox() then return end
+    if  key.KeyCode == Enum.KeyCode.LeftControl then
+        for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetDescendants()) do
+            if v:IsA("ScreenGui") and v.Name:match("Cheeto") then
+                v.Enabled = not v.Enabled
+            end
+        end
+    end
+end)
+
+uis.InputBegan:Connect(function(key,gp)
+    if uis:GetFocusedTextBox() then return end
+    if  key.KeyCode == Enum.KeyCode.LeftAlt then
+        for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetDescendants()) do
+            if v:IsA("ScreenGui") and v.Name:match("Cheeto") then
+                v:Destroy()
+            end
+        end
+    end
+end)
+
