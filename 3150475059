@@ -1,0 +1,976 @@
+local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+
+local screenGui = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer.PlayerGui)
+
+local instances = {
+	["UICorner_1"] = Instance.new("UICorner"),
+	["TextLabel_1"] = Instance.new("TextLabel"),
+	["Frame_1"] = Instance.new("Frame"),
+	["TextLabel_2"] = Instance.new("TextLabel"),
+}
+
+
+screenGui.Name = 'SelectedPlayer'
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGui.Enabled = false
+
+instances.Frame_1.Parent = screenGui
+instances.Frame_1.BackgroundColor3 = Color3.new(0.0941177, 0.0941177, 0.0941177)
+instances.Frame_1.BorderSizePixel = 0
+instances.Frame_1.Position = UDim2.new(0.44146010279655457, 0, 0.8224077224731445, 0)
+instances.Frame_1.Size = UDim2.new(0, 293, 0, 113)
+instances.Frame_1.Name = 'main'
+
+instances.TextLabel_1.Parent = instances.Frame_1
+instances.TextLabel_1.Font = Enum.Font.GothamSemibold
+instances.TextLabel_1.Text = 'cheeto hub'
+instances.TextLabel_1.TextColor3 = Color3.new(1, 1, 1)
+instances.TextLabel_1.TextSize = 20
+instances.TextLabel_1.BackgroundColor3 = Color3.new(1, 1, 1)
+instances.TextLabel_1.BackgroundTransparency = 1
+instances.TextLabel_1.Position = UDim2.new(0, 0, 0.19372233748435974, 0)
+instances.TextLabel_1.Size = UDim2.new(0, 293, 0, 20)
+instances.TextLabel_1.Name = 'cheeto'
+
+instances.TextLabel_2.Parent = instances.Frame_1
+instances.TextLabel_2.Font = Enum.Font.Gotham
+instances.TextLabel_2.Text = 'select the player bro (keybind is Q)'
+instances.TextLabel_2.TextColor3 = Color3.new(1, 1, 1)
+instances.TextLabel_2.TextSize = 14
+instances.TextLabel_2.TextWrapped = true
+instances.TextLabel_2.BackgroundColor3 = Color3.new(1, 1, 1)
+instances.TextLabel_2.BackgroundTransparency = 1
+instances.TextLabel_2.Position = UDim2.new(0, 0, 0.7138947248458862, 0)
+instances.TextLabel_2.Size = UDim2.new(0, 292, 0, 22)
+
+instances.UICorner_1.Parent = instances.Frame_1
+
+local get = function(x)
+    return game:GetService(x)
+end
+local players = get "Players"
+local ws = get "Workspace"
+local rs = get "ReplicatedStorage"
+local rus = get "RunService"
+local uis = get "UserInputService"
+local coregui = get "CoreGui"
+local http = get "HttpService"
+local ts = get "TeleportService"
+local lighting = get "Lighting"
+local plr = players.LocalPlayer
+local char = (plr and (plr.Character or plr.CharacterAdded:Wait()) or nil)
+local hrp = plr and (char:WaitForChild "HumanoidRootPart") or nil
+local hum = plr and (char:WaitForChild "Humanoid") or nil
+if plr then
+    plr.CharacterAdded:Connect(
+        function(c)
+            char = c
+            hrp = c:WaitForChild "HumanoidRootPart"
+            hum = c:WaitForChild "Humanoid"
+        end
+    )
+end
+local cf = CFrame
+local v3 = Vector3
+local ud2 = UDim2
+local c3 = Color3
+local rgb = c3.fromRGB
+local step = rus.Stepped
+local rstep = rus.RenderStepped
+local heartbeat = rus.Heartbeat
+local function bind(k, callback)
+    return uis.InputBegan:Connect(
+        function(io, gpe)
+            if Enum.UserInputType[k] then
+                if io.UserInputType == Enum.UserInputType[k] then
+                    callback()
+                end
+            elseif Enum.KeyCode[k] then
+                if io.KeyCode == Enum.KeyCode[k] then
+                    callback()
+                end
+            end
+        end
+    )
+end
+local function bindToStep(callback, doDebounce, debounceWait)
+    local debounce = false
+    step:Connect(
+        function()
+            if not debounce then
+                debounce = doDebounce == nil
+                callback()
+                if debounceWait and doDebounce then
+                    wait(debounceWait)
+                end
+                debounce = false
+            end
+        end
+    )
+end
+local function bindToRenderStep(callback, doDebounce, debounceWait)
+    local debounce = false
+    rstep:Connect(
+        function()
+            if not debounce then
+                debounce = doDebounce == nil
+                callback()
+                if debounceWait and doDebounce then
+                    wait(debounceWait)
+                end
+                debounce = false
+            end
+        end
+    )
+end
+local function bindToHeartbeat(callback, doDebounce, debounceWait)
+    local debounce = false
+    heartbeat:Connect(
+        function()
+            if not debounce then
+                debounce = doDebounce == nil
+                callback()
+                if debounceWait and doDebounce then
+                    wait(debounceWait)
+                end
+                debounce = false
+            end
+        end
+    )
+end
+local JSON = {stringify = function(...)
+        return http:JSONEncode(...)
+    end, parse = function(...)
+        return http:JSONDecode(...)
+    end}
+local tws = get "TweenService"
+local stats = get("Stats")
+local plrgui = plr:WaitForChild("PlayerGui")
+local mouse = plr:GetMouse()
+local models = ws.Models
+local values = rs.Values
+local carrier = values.Carrier
+local status = values.Status
+local playtype = values.PlayType
+local thrown = values.Thrown
+local qb = values.QB
+local cc = ws.CurrentCamera
+local finishLine = models.LockerRoomA.FinishLine
+local initVoting = plrgui.MainGui.InitVoting
+local mainRemote = rs.Remotes.CharacterSoundEvent
+local function getPing()
+    return stats.PerformanceStats.Ping:GetValue()
+end
+local function getServerPing()
+    return stats.Network.ServerStatsItem["Data Ping"]:GetValue()
+end
+local function getPosInXSeconds(currentPos, direction, speed, seconds)
+    local dist = speed * seconds
+    local pos = currentPos + direction * dist
+    return pos
+end
+local function getTime(dist, speed)
+    return dist / speed
+end
+local function getJumpHeightFromJumpPower()
+    return hum.JumpPower ^ 2 / (2 * ws.Gravity)
+end
+local function removeVectorComponent(vector, component)
+    if component:lower() == "y" then
+        return vector * v3.new(1, 0, 1)
+    elseif component:lower() == "x" then
+        return vector * v3.new(0, 1, 1)
+    elseif component:lower() == "z" then
+        return vector * v3.new(1, 1, 0)
+    end
+end
+local function jump()
+    hum.Jump = true
+    keypress(0x20)
+    wait()
+    keyrelease(0x20)
+end
+
+
+wait(.1)
+
+--[[ char.Humanoid.Died:Connect(function()
+    game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId,game.JobId)
+end) ]]
+
+-- Functions
+local function create(class, parent, props, children)
+    props = props or {}
+    children = children or {}
+    parent = parent or nil
+    local thing = Instance.new(class, parent)
+    for i, v in pairs(props) do
+        thing[i] = v
+    end
+    for _, v in pairs(children) do
+        v.Parent = thing
+    end
+    return thing
+end
+
+
+if (not getrawmetatable or  not hookmetamethod or not Drawing.new) then
+	game.Players.LocalPlayer:Kick("Your exploit is not supported. use Krnl (best free exploit) or Synapse X (best paid exploit) for it to work.") 
+end
+
+local uis = game:GetService("UserInputService")
+
+local values = game:GetService("ReplicatedStorage").Values
+local status = values.Status
+local qb = values.QB
+local isQB = (qb.Value == game:GetService("Players").LocalPlayer and game:GetService("Players").LocalPlayer.Character:FindFirstChild("Football"))
+
+
+local get = function(x)
+	return game:GetService(x)
+end
+local players = get "Players"
+local ws = get "Workspace"
+local rs = get "ReplicatedStorage"
+local rus = get "RunService"
+local uis = get "UserInputService"
+local coregui = get "CoreGui"
+local http = get "HttpService"
+local ts = get "TeleportService"
+local lighting = get "Lighting"
+local plr = players.LocalPlayer
+local char = (plr and (plr.Character or plr.CharacterAdded:Wait()) or nil)
+local hrp = plr and (char:WaitForChild "HumanoidRootPart") or nil
+local hum = plr and (char:WaitForChild "Humanoid") or nil
+if plr then
+	plr.CharacterAdded:Connect(
+		function(c)
+			char = c
+			hrp = c:WaitForChild "HumanoidRootPart"
+			hum = c:WaitForChild "Humanoid"
+		end
+	)
+end
+
+local cf = CFrame
+local v3 = Vector3
+local ud2 = UDim2
+local c3 = Color3
+local rgb = c3.fromRGB
+local step = rus.Stepped
+local rstep = rus.RenderStepped
+local heartbeat = rus.Heartbeat
+local function bind(k, callback)
+	return uis.InputBegan:Connect(
+		function(io, gpe)
+			if Enum.UserInputType[k] then
+				if io.UserInputType == Enum.UserInputType[k] then
+					callback()
+				end
+			elseif Enum.KeyCode[k] then
+				if io.KeyCode == Enum.KeyCode[k] then
+					callback()
+				end
+			end
+		end
+	)
+end
+local tws = get "TweenService"
+local stats = get("Stats")
+local plrgui = plr:WaitForChild("PlayerGui")
+local mouse = plr:GetMouse()
+local models = ws.Models
+local values = rs.Values
+local carrier = values.Carrier
+local status = values.Status
+local playtype = values.PlayType
+local thrown = values.Thrown
+local qb = values.QB
+local cc = ws.CurrentCamera
+local finishLine = models.LockerRoomA.FinishLine
+local initVoting = plrgui.MainGui.InitVoting
+local mainRemote = rs.Remotes.CharacterSoundEvent
+
+
+local mt = getrawmetatable(game)
+setreadonly(mt,false)
+local old = mt.__index
+
+
+mt.__index = newcclosure(function(self,b,c)
+	if self:IsA("BasePart") and b.Name == "Football" and c == "Position" then
+		return Vector3.new()
+	        elseif self:IsA("Part") and b.Name == "Football" and c == "Position" then
+                return Vector3.new()
+        end
+	return old(self,b,c)
+end)
+
+
+mt.__index = newcclosure(function(self,b)
+	if  b.Name == "Football"  then
+		return Vector3.new()
+        end
+	return old(self,b)
+end)
+
+
+
+spawn(function()
+while true do wait()
+    game:GetService("Players").LocalPlayer:FindFirstChildOfClass("Vector3Value").Value = Vector3.new()
+    end
+end)
+
+local Library =
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Attrixx/FreeScripts/main/YTUILib1.lua"))():init(
+        "Cheeto Hub | Football Fusion 2")
+
+
+
+ local Tab = Library:Tab("Main")
+
+local Catching = Tab:Section("Catching")
+local Physics = Tab:Section("Physics")
+local QB = Tab:Section("QB")
+local Visuals = Tab:Section("Visuals")
+local Extras = Tab:Section("Trolling")
+local Automatic = Tab:Section("Automatics")
+-- Ui Detection Bypass
+game:GetService("RunService").Stepped:Connect(function()
+    if game:GetService("CoreGui"):FindFirstChild("Cheeto Hub | Football Fusion 2") then
+        game:GetService("CoreGui")["Cheeto Hub | Football Fusion 2"].Parent = game:GetService('Players').LocalPlayer.PlayerGui
+                game:GetService('Players').LocalPlayer.PlayerGui["Cheeto Hub | Football Fusion 2"].ResetOnSpawn = false
+                if game:GetService('Players').LocalPlayer.PlayerGui:FindFirstChild("Cheeto Hub | Football Fusion 2") then
+                    return end
+        end
+end)
+--
+
+
+
+ Catching:Slider("Football Mags Distance",1,1,100, function(state)
+     distance = state
+ end)
+
+Catching:Toggle("Football Magnets",false,function(value)
+    	_G.tog = value
+        magging = nil;
+    
+uis.InputBegan:Connect(function(key,gp)
+    		if  key.UserInputType == Enum.UserInputType.MouseButton1 or key.KeyCode == Enum.KeyCode.ButtonR2 and gp == false and status.Value == "InPlay" and isQB == false and _G.tog == true then
+			for _,k in pairs(game:GetService("Workspace"):GetChildren()) do
+				if k.Name == "Football" and k.ClassName == "Part" then
+					for i = 1,60 do wait()
+					    magging = true
+					    if game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - k.Position).Magnitude <= distance and status.Value == "InPlay" and isQB == false and _G.tog == true then
+					        if gp == false then
+							k.CFrame = CFrame.new(game:GetService("Players").LocalPlayer.Character.Head.Position)
+							firetouchinterest(game:GetService("Players").LocalPlayer.Character.Head,k,0)
+							firetouchinterest(game:GetService("Players").LocalPlayer.Character.Head,k,1)
+							k.CanCollide = false
+							end
+						end
+					end
+					magging = false
+				end
+			end
+		end
+	end)
+end)
+Catching:Toggle("Stable Football Mags",false,function(value)
+	_G.tog2 = value
+    magging = nil;
+    
+uis.InputBegan:Connect(function(key,gp)
+    		if  key.UserInputType == Enum.UserInputType.MouseButton1 or key.KeyCode == Enum.KeyCode.ButtonR2 and gp == false and status.Value == "InPlay" and isQB == false and _G.tog2 == true then
+			for _,k in pairs(game:GetService("Workspace"):GetChildren()) do
+				if k.Name == "Football" and k.ClassName == "Part" then
+					for i = 1,60 do wait()
+					    magging = true
+					    if game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - k.Position).Magnitude <= distance and status.Value == "InPlay" and isQB == false and _G.tog2 == true then
+					        if gp == false then
+							k.CFrame = CFrame.new(game:GetService("Players").LocalPlayer.Character.Head.Position)
+
+							k.CanCollide = false
+							end
+						end
+					end
+					magging = false
+				end
+			end
+		end
+	end)
+end)
+
+
+
+Catching:Toggle("Legit Mags (Won't TP ball)",false,function(value)
+    fbsize = value
+end)
+    game:GetService("RunService").RenderStepped:Connect(function()
+    if fbsize == true and workspace:FindFirstChild("Football")   then
+        workspace:FindFirstChild('Football').Size = Vector3.new(10,10,10)
+    elseif fbsize == false and workspace:FindFirstChild("Football") then
+        workspace:FindFirstChild("Football").Size = Vector3.new(0.85, 1.2, 0.85)
+    end
+ end)
+
+
+Automatic:Slider("Auto Catch Distance",1,1,30.1,function(value)
+    catchdist = value
+end)
+
+
+Automatic:Toggle("Auto Catch",false,function(value)
+	tog2 = value
+end)
+
+spawn(function()
+local rs = game:GetService("ReplicatedStorage")
+local values = rs.Values
+local status = values.Status
+
+local rstep = game:GetService("RunService").RenderStepped
+local vu = game:GetService("VirtualUser")
+
+
+while rstep:wait() do
+repeat wait()
+    if workspace:FindFirstChild("Football") and game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart") and status.Value == "InPlay" and tog2 then
+       if (workspace:FindFirstChild("Football").Position - game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Position).Magnitude <= catchdist and status.Value =="InPlay" and tog2 then
+           mouse1click()
+                end
+            end
+        until tog2 == false or not workspace:FindFirstChild("Football")
+    end
+end)
+
+
+
+Automatic:Toggle("Auto Jump",false,function(value)
+	tog3 = value
+	local function removeVectorComponent(vector, component)
+    if component:lower() == "y" then
+        return vector * v3.new(1, 0, 1)
+    elseif component:lower() == "x" then
+        return vector * v3.new(0, 1, 1)
+    elseif component:lower() == "z" then
+        return vector * v3.new(1, 1, 0)
+    end
+end
+
+local function getJumpHeightFromJumpPower()
+    return hum.JumpPower ^ 2 / (2 * ws.Gravity)
+end
+
+
+local function jump()
+    hum.Jump = true
+    keypress(0x20)
+    wait()
+    keyrelease(0x20)
+end
+
+coroutine.resume(
+    coroutine.create(
+        function()
+            repeat
+                wait(.25)
+            until tog3 == false
+            while rstep:wait() do
+                if tog3 == true then
+                    local fb = workspace:FindFirstChild("Football")
+                    if status.Value == "InPlay" and fb then
+                        local fbpos = fb.Position
+                        if fbpos.Y >= 7 and fbpos.Y <= hrp.Position.Y + getJumpHeightFromJumpPower() + 10 then
+                            local distXZ =
+                                (removeVectorComponent(fb.Position, "Y") - removeVectorComponent(hrp.Position, "Y")).Magnitude
+                            local distX = (fb.Position * v3.new(1, 0, 0) - hrp.Position * v3.new(1, 0, 0)).Magnitude
+                            local distZ = (fb.Position * v3.new(0, 0, 1) - hrp.Position * v3.new(0, 0, 1)).Magnitude
+                            if distX <= 15 and distZ <= fb.Position.Y then
+                                jump()
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    )
+)
+
+
+end)
+
+
+ 
+ QB:Toggle("Qb Aimbot (Press T to Throw)",false,function(value)
+     tog5 = value
+     local uis = game:GetService("UserInputService")
+
+local LPlayer = game:GetService("Players").LocalPlayer
+local LMouse = LPlayer:GetMouse()
+
+local Camera = game:GetService("Workspace").CurrentCamera
+
+local function GetClosestPlayer()
+    local ClosestDistance, ClosestPlayer = math.huge, nil;
+    for _,Player in next, game:GetService("Players"):GetPlayers() do
+        if Player ~= LPlayer then
+            local Character = Player.Character
+            if Character and Character.Humanoid.Health > 1 and v.TeamColor ~= game:GetService("Players").LocalPlayer.TeamColor then
+                local ScreenPosition, IsVisibleOnViewPort = Camera:WorldToViewportPoint(Character.HumanoidRootPart.Position)
+                if IsVisibleOnViewPort then
+                    local MDistance = (Vector2.new(LMouse.X, LMouse.Y) - Vector2.new(ScreenPosition.X, ScreenPosition.Y)).Magnitude
+                    if MDistance < ClosestDistance then
+                        ClosestPlayer = Player
+                        ClosestDistance = MDistance
+                    end
+                end
+            end
+        end
+    end
+    return ClosestPlayer
+end
+
+
+uis.InputBegan:Connect(function(key)
+    if key.KeyCode == Enum.KeyCode.T then
+         getgenv().closest = GetClosestPlayer()
+         if getgenv().closest.TeamColor ~= game:GetService("Players").LocalPlayer.TeamColor and tog5 and values.Status == "InPlay" then
+local plusvector = tonumber((game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - getgenv().closest.Character.HumanoidRootPart.Position).Magnitude)
+local pwr = string.gsub(game:GetService("Players").LocalPlayer.PlayerGui.BallGui.Frame.Disp.Text,"%%","")
+
+
+local anim = game:GetService("ReplicatedStorage").Animations.Throw
+
+local play = game:GetService("Players").LocalPlayer.Character.Humanoid:LoadAnimation(game:GetService("ReplicatedStorage").Animations.Throw)
+
+play:Play()
+
+
+
+local args = {
+    [1] = "Clicked",
+    [2] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position,
+    [3] = getgenv().closest.Character["HumanoidRootPart"].Position + Vector3.new(0,plusvector,0),
+    [4] = tonumber(math.round(pwr))
+}
+
+game:GetService("Players").LocalPlayer.Character.Football.Handle.RemoteEvent:FireServer(unpack(args))
+            end
+        end
+    end)
+end)
+ 
+ Physics:Toggle("Quick TP (F is the keybind)",false,function(value)
+     forwardtp = value
+     
+     local Players = game:GetService("Players")
+local ContextActionService = game:GetService("ContextActionService")
+ 
+local function doTeleport()
+    if forwardtp == true then
+	local player = Players.LocalPlayer
+	local character = player.Character
+	if character and character.Parent then
+		local currentPivot = character:GetPivot()
+		character:PivotTo(currentPivot * CFrame.new(0, 0, -2))
+		end
+	end
+end
+ _G.tog = value
+ if _G.tog == true  then
+ContextActionService:BindAction("Teleport", doTeleport, true, Enum.KeyCode.F)
+else
+    ContextActionService:UnbindAction("Teleport")
+end
+ end)
+ 
+ 
+ 
+ 
+
+
+Catching:Slider("Pull Vector Distance",1,1,25,function(value)
+    pulldist = value
+end)
+
+ function create(class, parent, props, children)
+    props = props or {}
+    children = children or {}
+    parent = parent or nil
+    local thing = Instance.new(class, parent)
+    for i, v in pairs(props) do
+        thing[i] = v
+    end
+    for _, v in pairs(children) do
+        v.Parent = thing
+    end
+    return thing
+end
+
+
+Catching:Toggle("Pull Vector",false,function(value)
+     pullvector = value
+game:GetService("UserInputService").InputBegan:Connect(function(key,gp)
+    if key.UserInputType == Enum.UserInputType.MouseButton1 and pullvector == true and gp == false then
+            if workspace:FindFirstChild("Football") and status.Value == "InPlay" then
+                if (workspace:FindFirstChild("Football").Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= pulldist and gp == false then
+                    for k = 1,2 do wait()
+                    if workspace:FindFirstChild("Football") and (workspace:FindFirstChild("Football").Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= pulldist and status.Value == "InPlay" then
+                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(workspace:FindFirstChild("Football").Position)
+                        firetouchinterest(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart,workspace:FindFirstChild("Football"):FindFirstChild("TouchInterest"),0)
+                        wait()
+                        firetouchinterest(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart,workspace:FindFirstChild("Football"):FindFirstChild("TouchInterest"),1)
+                        end
+                    end
+                end
+            end
+        end
+    end)
+end)
+
+
+
+
+
+
+
+ 
+
+ Visuals:Toggle("Football ESP",false,function(value)
+     
+
+
+ESP:AddObjectListener(workspace, {
+    Name = "Football" ,
+    CustomName = "Football",
+    Color = Color3.fromRGB(255,255,255),
+    IsEnabled = "FootballESP"
+})
+
+
+ESP.FootballESP = true
+
+footballesp = value
+
+ESP:Toggle(footballesp)
+ESP.Players = false
+end)
+ 
+ Visuals:Toggle("Player ESP",false,function(value)
+     players = value
+        if not ESP.FootballESP == true then
+     ESP:Toggle(true)
+     ESP.Players = true
+        end
+     ESP.Players = players
+ end)
+ 
+ 
+ 
+
+
+ Visuals:Toggle("ESP Boxes",true,function(value)
+     ESP.Boxes = value
+ end)
+ Visuals:Toggle("Use Team Color",true,function(value)
+     ESP.TeamColor = value
+ end)
+ 
+ Extras:Toggle("Advertise Script in Chat",false,function(value)
+     Advertise = value
+
+ end)
+
+spawn(function()
+         while true do wait(2)
+             if Advertise then
+local ohString1 = "use cheeto hub for the best hacks for football fusion 2, inv: .gg/Cp4U3xtApN"
+local ohString2 = "All"
+
+game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(ohString1, ohString2)
+        end
+    end
+end)
+
+     local oldCanCollide = workspace:FindFirstChild("ScrambleWall").CanCollide
+
+Extras:Toggle("No QB Boundaries",false,function(value)
+    boundaries = value 
+
+    if boundaries  == true then
+        workspace:FindFirstChild("ScrambleWall").CanCollide = false
+     else
+        workspace:FindFirstChild("ScrambleWall").CanCollide = oldCanCollide
+    end
+end)
+     local oldParent = workspace.Models
+
+ Extras:Toggle("No Out Of Bounds",false,function(value)
+     bounds = value
+
+      if bounds == true then
+        if workspace.Models:FindFirstChild("Boundaries") then
+            workspace.Models:FindFirstChild("Boundaries").Parent = game:GetService("BadgeService")
+        elseif bounds == false then
+            game:GetService("BadgeService"):FindFirstChild("Boundaries").Parent = workspace.Models
+        end
+    end           
+end)
+
+ 
+
+ 
+ 
+ Extras:Slider("Tackle Aimbot Distance",1,1,15,function(value)
+    tackledist = value 
+ end)
+ 
+ Extras:Toggle("Tackle Aimbot",false,function(value)
+     tacklebot = value
+local hrp = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+local uis = game:GetService("UserInputService")
+
+uis.InputBegan:Connect(function(key,gp)
+    if key.UserInputType == Enum.UserInputType.MouseButton1 and workspace:FindFirstChild(game:GetService('Players').LocalPlayer.Name):FindFirstChild("HumanoidRootPart") then
+        for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+            if game:GetService("ReplicatedStorage").Values.Carrier.Value ~= nil and tacklebot then
+                if v == game:GetService("ReplicatedStorage").Values.Carrier.Value and v.TeamColor ~= game:GetService("Players").LocalPlayer.TeamColor then
+                    if (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).Magnitude <= tackledist and tacklebot then
+                        hrp.CFrame = CFrame.new(v.Character.HumanoidRootPart.Position)
+                        end
+                    end
+                end
+            end
+        end
+    end)
+end)
+
+
+
+
+local SkyWeather = game.Workspace.SkyWeather
+Visuals:Toggle("Change Weather To Snow",false,function(value)
+	isSnow = value 
+
+	if isSnow  == true then
+
+
+		for i,v in pairs(SkyWeather:GetChildren()) do
+			if v.Name == "Snow" then
+				v.Enabled = true
+			end
+		end
+	else
+		for i,v in pairs(SkyWeather:GetChildren()) do
+			if v.Name == "Snow" then
+				v.Enabled = false
+			end
+		end
+	end
+end)
+
+Visuals:Toggle("Change Weather To Rain",false,function(value)
+	isRain = value 
+	
+	local Raining = game.Workspace.Models.Field.Ground
+	
+	if isRain  == true then
+		for i,v in pairs(SkyWeather:GetChildren()) do
+			if v.Name == "Rain" then
+				v.Enabled = true
+			end
+		end
+	elseif isRain == false  then
+		for i,v in pairs(SkyWeather:GetChildren()) do
+			if v.Name == "Rain" then
+				v.Enabled = false
+			end
+		end
+	end
+end)
+
+Automatic:Toggle("Auto Follow Player GUI",false,function(value)
+    
+local uis = game:GetService("UserInputService")
+local LPlayer = game:GetService("Players").LocalPlayer
+local LMouse = LPlayer:GetMouse()
+
+local Camera = game:GetService("Workspace").CurrentCamera
+
+local function GetClosestPlayer()
+    local ClosestDistance, ClosestPlayer = math.huge, nil;
+    for _,Player in next, game:GetService("Players"):GetPlayers() do
+        if Player ~= LPlayer then
+            local Character = Player.Character
+            if Character and Character.Humanoid.Health > 1 and Player.TeamColor ~= LPlayer.TeamColor then
+                local ScreenPosition, IsVisibleOnViewPort = Camera:WorldToViewportPoint(Character.HumanoidRootPart.Position)
+                if IsVisibleOnViewPort then
+                    local MDistance = (Vector2.new(LMouse.X, LMouse.Y) - Vector2.new(ScreenPosition.X, ScreenPosition.Y)).Magnitude
+                    if MDistance < ClosestDistance then
+                        ClosestPlayer = Player
+                        ClosestDistance = MDistance
+                    end
+                end
+            end
+        end
+    end
+    return ClosestPlayer
+end
+
+
+_G.toggle3 = value
+_G.stopfollow = false
+
+uis.InputBegan:Connect(function(key,gp)
+    if key.KeyCode == Enum.KeyCode.Q and _G.toggle3 and screenGui.Enabled == true then
+        instances.TextLabel_2.Text = tostring(GetClosestPlayer())
+         repeat wait()
+            game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid"):MoveTo(game:GetService("Players")[instances.TextLabel_2.Text].Character:FindFirstChild("HumanoidRootPart").Position)
+        until _G.toggle3 == false  or instances.TextLabel_2.Text == 'select the player bro (keybind is Q)'
+    end
+end)
+
+uis.InputBegan:Connect(function(key,gp)
+    if key.KeyCode == Enum.KeyCode.G and instances.TextLabel_2.Text ~= 'select the player bro (keybind is Q)' and _G.toggle3 and screenGui.Enabled == true then
+        _G.stopfollow = true
+        instances.TextLabel_2.Text = 'select the player bro (keybind is Q)'
+        game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid"):MoveTo(game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Position)
+    end
+end)
+
+game:GetService("Players").LocalPlayer.PlayerGui.SelectedPlayer.Enabled = not game:GetService("Players").LocalPlayer.PlayerGui.SelectedPlayer.Enabled 
+end)
+
+
+Physics:Toggle("Remove Ball Trail",false,function(value)
+    balltrail = value
+end)
+spawn(function()
+     while true do wait(0.1)
+            if balltrail then
+        if workspace:FindFirstChild("Football") and workspace:FindFirstChild("Football"):FindFirstChild("Trail") and balltrail then
+        workspace:FindFirstChild("Football"):FindFirstChild("Trail"):Destroy()
+            end
+        end
+     end
+end)
+
+
+
+Automatic:Toggle("Auto Captain",false,function(value)
+captain = value
+end)
+
+spawn(function()
+    while true do task.wait(.5) 
+    if captain and models.LockerRoomA:FindFirstChild("FinishLine") and models.LockerRoomA:FindFirstChild("FinishLine"):FindFirstChildOfClass("TouchTransmitter") then
+        hrp.CFrame = CFrame.new(models.LockerRoomA:FindFirstChild("FinishLine").Position)
+        end
+     end
+end)
+Physics:Toggle("No Freeze",false,function(value)
+    nofreeze = value
+end)
+spawn(function()
+while true do wait()
+    if nofreeze and game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+        game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = 20
+        end
+    end
+end)
+
+
+Automatic:Slider("Auto Block Distance",1,2,5,function(value)
+    blockdist = value
+end)
+
+
+
+function getclosest()
+    local dist,char = math.huge
+    for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+        if v.Character and v.Character:FindFirstChild("Humanoid") and v.Character:FindFirstChild("HumanoidRootPart") and v.Name ~= game:GetService("Players").LocalPlayer.Name and v.TeamColor ~= game:GetService("Players").LocalPlayer.TeamColor then
+        local magnitude = (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).Magnitude
+        if magnitude < dist then
+            dist = magnitude
+            char = v
+            end
+        end
+    end
+    return char
+    end
+
+
+
+
+
+Automatic:Toggle("Auto Block",false,function(value)
+    blocktog = value
+end)
+
+
+local VirtualInputManager = game:GetService('VirtualInputManager')
+
+spawn(function()
+    while true do wait()
+    if blocktog and (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - getclosest().Character.HumanoidRootPart.Position).Magnitude <= blockdist then
+        VirtualInputManager:SendKeyEvent(true, "X", false, game)
+        end
+    end
+end)
+
+
+
+
+wait(1)
+
+
+local t = 10; 
+
+local tick = tick
+local fromHSV = Color3.fromHSV
+local RunService = game:GetService("RunService")
+local Frame = game:GetService("Players").LocalPlayer.PlayerGui["Cheeto Hub | Football Fusion 2"].Main.Top.Line
+RunService:BindToRenderStep("Rainbow", 1000, function()
+	local hue = tick() % t / t
+	local color = fromHSV(hue, 1, 1)
+	Frame.BackgroundColor3 = color
+end)
+
+game:GetService("Players").LocalPlayer.PlayerGui["Cheeto Hub | Football Fusion 2"].Main.Top.Label.Font = Enum.Font.Gotham
+
+ getgenv().tbs = {}
+
+
+        for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetDescendants()) do
+            if v:IsA("ScreenGui") and v.Name:match("Cheeto") then
+                table.insert(getgenv().tbs,v)
+            end
+        end
+        wait(0.5)
+
+uis.InputBegan:Connect(function(key,gp)
+    if uis:GetFocusedTextBox() then return end
+        if key.KeyCode == Enum.KeyCode.LeftControl then
+            for i,v in pairs(getgenv().tbs) do
+            v.Enabled = not v.Enabled
+        end
+    end
+end)
+
+uis.InputBegan:Connect(function(key,gp)
+    if uis:GetFocusedTextBox() then return end
+    if  key.KeyCode == Enum.KeyCode.RightAlt then
+        for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetDescendants()) do
+            if v:IsA("ScreenGui") and v.Name:match("Cheeto") then
+                v:Destroy()
+                end
+            end
+        end
+end)
+
+print()
+
