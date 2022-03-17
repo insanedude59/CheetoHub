@@ -395,6 +395,7 @@ Catching:Toggle("Stable Football Mags",false,function(value)
     
 uis.InputBegan:Connect(function(key,gp)
     		if  key.UserInputType == Enum.UserInputType.MouseButton1 or key.KeyCode == Enum.KeyCode.ButtonR2 and gp == false and status.Value == "InPlay" and isQB == false and _G.tog2 == true then
+    		    percent = math.random(1,100)
     		    if percent <= chance then
         			for _,k in pairs(game:GetService("Workspace"):GetChildren()) do
         				if k.Name == "Football" and k.ClassName == "Part" then
