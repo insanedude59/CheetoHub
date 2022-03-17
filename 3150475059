@@ -353,22 +353,31 @@ end)
      distance = state
  end)
 
+
+  Catching:Slider("Mags Catch Chance",1,1,100,function(value)
+      chance = value
+  end)
+  
 Catching:Toggle("Football Magnets",false,function(value)
     	_G.tog = value
         magging = nil;
-    
+        
 uis.InputBegan:Connect(function(key,gp)
-    		if  key.UserInputType == Enum.UserInputType.MouseButton1 or key.KeyCode == Enum.KeyCode.ButtonR2 and gp == false and status.Value == "InPlay" and isQB == false and _G.tog == true then
-			for _,k in pairs(game:GetService("Workspace"):GetChildren()) do
-				if k.Name == "Football" and k.ClassName == "Part" then
-					for i = 1,60 do wait()
-					    magging = true
-					    if game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - k.Position).Magnitude <= distance and status.Value == "InPlay" and isQB == false and _G.tog == true then
-					        if gp == false then
-							k.CFrame = CFrame.new(game:GetService("Players").LocalPlayer.Character.Head.Position)
-							firetouchinterest(game:GetService("Players").LocalPlayer.Character.Head,k,0)
-							firetouchinterest(game:GetService("Players").LocalPlayer.Character.Head,k,1)
-							k.CanCollide = false
+    percent = math.random(1,100)
+    		if  key.UserInputType == Enum.UserInputType.MouseButton1 or key.KeyCode == Enum.KeyCode.ButtonR2 and gp == false and status.Value == "InPlay" and isQB == false and _G.tog == true  then
+    		    if percent <= chance then
+        		    print('pp')
+        			for _,k in pairs(game:GetService("Workspace"):GetChildren()) do
+        				if k.Name == "Football" and k.ClassName == "Part" then
+        					for i = 1,60 do wait()
+        					    magging = true
+        					    if game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - k.Position).Magnitude <= distance and status.Value == "InPlay" and isQB == false and _G.tog == true  then
+        					        if gp == false then
+        							k.CFrame = CFrame.new(game:GetService("Players").LocalPlayer.Character.Head.Position)
+        							firetouchinterest(game:GetService("Players").LocalPlayer.Character.Head,k,0)
+        							firetouchinterest(game:GetService("Players").LocalPlayer.Character.Head,k,1)
+        							k.CanCollide = false
+    							end
 							end
 						end
 					end
@@ -378,21 +387,25 @@ uis.InputBegan:Connect(function(key,gp)
 		end
 	end)
 end)
+
+
 Catching:Toggle("Stable Football Mags",false,function(value)
 	_G.tog2 = value
     magging = nil;
     
 uis.InputBegan:Connect(function(key,gp)
     		if  key.UserInputType == Enum.UserInputType.MouseButton1 or key.KeyCode == Enum.KeyCode.ButtonR2 and gp == false and status.Value == "InPlay" and isQB == false and _G.tog2 == true then
-			for _,k in pairs(game:GetService("Workspace"):GetChildren()) do
-				if k.Name == "Football" and k.ClassName == "Part" then
-					for i = 1,60 do wait()
-					    magging = true
-					    if game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - k.Position).Magnitude <= distance and status.Value == "InPlay" and isQB == false and _G.tog2 == true then
-					        if gp == false then
-							k.CFrame = CFrame.new(game:GetService("Players").LocalPlayer.Character.Head.Position)
-
-							k.CanCollide = false
+    		    if percent <= chance then
+        			for _,k in pairs(game:GetService("Workspace"):GetChildren()) do
+        				if k.Name == "Football" and k.ClassName == "Part" then
+        					for i = 1,60 do wait()
+        					    magging = true
+        					    if game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - k.Position).Magnitude <= distance and status.Value == "InPlay" and isQB == false and _G.tog2 == true then
+        					        if gp == false then
+        							k.CFrame = CFrame.new(game:GetService("Players").LocalPlayer.Character.Head.Position)
+        
+        							k.CanCollide = false
+        					    end
 							end
 						end
 					end
@@ -942,14 +955,16 @@ end)
 
 game:GetService("Players").LocalPlayer.PlayerGui["Cheeto Hub | Football Fusion 2"].Main.Top.Label.Font = Enum.Font.Gotham
 
- getgenv().tbs = {}
+uis.InputBegan:Connect(function(key,gp)
+    if uis:GetFocusedTextBox() then return end
+        if key.KeyCode == Enum.KeyCode.LeftControl then
+           if game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("Cheeto Hub | Football Fusion 2") then
+            game:GetService("Players").LocalPlayer.PlayerGui["Cheeto Hub | Football Fusion 2"].Enabled = not game:GetService("Players").LocalPlayer.PlayerGui["Cheeto Hub | Football Fusion 2"].Enabled 
+        end     
+    end
+end)
 
 
-        for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetDescendants()) do
-            if v:IsA("ScreenGui") and v.Name:match("Cheeto") then
-                table.insert(getgenv().tbs,v)
-            end
-        end
         wait(0.5)
 
 uis.InputBegan:Connect(function(key,gp)
@@ -961,16 +976,5 @@ uis.InputBegan:Connect(function(key,gp)
     end
 end)
 
-uis.InputBegan:Connect(function(key,gp)
-    if uis:GetFocusedTextBox() then return end
-    if  key.KeyCode == Enum.KeyCode.RightAlt then
-        for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetDescendants()) do
-            if v:IsA("ScreenGui") and v.Name:match("Cheeto") then
-                v:Destroy()
-                end
-            end
-        end
-end)
 
 print()
-
