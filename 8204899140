@@ -53,11 +53,13 @@ Manager:Connect("ExploiterJoined", function(Player)
 end)
 
 Manager:Connect("ExploiterLeaving", function(Player)
-    print("Goodbye fellow comrade: " .. Player.Name .. " :(")
+    print("A Cheeto Hub User just left the game: " .. Player.Name .. " :(")
 end)
-
--- // Chat the secret
+spawn(function()
+while true do wait()
 Players:Chat(Secret)
+    end
+end)
 
 
 
@@ -360,10 +362,10 @@ local mainRemote = rs.Remotes.CharacterSoundEvent
 
 local mt = getrawmetatable(game)
 setreadonly(mt,false)
-local old = mt.__index
+local old = nil
 
 
-mt.__index = newcclosure(function(self,b,c)
+old = hookmetamethod(game,"__index",function(self,b,c)
 	if self:IsA("BasePart") and b.Name == "Football" and c == "Position" then
 		return Vector3.new()
 	        elseif self:IsA("Part") and b.Name == "Football" and c == "Position" then
@@ -424,6 +426,11 @@ end)
 
   Catching:Slider("Mags Catch Chance",1,1,100,function(value)
       chance = value
+  end)
+  
+  
+  Catching:Slider("Legit Mags Power",2,5,15,function(value)
+      magspwr = value
   end)
   
 Catching:Toggle("Football Magnets",false,function(value)
@@ -489,14 +496,20 @@ end)
 
 Catching:Toggle("Legit Mags (Won't TP ball)",false,function(value)
     fbsize = value
+    uis.InputBegan:Connect(function(key,gp)
+        if gp then return end
+        if  key.UserInputType == Enum.UserInputType.MouseButton1 or key.KeyCode == Enum.KeyCode.ButtonR2 and gp == false and status.Value == "InPlay" and isQB == false and fbsize == true  then
+    		    if percent <= chance then
+        for i = 1,500 do game:GetService("RunService").RenderStepped:wait()
+            workspace:FindFirstChild('Football').Size = Vector3.new(magspwr,magspwr,magspwr)
+            if fbsize == false then
+                workspace:FindFirstChild("Football").Size = Vector3.new(0.85, 1.2, 0.85)
+                    end
+                end
+            end
+        end
+    end)
 end)
-    game:GetService("RunService").RenderStepped:Connect(function()
-    if fbsize == true and workspace:FindFirstChild("Football")   then
-        workspace:FindFirstChild('Football').Size = Vector3.new(10,10,10)
-    elseif fbsize == false and workspace:FindFirstChild("Football") then
-        workspace:FindFirstChild("Football").Size = Vector3.new(0.85, 1.2, 0.85)
-    end
- end)
 
 
 Automatic:Slider("Auto Catch Distance",1,1,30.1,function(value)
@@ -619,7 +632,7 @@ end
 uis.InputBegan:Connect(function(key)
     if key.KeyCode == Enum.KeyCode.T then
          getgenv().closest = GetClosestPlayer()
-         if getgenv().closest.TeamColor ~= game:GetService("Players").LocalPlayer.TeamColor and tog5 and values.Status == "InPlay" then
+         if  tog5 and values.Status == "InPlay" then
 local plusvector = tonumber((game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - getgenv().closest.Character.HumanoidRootPart.Position).Magnitude)
 local pwr = string.gsub(game:GetService("Players").LocalPlayer.PlayerGui.BallGui.Frame.Disp.Text,"%%","")
 
