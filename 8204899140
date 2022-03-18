@@ -328,8 +328,10 @@ local Library =
 
 
 
- local Tab = Library:Tab("Main")
-
+local Tab = Library:Tab("Main")
+local plr = Library:Tab("Player")
+ 
+ 
 local Catching = Tab:Section("Catching")
 local Physics = Tab:Section("Physics")
 local QB = Tab:Section("QB")
@@ -977,5 +979,82 @@ uis.InputBegan:Connect(function(key,gp)
     end
 end)
 
+function ACBYPASS()
+    if ACBYPASS_HASRUN then
+        return
+    end
+    if not ACBYPASS_HASRUN then
+        ACBYPASS_HASRUN = true
+        local checkfunc = is_synapse_function or is_protosmasher_closure or function()
+                return false
+            end
+        local gc = syn and getgc(true) or get_gc_objects()
+        for i, v in next, gc do
+            if type(v) == "function" and islclosure(v) and not checkfunc(v) then
+                for k, x in next, getconstants(v) do
+                    if
+                        x and tonumber(x) and
+                            ((tonumber(x) > 19 and tonumber(x) < 21) or (tonumber(x) > 49 and tonumber(x) < 51))
+                     then
+                        setconstant(v, k, 100)
+                    end
+                end
+            end
+        end
+    end
+end
 
-print()
+local sction = plr:Section("Player")
+
+
+sction:Slider("WalkSpeed",20,20,45,function(value)
+    ws = value
+end)
+
+sction:Slider("JumpPower",50,50,80,function(value)
+    jp = value
+end)
+
+sction:Toggle("WalkSpeed",false,function(value)
+local ACBYPASS_HASRUN = false
+walkspeed = value
+
+if walkspeed == true then
+ACBYPASS()
+print('yoyoy')
+end
+if walkspeed == false then
+    game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = 20
+        end
+end)
+rstep = game:GetService("RunService").RenderStepped
+spawn(function()
+while true do rstep:wait()
+    if walkspeed and game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid") then
+        game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = ws
+        end
+    end
+end)
+
+
+sction:Toggle("JumpPower",false,function(value)
+    print('yes',value)
+    _G.JumpPower = value
+    if _G.JumpPower then
+        ACBYPASS()
+    end
+        if _G.JumpPower == false then
+        game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").JumpPower = 50
+    end
+end)
+
+spawn(function()
+while true do rstep:wait() 
+    if _G.JumpPower and game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid") then
+    game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").JumpPower = jp
+        end
+    end
+end)
+
+
+
