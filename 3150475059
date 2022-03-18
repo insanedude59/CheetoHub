@@ -795,7 +795,7 @@ spawn(function()
         if boundaries  == true then
             workspace:FindFirstChild("ScrambleWall").CanCollide = false
          else
-            workspace:FindFirstChild("ScrambleWall").CanCollide = not workspace:FindFirstChild("ScrambleWall").CanCollide
+            workspace:FindFirstChild("ScrambleWall").CanCollide = oldCanCollide
             break
         end
     end
