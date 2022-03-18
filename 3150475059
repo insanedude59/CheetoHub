@@ -615,7 +615,7 @@ local function GetClosestPlayer()
     for _,Player in next, game:GetService("Players"):GetPlayers() do
         if Player ~= LPlayer then
             local Character = Player.Character
-            if Character and Character.Humanoid.Health > 1 and v.TeamColor ~= game:GetService("Players").LocalPlayer.TeamColor then
+            if Character and Character.Humanoid.Health > 1 and Player.TeamColor ~= game:GetService("Players").LocalPlayer.TeamColor then
                 local ScreenPosition, IsVisibleOnViewPort = Camera:WorldToViewportPoint(Character.HumanoidRootPart.Position)
                 if IsVisibleOnViewPort then
                     local MDistance = (Vector2.new(LMouse.X, LMouse.Y) - Vector2.new(ScreenPosition.X, ScreenPosition.Y)).Magnitude
