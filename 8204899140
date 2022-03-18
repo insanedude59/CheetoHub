@@ -49,14 +49,14 @@ end)
 
 -- // Connect to signals
 Manager:Connect("ExploiterJoined", function(Player)
-    print("Hello fellow comrade: " .. Player.Name)
+    print("A Cheeto Hub user is in your game: " .. Player.Name)
 end)
 
 Manager:Connect("ExploiterLeaving", function(Player)
-    print("A Cheeto Hub User just left the game: " .. Player.Name .. " :(")
+    print("A Cheeto Hub user just left the game: " .. Player.Name .. " :(")
 end)
 spawn(function()
-while true do wait()
+while true do wait(1)
 Players:Chat(Secret)
     end
 end)
@@ -430,7 +430,7 @@ end)
   
   
   Catching:Slider("Legit Mags Power",2,5,15,function(value)
-      magspwr = value
+      magspwr = value or 10
   end)
   
 Catching:Toggle("Football Magnets",false,function(value)
@@ -491,7 +491,7 @@ uis.InputBegan:Connect(function(key,gp)
 		end
 	end)
 end)
-
+local percent = math.random(1,100)
 
 
 Catching:Toggle("Legit Mags (Won't TP ball)",false,function(value)
@@ -499,11 +499,13 @@ Catching:Toggle("Legit Mags (Won't TP ball)",false,function(value)
     uis.InputBegan:Connect(function(key,gp)
         if gp then return end
         if  key.UserInputType == Enum.UserInputType.MouseButton1 or key.KeyCode == Enum.KeyCode.ButtonR2 and gp == false and status.Value == "InPlay" and isQB == false and fbsize == true  then
-    		    if percent <= chance then
+    		    if percent <= chance and magspwr ~= nil and workspace:FindFirstChild("Football")  then
         for i = 1,500 do game:GetService("RunService").RenderStepped:wait()
+            if workspace:FindFirstChild("Football") then
             workspace:FindFirstChild('Football').Size = Vector3.new(magspwr,magspwr,magspwr)
             if fbsize == false then
                 workspace:FindFirstChild("Football").Size = Vector3.new(0.85, 1.2, 0.85)
+                        end
                     end
                 end
             end
@@ -1045,7 +1047,7 @@ uis.InputBegan:Connect(function(key,gp)
         end     
     end
 end)
-
+getgenv().tbs = {}
 
         wait(0.5)
 
