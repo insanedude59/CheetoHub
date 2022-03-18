@@ -362,14 +362,12 @@ local mainRemote = rs.Remotes.CharacterSoundEvent
 
 local mt = getrawmetatable(game)
 setreadonly(mt,false)
-local old = nil
+local old = mt.__index
 
 
-old = hookmetamethod(game,"__index",function(self,b,c)
-	if self:IsA("BasePart") and b.Name == "Football" and c == "Position" then
+mt.__index = newcclosure(function(self,b,c)
+	if self:IsA("BasePart") and c == "Position" then
 		return Vector3.new()
-	        elseif self:IsA("Part") and b.Name == "Football" and c == "Position" then
-                return Vector3.new()
         end
 	return old(self,b,c)
 end)
@@ -429,10 +427,11 @@ end)
   end)
   
   
-  Catching:Slider("Legit Mags Power",2,5,15,function(value)
-      magspwr = value or 10
+  Catching:Slider("Legit Mags Power",2,5,20,function(value)
+      magspwr = value
   end)
-  
+  local rstep = game:GetService("RunService").RenderStepped
+
 Catching:Toggle("Football Magnets",false,function(value)
     	_G.tog = value
         magging = nil;
@@ -444,12 +443,13 @@ uis.InputBegan:Connect(function(key,gp)
         		    print('pp')
         			for _,k in pairs(game:GetService("Workspace"):GetChildren()) do
         				if k.Name == "Football" and k.ClassName == "Part" then
-        					for i = 1,60 do wait()
+        					for i = 1,300 do rstep:wait()
         					    magging = true
         					    if game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - k.Position).Magnitude <= distance and status.Value == "InPlay" and isQB == false and _G.tog == true  then
-        					        if gp == false then
+        					        if gp == false and status.Value == "InPlay" then
         							k.CFrame = CFrame.new(game:GetService("Players").LocalPlayer.Character.Head.Position)
         							firetouchinterest(game:GetService("Players").LocalPlayer.Character.Head,k,0)
+        							wait()
         							firetouchinterest(game:GetService("Players").LocalPlayer.Character.Head,k,1)
         							k.CanCollide = false
     							end
@@ -496,18 +496,11 @@ local percent = math.random(1,100)
 
 Catching:Toggle("Legit Mags (Won't TP ball)",false,function(value)
     fbsize = value
-    uis.InputBegan:Connect(function(key,gp)
-        if gp then return end
-        if  key.UserInputType == Enum.UserInputType.MouseButton1 or key.KeyCode == Enum.KeyCode.ButtonR2 and gp == false and status.Value == "InPlay" and isQB == false and fbsize == true  then
-    		    if percent <= chance and magspwr ~= nil and workspace:FindFirstChild("Football")  then
-        for i = 1,500 do game:GetService("RunService").RenderStepped:wait()
+        game:GetService("RunService").RenderStepped:Connect(function()
             if workspace:FindFirstChild("Football") then
             workspace:FindFirstChild('Football').Size = Vector3.new(magspwr,magspwr,magspwr)
             if fbsize == false then
                 workspace:FindFirstChild("Football").Size = Vector3.new(0.85, 1.2, 0.85)
-                        end
-                    end
-                end
             end
         end
     end)
@@ -599,8 +592,6 @@ coroutine.resume(
 
 end)
 
-
- 
  QB:Toggle("Qb Aimbot (Press T to Throw)",false,function(value)
      tog5 = value
      local uis = game:GetService("UserInputService")
@@ -613,9 +604,9 @@ local Camera = game:GetService("Workspace").CurrentCamera
 local function GetClosestPlayer()
     local ClosestDistance, ClosestPlayer = math.huge, nil;
     for _,Player in next, game:GetService("Players"):GetPlayers() do
-        if Player ~= LPlayer then
+        if Player ~= LPlayer and Player.TeamColor == LPlayer.TeamColor then
             local Character = Player.Character
-            if Character and Character.Humanoid.Health > 1 and Player.TeamColor ~= game:GetService("Players").LocalPlayer.TeamColor then
+            if Character and Character.Humanoid.Health > 1 then
                 local ScreenPosition, IsVisibleOnViewPort = Camera:WorldToViewportPoint(Character.HumanoidRootPart.Position)
                 if IsVisibleOnViewPort then
                     local MDistance = (Vector2.new(LMouse.X, LMouse.Y) - Vector2.new(ScreenPosition.X, ScreenPosition.Y)).Magnitude
@@ -632,12 +623,11 @@ end
 
 
 uis.InputBegan:Connect(function(key)
-    if key.KeyCode == Enum.KeyCode.T then
+    if key.KeyCode == Enum.KeyCode.T and tog5 == true then
          getgenv().closest = GetClosestPlayer()
-         if  tog5 and values.Status == "InPlay" then
+         if getgenv().closest.TeamColor == game:GetService("Players").LocalPlayer.TeamColor then
 local plusvector = tonumber((game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - getgenv().closest.Character.HumanoidRootPart.Position).Magnitude)
 local pwr = string.gsub(game:GetService("Players").LocalPlayer.PlayerGui.BallGui.Frame.Disp.Text,"%%","")
-
 
 local anim = game:GetService("ReplicatedStorage").Animations.Throw
 
@@ -659,6 +649,8 @@ game:GetService("Players").LocalPlayer.Character.Football.Handle.RemoteEvent:Fir
         end
     end)
 end)
+ 
+
  
  Physics:Toggle("Quick TP (F is the keybind)",false,function(value)
      forwardtp = value
@@ -796,13 +788,19 @@ end)
 
 Extras:Toggle("No QB Boundaries",false,function(value)
     boundaries = value 
+end)
 
-    if boundaries  == true then
-        workspace:FindFirstChild("ScrambleWall").CanCollide = false
-     else
-        workspace:FindFirstChild("ScrambleWall").CanCollide = oldCanCollide
+spawn(function()
+    while true do wait()
+        if boundaries  == true then
+            workspace:FindFirstChild("ScrambleWall").CanCollide = false
+         else
+            workspace:FindFirstChild("ScrambleWall").CanCollide = not workspace:FindFirstChild("ScrambleWall").CanCollide
+            break
+        end
     end
 end)
+
      local oldParent = workspace.Models
 
  Extras:Toggle("No Out Of Bounds",false,function(value)
