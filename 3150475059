@@ -440,7 +440,6 @@ uis.InputBegan:Connect(function(key,gp)
     percent = math.random(1,100)
     		if  key.UserInputType == Enum.UserInputType.MouseButton1 or key.KeyCode == Enum.KeyCode.ButtonR2 and gp == false and status.Value == "InPlay" and isQB == false and _G.tog == true  then
     		    if percent <= chance then
-        		    print('pp')
         			for _,k in pairs(game:GetService("Workspace"):GetChildren()) do
         				if k.Name == "Football" and k.ClassName == "Part" then
         					for i = 1,300 do rstep:wait()
@@ -1100,7 +1099,6 @@ walkspeed = value
 
 if walkspeed == true then
 ACBYPASS()
-print('yoyoy')
 end
 if walkspeed == false then
     game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = 20
@@ -1117,7 +1115,6 @@ end)
 
 
 sction:Toggle("JumpPower",false,function(value)
-    print('yes',value)
     _G.JumpPower = value
     if _G.JumpPower then
         ACBYPASS()
