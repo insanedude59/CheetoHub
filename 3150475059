@@ -1055,6 +1055,3 @@ while true do rstep:wait()
         end
     end
 end)
-
-
-
