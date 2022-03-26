@@ -38,6 +38,65 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  local old = nil
 old = hookmetamethod(game, "__index", function(Self, Key)
     if  not checkcaller() and Self:IsA("BasePart") and Key == "Position" and Self.Name ~= "ReplayBall"  then
