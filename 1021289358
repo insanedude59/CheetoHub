@@ -104,6 +104,41 @@ local a = coroutine.create(function(a)
 end)
 coroutine.resume(a)
 
+
+section1:slider({name = "Click Tackle Aimbot Distance",def = 1,max = 100,min = 1,rounding = true,ticking = false,measuring = "",callback = function(value)
+tackledist = value
+end})
+
+section1:toggle({name = "Click Tackle Aimbot",def = false,callback = function(value)
+    uis.InputBegan:Connect(function(key,gp)
+        if key.UserInputType == Enum.UserInputType.MouseButton1 then
+        if gp then return end
+        
+        for i,v in pairs(game.Players:GetPlayers()) do
+            if v.Character:FindFirstChildOfClass("Tool") then
+                    if v.Team ~= game.Players.LocalPlayer.Team then
+                        if (v.Character.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= tackledist then
+                            game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.Character.HumanoidRootPart.Position)
+                        end
+                    end
+                end
+            end
+        end 
+    end)
+end})
+
+
+
+
+
+
+
+
+
+
+
+
+
 section2:slider({name = "WalkSpeed",def = 16,max = 100,min = 16,rounding = true,ticking = false,measuring = "",callback = function(value)
     ws = value
 end})
