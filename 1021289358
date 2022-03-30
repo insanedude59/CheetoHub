@@ -1,0 +1,145 @@
+if not hookmetamethod then
+    game:GetService("Players").LocalPlayer:Kick("Your exploit is not supported. Use Krnl (best free exploit) or Synapse X (best paid exploit) for the script to work.")
+end
+
+
+for _,v in pairs(getgc()) do
+    if type(v) == "function" and getfenv(v).script == game:GetService("Players").LocalPlayer.PlayerGui.ClientModel.AntiSpeedHackV3 then
+        if debug.getinfo(v).name == "KickPlayerForHacking" then
+        hookfunction(v, function(...)
+            end)
+        end
+    end
+end
+
+game:GetService("Players").LocalPlayer.PlayerGui.ClientModel:FindFirstChild("AntiSpeedHackV3"):Destroy()
+
+
+
+
+local uis = game:GetService('UserInputService')
+
+
+ball = function()
+    for i,v in pairs(workspace:GetChildren()) do
+        if v.Name:match("Football") and v:FindFirstChild("Mesh") then
+            return v
+        end
+    end
+end
+
+
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/SplixUiLib/main/Main"))()
+
+    
+local window = library:new({textsize = 13.5,font = Enum.Font.GothamSemibold,name = "Football Universe",color = Color3.fromRGB(225,58,81)})
+
+local tab = window:page({name = "Main"})
+
+local section1 = tab:section({name = "Main",side = "left",size = 250})
+local section2 = tab:section({name = "Player",side = "right",size = 250})
+
+section1:toggle({name = "Football Magnets",def = false,callback = function(value)
+    local uis = game:GetService('UserInputService')
+    local old = nil
+
+
+_G.On = value 
+
+
+uis.InputBegan:Connect(function(key,gp)
+    if gp then return end
+    
+    if key.UserInputType == Enum.UserInputType.MouseButton1 then
+        for i = 1,45 do wait()
+        if ball() ~= nil and game:GetService('Players').LocalPlayer.Character:FindFirstChild('Humanoid') and _G.On then
+            ball().CanCollide = false
+            ball().CFrame = CFrame.new(game:GetService('Players').LocalPlayer.Character:FindFirstChild('Head').Position)
+                end
+            end
+        end
+    end)
+end})
+
+
+section1:toggle({name = "Auto Catch",def = false,callback = function(value)
+    autocatch = value
+end})
+
+local db = coroutine.create(function()
+local rs = game:GetService("ReplicatedStorage")
+
+
+local rstep = game:GetService("RunService").RenderStepped
+local vu = game:GetService("VirtualUser")
+
+
+while rstep:wait() do
+repeat wait()
+    if workspace:FindFirstChild("Football") and game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart") and autocatch then
+       if (workspace:FindFirstChild("Football").Position - game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Position).Magnitude <= 20 and  autocatch then
+           mouse1click()
+                end
+            end
+        until autocatch == false or not workspace:FindFirstChild("Football")
+    end
+end)
+
+coroutine.resume(db)
+
+section1:toggle({name = "Increased Football Size",def = false,callback = function(value)
+    size = value
+end})
+
+local a = coroutine.create(function(a)
+    while true do rstep:wait()
+        if size then
+         for _,k in pairs(game:GetService("Workspace"):GetChildren()) do
+            if k:FindFirstChild("Football") and k.ClassName == "Part" then
+                k.Size = Vector3.new(10,10,10)
+                end
+            end
+        end
+    end
+end)
+coroutine.resume(a)
+
+section2:slider({name = "WalkSpeed",def = 16,max = 100,min = 16,rounding = true,ticking = false,measuring = "",callback = function(value)
+    ws = value
+end})
+
+section2:slider({name = "JumpPower",def = 50,max = 200,min = 50,rounding = true,ticking = false,measuring = "",callback = function(value)
+    jp = value
+end})
+
+section2:toggle({name = "Toggle WalkSpeed",def = false,callback = function(value)
+    togglews = value
+end})
+
+section2:toggle({name = "Toggle JumpPower",def = false,callback = function(value)
+togglejp = value
+end})
+
+
+local rstep = game:GetService("RunService").RenderStepped
+
+
+spawn(function()
+    while rstep:wait() do
+            if togglews then
+                game:GetService('Players').LocalPlayer.Character.Humanoid.WalkSpeed = ws
+                
+                elseif togglews == false then
+                game:GetService('Players').LocalPlayer.Character.Humanoid.WalkSpeed = 16
+        end
+    end
+end)
+spawn(function()
+    while true do rstep:wait()
+        if togglejp then
+            game:GetService('Players').LocalPlayer.Character.Humanoid.JumpPower = jp
+        elseif togglejp == false then
+            game:GetService('Players').LocalPlayer.Character.Humanoid.JumpPower = 50
+        end
+    end
+end)
