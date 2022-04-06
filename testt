@@ -1,0 +1,6 @@
+old = hookmetamethod(game,"__index",function(Self,b)
+  if not checkcaller() and Self:IsA("Part") and b.Name == "Football" then
+      return Vector3.new()
+   end
+return old(Self,b)
+end)
