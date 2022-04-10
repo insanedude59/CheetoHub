@@ -2,10 +2,16 @@ LPH_JIT_ULTRA = LPH_JIT_ULTRA or function(...) return ... end
 
 
 LPH_JIT_ULTRA(function()
-old = hookmetamethod(game,"__index",function(Self,b)
-  if not checkcaller() and Self:IsA("Part") and b.Name == "Football" then
-      return Vector3.new()
+
+local mt = getrawmetatable(game)
+setreadonly(mt,false)
+
+local old = mt.__index
+
+   mt.__index = function(self,s)
+    if not checkcaller() and s == "Position" and self.Name == "Football" then
+         return Vector3.new(math.random(),math.random(),math.random())
         end
-        return old(Self,b)
-    end)
+    return old(self,s)
+  end
 end)()
