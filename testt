@@ -17,4 +17,4 @@ old = hookmetamethod(game,"__index",function(Self,Key)
     end
     return old(Self,Key)
 end)
-end()
+end)()
