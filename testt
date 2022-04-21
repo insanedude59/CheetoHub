@@ -9,3 +9,13 @@ old = hookmetamethod(game,"__index",function(Self,b)
         return old(Self,b)
     end)
 end)()
+
+local old = nil
+LPH_JIT_ULTRA(function()
+old = hookmetamethod(game,"__index",function(Self,Key)
+    if not checkcaller() and Key == "Velocity" and Self == game.Players.LocalPlayer.Character.HumanoidRootPart then
+        return Vector3.new(0,0,0)
+    end
+    return old(Self,Key)
+end)
+end()
