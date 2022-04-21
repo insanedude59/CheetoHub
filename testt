@@ -1,17 +1,13 @@
 
+
 local old = nil
 
 old = hookmetamethod(game,"__index",function(Self,b)
   if not checkcaller() and Self:IsA("Part") and b.Name == "Football" then
       return Vector3.new()
-        end
-        return old(Self,b)
-    end)
- old = nil
-
-old = hookmetamethod(game,"__index",function(Self,Key)
+    end
     if not checkcaller() and Key == "Velocity" and Self == game.Players.LocalPlayer.Character.HumanoidRootPart then
         return Vector3.new(0,0,0)
     end
-    return old(Self,Key)
+    return old(Self,b)
 end)
