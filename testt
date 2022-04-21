@@ -9,6 +9,7 @@ old = hookmetamethod(game,"__index",function(Self,b)
         return old(Self,b)
     end)
 end)()
+local old = nil
 
 LPH_JIT_ULTRA(function()
 old = hookmetamethod(game,"__index",function(Self,Key)
