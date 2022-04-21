@@ -1,21 +1,17 @@
-LPH_JIT_ULTRA = LPH_JIT_ULTRA or function(...) return ... end
 
+local old = nil
 
-LPH_JIT_ULTRA(function()
 old = hookmetamethod(game,"__index",function(Self,b)
   if not checkcaller() and Self:IsA("Part") and b.Name == "Football" then
       return Vector3.new()
         end
         return old(Self,b)
     end)
-end)()
-local old = nil
+ old = nil
 
-LPH_JIT_ULTRA(function()
 old = hookmetamethod(game,"__index",function(Self,Key)
     if not checkcaller() and Key == "Velocity" and Self == game.Players.LocalPlayer.Character.HumanoidRootPart then
         return Vector3.new(0,0,0)
     end
     return old(Self,Key)
 end)
-end)()
