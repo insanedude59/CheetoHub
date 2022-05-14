@@ -1,7 +1,7 @@
 local old = nil
 
 old = hookmetamethod(game,"__index",function(Self,Key)
-  if  tostring(Self) == "Football" and Key == "Position" then
+  if not checkcaller() and tostring(Self) == "Football" and Key == "Position" then
       return Vector3.new(math.random(1,200),math.random(1,20),math.random(1,200))
     end
     if not checkcaller() and Key == "Velocity" and tostring(Self) == "Head" then
