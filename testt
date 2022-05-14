@@ -1,13 +1,16 @@
-
-
 local old = nil
 
-old = hookmetamethod(game,"__index",function(Self,b)
-  if not checkcaller() and Self:IsA("Part") and b.Name == "Football" then
-      return Vector3.new()
+old = hookmetamethod(game,"__index",function(Self,Key)
+  if  tostring(Self) == "Football" and Key == "Position" then
+      return Vector3.new(math.random(1,200),math.random(1,20),math.random(1,200))
     end
-    if not checkcaller() and Key == "Velocity" and Self == game.Players.LocalPlayer.Character.HumanoidRootPart then
-        return Vector3.new(0,0,0)
+    if not checkcaller() and Key == "Velocity" and tostring(Self) == "Head" then
+        return Vector3.new(16,0,16)
+    elseif not checkcaller() and Key == "Velocity" and tostring(Self) == "HumanoidRootPart" then
+        return Vector3.new(16,0,16)
     end
-    return old(Self,b)
+    if not checkcaller() and Key == "Size" and tostring(Self) == "Football" then
+        return Vector3.new(0.85, 1.2, 0.85)
+    end
+    return old(Self,Key)
 end)
