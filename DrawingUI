@@ -676,7 +676,7 @@ local drawing = {} do
                             end
                         else
                             local newpos = udim2tovector2(v, workspace.CurrentCamera.ViewportSize)
-                            objpositions[obj] = Vector2.new(math.floor(newpos.X), math.floor(newpos.Y))
+                            objpositions[obj] = newpos
                             v = udim2tovector2(v, workspace.CurrentCamera.ViewportSize)
                         end
 
@@ -689,7 +689,7 @@ local drawing = {} do
 
                         changechildrenpos(self, v)
                     else
-                        objpositions[obj] = Vector2.new(math.floor(v.X), math.floor(v.Y))
+                        objpositions[obj] = v
 
                         if customproperties.Parent then
                             if listobjs[customproperties.Parent] then
@@ -709,7 +709,7 @@ local drawing = {} do
                         changechildrenpos(self, v)
                     end
 
-                    v = Vector2.new(math.floor(v.X), math.floor(v.Y))
+                    v = v
                 end
 
                 local changechildrenudim2pos
@@ -775,7 +775,6 @@ local drawing = {} do
                             for i, object in next, objchildren[customproperties.Parent] do
                                 if i > objindex then
                                     object.Position = object.Position + Vector2.new(0, sizediff)
-                                    listcontents[customproperties.Parent] = listcontents[customproperties.Parent] + sizediff
                                     listindexes[customproperties.Parent][i] = listindexes[customproperties.Parent][i] + sizediff
                                 end
                             end
@@ -1027,7 +1026,7 @@ function utility.tabletocolor(tbl)
 end
 
 function utility.round(number, increment)
-    return  number - math.fmod(number, increment)
+    return number - math.fmod(number, increment)
 end
 
 function utility.getrgb(color)
@@ -1049,6 +1048,26 @@ local totalunnamedflags = 0
 function utility.nextflag()
     totalunnamedflags = totalunnamedflags + 1
     return string.format("%.14g", totalunnamedflags)
+end
+
+function utility.rgba(r, g, b, alpha)
+    local rgb = Color3.fromRGB(r, g, b)
+    local mt = table.clone(getrawmetatable(rgb))
+    
+    setreadonly(mt, false)
+    local old = mt.__index
+    
+    mt.__index = newcclosure(function(self, key)
+        if key:lower() == "a" then
+            return alpha
+        end
+        
+        return old(self, key)
+    end)
+    
+    setrawmetatable(rgb, mt)
+    
+    return rgb
 end
 
 local themes = {
@@ -1090,6 +1109,7 @@ local themeobjects = {}
 local library = utility.table({folder = "vozoiduilib", extension = "vozoid", flags = {}, open = true, keybind = Enum.KeyCode.RightShift, mousestate = services.InputService.MouseIconEnabled, cursor = nil, holder = nil, connections = {}}, true)
 local decode = (syn and syn.crypt.base64.decode) or (crypt and crypt.base64decode) or base64_decode
 library.gradient = decode("iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABuSURBVChTxY9BDoAgDASLGD2ReOYNPsR/+BAfroI7hibe9OYmky2wbUPIOdsXdc1f9WMwppQm+SDGBnUvomAQBH49qzhFEag25869ElzaIXDhD4JGbyoEVxUedN8FKwnfmwhucgKICc+pNB1mZhdCdhsa2ky0FAAAAABJRU5ErkJggg==")
+library.utility = utility
 
 function utility.outline(obj, color)
     local outline = drawing:new("Square")
@@ -1175,7 +1195,7 @@ function library:SaveConfig(name, universal)
                 if typeof(value) == "EnumItem" then
                     configtbl[flag] = tostring(value)
                 elseif typeof(value) == "Color3" then
-                    configtbl[flag] = value:ToHex()
+                    configtbl[flag] = {color = value:ToHex(), alpha = value.A}
                 else
                     configtbl[flag] = value
                 end
@@ -1521,15 +1541,154 @@ function library.createbox(box, text, callback, finishedcallback)
     end)
 end
 
-function library.createcolorpicker(default, parent, count, flag, callback, pickers)
+function library.createslider(min, max, parent, text, default, float, flag, callback)
+    local slider = utility.create("Square", {
+        Filled = true,
+        Thickness = 0,
+        Theme = "Object Background",
+        Size = UDim2.new(1, 0, 0, 10),
+        Position = UDim2.new(0, 0, 1, -10),
+        ZIndex = 7,
+        Parent = parent
+    })
+
+    utility.outline(slider, "Object Border")
+
+    utility.create("Image", {
+        Size = UDim2.new(1, 0, 1, 0),
+        Transparency = 0.5,
+        ZIndex = 9,
+        Parent = slider,
+        Data = library.gradient
+    })
+
+    local fill = utility.create("Square", {
+        Filled = true,
+        Thickness = 0,
+        Theme = "Accent",
+        Size = UDim2.new(0, 0, 1, 0),
+        ZIndex = 8,
+        Parent = slider
+    })
+
+    local valuetext = utility.create("Text", {
+        Font = Drawing.Fonts.Plex,
+        Size = 13,
+        Position = UDim2.new(0.5, 0, 0, -2),
+        Theme = "Text",
+        Center = true,
+        ZIndex = 10,
+        Outline = true,
+        Parent = slider
+    })
+
+    local function set(value)
+        value = math.clamp(utility.round(value, float), min, max)
+
+        valuetext.Text = text:gsub("%[value%]", string.format("%.14g", value))
+        
+        local sizeX = ((value - min) / (max - min))
+        fill.Size = UDim2.new(sizeX, 0, 1, 0)
+
+        library.flags[flag] = value
+        callback(value)
+    end
+
+    set(default)
+
+    local sliding = false
+    
+    local mouseover = false
+
+    slider.MouseEnter:Connect(function()
+        mouseover = true
+        if not sliding then
+            slider.Color = utility.changecolor(library.theme["Object Background"], 3)
+        end
+    end)
+
+    slider.MouseLeave:Connect(function()
+        mouseover = false
+        if not sliding then
+            slider.Color = library.theme["Object Background"]
+        end
+    end)
+    
+    local function slide(input)
+        local sizeX = (input.Position.X - slider.AbsolutePosition.X) / slider.AbsoluteSize.X
+        local value = ((max - min) * sizeX) + min
+
+        set(value)
+    end
+
+    utility.connect(slider.InputBegan, function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            sliding = true
+            slider.Color = utility.changecolor(library.theme["Object Background"], 6)
+            slide(input)
+        end
+    end)
+
+    utility.connect(slider.InputEnded, function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            sliding = false
+            slider.Color = mouseover and utility.changecolor(library.theme["Object Background"], 3) or library.theme["Object Background"]
+        end
+    end)
+
+    utility.connect(fill.InputBegan, function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            sliding = true
+            slider.Color = utility.changecolor(library.theme["Object Background"], 6)
+            slide(input)
+        end
+    end)
+
+    utility.connect(fill.InputEnded, function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            sliding = false
+            slider.Color = mouseover and utility.changecolor(library.theme["Object Background"], 3) or library.theme["Object Background"]
+        end
+    end)
+
+    utility.connect(services.InputService.InputChanged, function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement then
+            if sliding then
+                slide(input)
+            end
+        end
+    end)
+
+    flags[flag] = set
+
+    local slidertypes = utility.table({}, true)
+
+    function slidertypes:Set(value)
+        set(value)
+    end
+
+    return slidertypes
+end
+
+local pickers = {}
+
+function library.createcolorpicker(default, defaultalpha, parent, count, flag, callback)
     local icon = utility.create("Square", {
         Filled = true,
         Thickness = 0,
         Color = default,
         Parent = parent,
+        Transparency = defaultalpha,
         Size = UDim2.new(0, 18, 0, 10),
         Position = UDim2.new(1, -18 - (count * 18) - (count * 6), 0, 2),
         ZIndex = 8
+    })
+
+    local alphaicon = utility.create("Image", {
+        Size = UDim2.new(1, 0, 1, 0),
+        ZIndex = 9,
+        Parent = icon,
+        Data = decode("iVBORw0KGgoAAAANSUhEUgAAABIAAAAKBAMAAABLZROSAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAGUExURb+/v////5nD/3QAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAVSURBVBjTY2AQhEIkliAWSLY6QQYAknwC7Za+1vYAAAAASUVORK5CYII=")
     })
 
     utility.outline(icon, "Object Border")
@@ -1537,7 +1696,7 @@ function library.createcolorpicker(default, parent, count, flag, callback, picke
     utility.create("Image", {
         Size = UDim2.new(1, 0, 1, 0),
         Transparency = 0.5,
-        ZIndex = 9,
+        ZIndex = 10,
         Parent = icon,
         Data = library.gradient
     })
@@ -1547,11 +1706,13 @@ function library.createcolorpicker(default, parent, count, flag, callback, picke
         Thickness = 0,
         Parent = icon,
         Theme = "Object Background",
-        Size = UDim2.new(0, 192, 0, 144),
+        Size = UDim2.new(0, 192, 0, 158),
         Visible = false,
         Position = UDim2.new(1, -192 + (count * 18) + (count * 6), 1, 6),
         ZIndex = 11
     })
+
+    table.insert(pickers, window)
 
     utility.outline(window, "Object Border")
 
@@ -1568,7 +1729,7 @@ function library.createcolorpicker(default, parent, count, flag, callback, picke
         Thickness = 0,
         Parent = window,
         Color = default,
-        Size = UDim2.new(0, 158, 0, 110),
+        Size = UDim2.new(0, 164, 0, 110),
         Position = UDim2.new(0, 6, 0, 6),
         ZIndex = 14
     })
@@ -1597,9 +1758,8 @@ function library.createcolorpicker(default, parent, count, flag, callback, picke
         Filled = true,
         Thickness = 0,
         Parent = window,
-        Color = default,
-        Size = UDim2.new(0, 14, 0, 110),
-        Position = UDim2.new(1, -20, 0, 6),
+        Size = UDim2.new(1, -12, 0, 9),
+        Position = UDim2.new(0, 6, 0, 123),
         ZIndex = 14
     })
 
@@ -1609,7 +1769,7 @@ function library.createcolorpicker(default, parent, count, flag, callback, picke
         Size = UDim2.new(1, 0, 1, 0),
         ZIndex = 15,
         Parent = hueframe,
-        Data = decode("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")
+        Data = decode("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")
     })
 
     local huepicker = utility.create("Square", {
@@ -1617,18 +1777,48 @@ function library.createcolorpicker(default, parent, count, flag, callback, picke
         Thickness = 0,
         Parent = hueframe,
         Color = Color3.fromRGB(255, 255, 255),
-        Size = UDim2.new(1, 0, 0, 2),
+        Size = UDim2.new(0, 1, 1, 0),
         ZIndex = 16
     })
 
     utility.outline(huepicker, Color3.fromRGB(0, 0, 0))
+
+    local alphaframe = utility.create("Square", {
+        Filled = true,
+        Thickness = 0,
+        Size = UDim2.new(0, 9, 0, 110),
+        Position = UDim2.new(1, -15, 0, 6),
+        ZIndex = 14,
+        Parent = window
+    })
+
+    utility.outline(alphaframe, "Object Border")
+
+    utility.create("Image", {
+        Size = UDim2.new(1, 0, 1, 0),
+        ZIndex = 15,
+        Transparency = 1,
+        Parent = alphaframe,
+        Data = decode("iVBORw0KGgoAAAANSUhEUgAAAAkAAABuCAYAAAD1YDnyAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFMSURBVFhHvZMhTMNQFEX/WOZwKBwON4dDNMHN4XBzc3M43BwOh8PhULip1s3hcLg53Nxcue9mIy/ty/8kDfcktzlpsv97xEZ1XacjVVUdLKWmaQ6W0slfNmrbdgIh/tf+1PCX3YUvu7MPP4WQQR8evuzO6s4gRFN3DiG5unFpvaOjWd0FhOTqwiv8ekdHs7pLCNHUTSFEU3cFIZq6awjR1N1AiKZuBiG5uuLsEX6Hn9XdQkiurjh7hFf4Wd0dhGjq5hCiqVtAiKZuCSGaunsI0dQ9QMjguuKsbgUhg+uKs7pHCNHUPUGIpu4ZQjR1LxCiqXuFEE3dG4Ro6t4hJFcX/mv9ekdHs7o1hOTqwiv8ekdHs7rfOzR1GwjR1H1AiKbuE0I0dV8QoqnbQkiurjh7hN/hZ3XfEJKrK84e4RV+VreDEE3dHkL+uy6NfwDz0OfO0eCa+AAAAABJRU5ErkJggg==")
+    })
+
+    local alphapicker = utility.create("Square", {
+        Filled = true,
+        Thickness = 0,
+        Parent = alphaframe,
+        Color = Color3.fromRGB(255, 255, 255),
+        Size = UDim2.new(1, 0, 0, 1),
+        ZIndex = 16
+    })
+
+    utility.outline(alphapicker, Color3.fromRGB(0, 0, 0))
 
     local rgbinput = utility.create("Square", {
         Filled = true,
         Thickness = 0,
         Theme = "Object Background",
         Size = UDim2.new(1, -12, 0, 14),
-        Position = UDim2.new(0, 6, 0, 123),
+        Position = UDim2.new(0, 6, 0, 139),
         ZIndex = 14,
         Parent = window
     })
@@ -1690,40 +1880,52 @@ function library.createcolorpicker(default, parent, count, flag, callback, picke
 
     local hue, sat, val = default:ToHSV()
     local hsv = default:ToHSV()
+    local alpha = defaultalpha
     local oldcolor = hsv
 
-    local function set(color, nopos)
+    local function set(color, a, nopos)
+        if type(color) == "table" then
+            a = color.alpha
+            color = Color3.fromHex(color.color)
+        end
+
         if type(color) == "string" then
-            color = utility.hextorgb(color)
+            color = Color3.fromHex(color)
+            a = 1
         end
 
         local oldcolor = hsv
+        local oldalpha = alpha
 
         hue, sat, val = color:ToHSV()
+        alpha = a
         hsv = Color3.fromHSV(hue, sat, val)
 
-        if hsv ~= oldcolor then
+        if hsv ~= oldcolor or alpha ~= oldalpha then
             icon.Color = hsv
+            alphaicon.Transparency = 1 - alpha
+            alphaframe.Color = hsv
 
             if not nopos then
-                saturationpicker.Position = UDim2.new(0, (math.clamp(sat * saturation.AbsoluteSize.X, 0, saturation.AbsoluteSize.X - 4)), 0, (math.clamp((1 - val) * saturation.AbsoluteSize.Y, 0, saturation.AbsoluteSize.Y - 4)))
-                huepicker.Position = UDim2.new(0, 0, 0, math.clamp((1 - hue) * saturation.AbsoluteSize.Y, 0, saturation.AbsoluteSize.Y - 4))
+                saturationpicker.Position = UDim2.new(0, (math.clamp(sat * saturation.AbsoluteSize.X, 0, saturation.AbsoluteSize.X - 2)), 0, (math.clamp((1 - val) * saturation.AbsoluteSize.Y, 0, saturation.AbsoluteSize.Y - 2)))
+                huepicker.Position = UDim2.new(0, math.clamp(hue * hueframe.AbsoluteSize.X, 0, hueframe.AbsoluteSize.X - 2), 0, 0)
+                alphapicker.Position = UDim2.new(0, 0, 0, math.clamp((1 - alpha) * alphaframe.AbsoluteSize.Y, 0, alphaframe.AbsoluteSize.Y - 2))
                 saturation.Color = hsv
             end
 
             text.Text = string.format("%s, %s, %s", math.round(hsv.R * 255), math.round(hsv.G * 255), math.round(hsv.B * 255))
 
             if flag then 
-                library.flags[flag] = Color3.fromRGB(hsv.r * 255, hsv.g * 255, hsv.b * 255)
+                library.flags[flag] = utility.rgba(hsv.r * 255, hsv.g * 255, hsv.b * 255, alpha)
             end
 
-            callback(Color3.fromRGB(hsv.r * 255, hsv.g * 255, hsv.b * 255))
+            callback(utility.rgba(hsv.r * 255, hsv.g * 255, hsv.b * 255, alpha))
         end
     end
 
     flags[flag] = set
 
-    set(default)
+    set(default, defaultalpha)
 
     local defhue, _, _ = default:ToHSV()
 
@@ -1755,12 +1957,12 @@ function library.createcolorpicker(default, parent, count, flag, callback, picke
     local function updatesatval(input)
         local sizeX = math.clamp((input.Position.X - saturation.AbsolutePosition.X) / saturation.AbsoluteSize.X, 0, 1)
         local sizeY = 1 - math.clamp(((input.Position.Y - saturation.AbsolutePosition.Y) + 36) / saturation.AbsoluteSize.Y, 0, 1)
-        local posY = math.clamp(((input.Position.Y - saturation.AbsolutePosition.Y) / saturation.AbsoluteSize.Y) * saturation.AbsoluteSize.Y + 36, 0, saturation.AbsoluteSize.Y - 4)
-        local posX = math.clamp(((input.Position.X - saturation.AbsolutePosition.X) / saturation.AbsoluteSize.X) * saturation.AbsoluteSize.X, 0, saturation.AbsoluteSize.X - 4)
+        local posY = math.clamp(((input.Position.Y - saturation.AbsolutePosition.Y) / saturation.AbsoluteSize.Y) * saturation.AbsoluteSize.Y + 36, 0, saturation.AbsoluteSize.Y - 2)
+        local posX = math.clamp(((input.Position.X - saturation.AbsolutePosition.X) / saturation.AbsoluteSize.X) * saturation.AbsoluteSize.X, 0, saturation.AbsoluteSize.X - 2)
 
         saturationpicker.Position = UDim2.new(0, posX, 0, posY)
 
-        set(Color3.fromHSV(curhuesizey or hue, sizeX, sizeY), true)
+        set(Color3.fromHSV(curhuesizey or hue, sizeX, sizeY), alpha, true)
     end
 
     local slidingsaturation = false
@@ -1781,14 +1983,14 @@ function library.createcolorpicker(default, parent, count, flag, callback, picke
     local slidinghue = false
 
     local function updatehue(input)
-        local sizeY = 1 - math.clamp(((input.Position.Y - hueframe.AbsolutePosition.Y) + 36) / hueframe.AbsoluteSize.Y, 0, 1)
-        local posY = math.clamp(((input.Position.Y - hueframe.AbsolutePosition.Y) / hueframe.AbsoluteSize.Y) * hueframe.AbsoluteSize.Y + 36, 0, hueframe.AbsoluteSize.Y - 2)
+        local sizeX = math.clamp((input.Position.X - hueframe.AbsolutePosition.X) / hueframe.AbsoluteSize.X, 0, 1)
+        local posX = math.clamp(((input.Position.X - hueframe.AbsolutePosition.X) / hueframe.AbsoluteSize.X) * hueframe.AbsoluteSize.X, 0, hueframe.AbsoluteSize.X - 2)
 
-        huepicker.Position = UDim2.new(0, 0, 0, posY)
-        saturation.Color = Color3.fromHSV(sizeY, 1, 1)
-        curhuesizey = sizeY
+        huepicker.Position = UDim2.new(0, posX, 0, 0)
+        saturation.Color = Color3.fromHSV(sizeX, 1, 1)
+        curhuesizey = sizeX
 
-        set(Color3.fromHSV(sizeY, sat, val), true)
+        set(Color3.fromHSV(sizeX, sat, val), alpha, true)
     end
 
     hueframe.InputBegan:Connect(function(input)
@@ -1804,8 +2006,36 @@ function library.createcolorpicker(default, parent, count, flag, callback, picke
         end
     end)
 
+    local slidingalpha = false
+
+    local function updatealpha(input)
+        local sizeY = 1 - math.clamp(((input.Position.Y - alphaframe.AbsolutePosition.Y) + 36) / alphaframe.AbsoluteSize.Y, 0, 1)
+        local posY = math.clamp(((input.Position.Y - alphaframe.AbsolutePosition.Y) / alphaframe.AbsoluteSize.Y) * alphaframe.AbsoluteSize.Y + 36, 0, alphaframe.AbsoluteSize.Y - 2)
+
+        alphapicker.Position = UDim2.new(0, 0, 0, posY)
+
+        set(Color3.fromHSV(curhuesizey, sat, val), sizeY, true)
+    end
+
+    alphaframe.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            slidingalpha = true
+            updatealpha(input)
+        end
+    end)
+
+    alphaframe.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            slidingalpha = false
+        end
+    end)
+
     utility.connect(services.InputService.InputChanged, function(input)
         if input.UserInputType == Enum.UserInputType.MouseMovement then
+            if slidingalpha then
+                updatealpha(input)
+            end
+
             if slidinghue then
                 updatehue(input)
             end
@@ -1827,6 +2057,10 @@ function library.createcolorpicker(default, parent, count, flag, callback, picke
 
         if slidinghue then
             slidinghue = false
+        end
+
+        if slidingalpha then
+            slidingalpha = false
         end
 
         if slidingsaturation then
@@ -1893,7 +2127,11 @@ local keys = {
     [Enum.UserInputType.MouseButton3] = "MOUSE-3"
 }
 
-function library.createkeybind(default, parent, blacklist, flag, callback)
+function library.createkeybind(default, parent, blacklist, flag, callback, offset)
+    if not offset then
+        offset = 0
+    end
+
     local keybutton = utility.create("Square", {
         Filled = true,
         Thickness = 0,
@@ -1907,6 +2145,7 @@ function library.createkeybind(default, parent, blacklist, flag, callback)
         Font = Drawing.Fonts.Plex,
         Size = 13,
         Theme = "Disabled Text",
+        Position = UDim2.new(0, 0, 0, offset),
         ZIndex = 9,
         Outline = true,
         Parent = keybutton,
@@ -1932,7 +2171,7 @@ function library.createkeybind(default, parent, blacklist, flag, callback)
 
             keytext.Text = text
             utility.changeobjecttheme(keytext, "Text")
-            keytext.Position = UDim2.new(1, -sizeX, 0, 0)
+            keytext.Position = UDim2.new(1, -sizeX, 0, offset)
 
             library.flags[flag] = newkey
             callback(newkey, true)
@@ -1947,7 +2186,7 @@ function library.createkeybind(default, parent, blacklist, flag, callback)
 
             keytext.Text = text
             utility.changeobjecttheme(keytext, "Disabled Text")
-            keytext.Position = UDim2.new(1, -sizeX, 0, 0)
+            keytext.Position = UDim2.new(1, -sizeX, 0, offset)
 
             library.flags[flag] = newkey
             callback(newkey, true)
@@ -2287,7 +2526,7 @@ function library:Load(options)
             function sectiontypes:Label(name)
                 local label = utility.create("Square", {
                     Transparency = 0,
-                    Size = UDim2.new(1, 0, 0, 12),
+                    Size = UDim2.new(1, 0, 0, 13),
                     Parent = sectioncontent
                 })
 
@@ -2312,6 +2551,87 @@ function library:Load(options)
 
                 return labeltypes
             end
+
+            function sectiontypes:Separator(name)
+                local separator = utility.create("Square", {
+                    Transparency = 0,
+                    Size = UDim2.new(1, 0, 0, 12),
+                    Parent = sectioncontent
+                })
+
+                local separatorline = utility.create("Square", {
+                    Size = UDim2.new(1, 0, 0, 1),
+                    Position = UDim2.new(0, 0, 0.5, 0),
+                    Thickness = 0,
+                    Filled = true,
+                    ZIndex = 7,
+                    Theme = "Object Background",
+                    Parent = separator
+                })
+
+                utility.outline(separatorline, "Object Border")
+
+                local sizeX = utility.textlength(name, Drawing.Fonts.Plex, 13).X
+
+                local separatorborder1 = utility.create("Square", {
+                    Size = UDim2.new(0, 1, 1, 2),
+                    Position = UDim2.new(0.5, (-sizeX / 2) - 7, 0.5, -1),
+                    Thickness = 0,
+                    Filled = true,
+                    ZIndex = 9,
+                    Theme = "Object Border",
+                    Parent = separatorline
+                })
+
+                local separatorborder2 = utility.create("Square", {
+                    Size = UDim2.new(0, 1, 1, 2),
+                    Position = UDim2.new(0.5, sizeX / 2 + 5, 0, -1),
+                    Thickness = 0,
+                    Filled = true,
+                    ZIndex = 9,
+                    Theme = "Object Border",
+                    Parent = separatorline
+                })
+
+                local separatorcutoff = utility.create("Square", {
+                    Size = UDim2.new(0, sizeX + 12, 0, 3),
+                    Position = UDim2.new(0.5, (-sizeX / 2) - 7, 0.5, -1),
+                    ZIndex = 8,
+                    Filled = true,
+                    Theme = "Section Background",
+                    Parent = separator
+                })
+
+                local text = utility.create("Text", {
+                    Text = name,
+                    Font = Drawing.Fonts.Plex,
+                    Size = 13,
+                    Position = UDim2.new(0.5, 0, 0, 0),
+                    Theme = "Text",
+                    ZIndex = 9,
+                    Outline = true,
+                    Center = true,
+                    Parent = separator,
+                })
+
+                section.Size = UDim2.new(1, 0, 0, sectioncontent.AbsoluteContentSize + 28)
+
+                local separatortypes = utility.table({}, true)
+
+                function separatortypes:Set(str)
+                    local sizeX = utility.textlength(str, Drawing.Fonts.Plex, 13).X
+                    separatorcutoff.Size = UDim2.new(0, sizeX + 12, 0, 3)
+                    separatorcutoff.Position =  UDim2.new(0.5, (-sizeX / 2) - 7, 0.5, -1)
+                    separatorborder1.Position =  UDim2.new(0.5, (-sizeX / 2) - 7, 0.5, -1)
+                    separatorborder2.Position = UDim2.new(0.5, sizeX / 2 + 5, 0, -1)
+
+                    text.Text = str
+                end
+
+                return separatortypes
+            end
+
+            sectiontypes.seperator = sectiontypes.separator
 
             function sectiontypes:Button(options)
                 utility.table(options)
@@ -2393,7 +2713,6 @@ function library:Load(options)
                     Thickness = 0,
                     Theme = "Object Background",
                     Size = UDim2.new(0, 10, 0, 10),
-                    Position = UDim2.new(0, 0, 0, 0),
                     ZIndex = 7,
                     Parent = holder
                 })
@@ -2423,28 +2742,33 @@ function library:Load(options)
 
                 local mouseover = false
                 local toggled = false
+                library.flags[flag] = default
 
-                holder.MouseEnter:Connect(function()
+                if not default then
+                    callback(default)
+                end
+
+                icon.MouseEnter:Connect(function()
                     if not toggled then
                         mouseover = true
                         icon.Color = utility.changecolor(library.theme["Object Background"], 3)
                     end
                 end)
 
-                holder.MouseLeave:Connect(function()
+                icon.MouseLeave:Connect(function()
                     if not toggled then
                         mouseover = false
                         icon.Color = library.theme["Object Background"]
                     end
                 end)
 
-                holder.MouseButton1Down:Connect(function()
+                icon.MouseButton1Down:Connect(function()
                     if not toggled then
                         icon.Color = utility.changecolor(library.theme["Object Background"], 6)
                     end
                 end)
 
-                holder.MouseButton1Up:Connect(function()
+                icon.MouseButton1Up:Connect(function()
                     if not toggled then
                         icon.Color = mouseover and utility.changecolor(library.theme["Object Background"], 3) or library.theme["Object Background"]
                     end
@@ -2468,13 +2792,12 @@ function library:Load(options)
                         table.remove(accentobjs, table.find(accentobjs, icon))
                         table.remove(accentobjs, table.find(accentobjs, title))
                     end
-
                     
                     library.flags[flag] = toggled
                     callback(toggled)
                 end
 
-                holder.MouseButton1Click:Connect(setstate)
+                icon.MouseButton1Click:Connect(setstate)
 
                 local function set(bool)
                     bool = type(bool) == "boolean" and bool or false
@@ -2493,22 +2816,18 @@ function library:Load(options)
                     set(bool)
                 end
 
-                local colorpickers = 0
-                local colorpickerstbl = {}
+                local colorpickers = -1
 
                 function toggletypes:ColorPicker(options)
+                    colorpickers = colorpickers + 1
+
                     utility.table(options)
                     local flag = options.flag or utility.nextflag()
                     local callback = options.callback or function() end
                     local default = options.default or Color3.fromRGB(255, 255, 255)
+                    local defaultalpha = options.defaultalpha or 1
 
-                    local colorpicker, window = library.createcolorpicker(default, holder, colorpickers, flag, callback, colorpickerstbl)
-
-                    table.insert(colorpickerstbl, window)
-
-                    colorpickers = colorpickers + 1
-
-                    return colorpicker
+                    return library.createcolorpicker(default, defaultalpha, holder, colorpickers, flag, callback)
                 end
 
                 function toggletypes:Keybind(options)
@@ -2526,7 +2845,24 @@ function library:Load(options)
                         callback(key, fromsetting)
                     end
 
-                    return library.createkeybind(default, holder, blacklist, flag, newcallback)
+                    return library.createkeybind(default, holder, blacklist, flag, newcallback, -2)
+                end
+
+                function toggletypes:Slider(options)
+                    utility.table(options)
+
+                    local min = options.min or options.minimum or 0
+                    local max = options.max or options.maximum or 100
+                    local text = options.text or ("[value]/" .. max)
+                    local float = options.float or 1
+                    local default = options.default and math.clamp(options.default, min, max) or min
+                    local flag = options.flag or utility.nextflag()
+                    local callback = options.callback or function() end
+
+                    holder.Size = UDim2.new(1, 0, 0, 26)
+                    section.Size = UDim2.new(1, 0, 0, sectioncontent.AbsoluteContentSize + 28)
+
+                    return library.createslider(min, max, holder, text, default, float, flag, callback)
                 end
 
                 return toggletypes
@@ -2670,136 +3006,9 @@ function library:Load(options)
                     Parent = holder
                 })
 
-                local slider = utility.create("Square", {
-                    Filled = true,
-                    Thickness = 0,
-                    Theme = "Object Background",
-                    Size = UDim2.new(1, 0, 0, 10),
-                    Position = UDim2.new(0, 0, 1, -10),
-                    ZIndex = 7,
-                    Parent = holder
-                })
-
-                utility.outline(slider, "Object Border")
-
-                utility.create("Image", {
-                    Size = UDim2.new(1, 0, 1, 0),
-                    Transparency = 0.5,
-                    ZIndex = 9,
-                    Parent = slider,
-                    Data = library.gradient
-                })
-
-                local fill = utility.create("Square", {
-                    Filled = true,
-                    Thickness = 0,
-                    Theme = "Accent",
-                    Size = UDim2.new(0, 0, 1, 0),
-                    ZIndex = 8,
-                    Parent = slider
-                })
-
-                table.insert(accentobjs, fill)
-
-                local valuetext = utility.create("Text", {
-                    Font = Drawing.Fonts.Plex,
-                    Size = 13,
-                    Position = UDim2.new(0.5, 0, 0, -2),
-                    Theme = "Text",
-                    Center = true,
-                    ZIndex = 10,
-                    Outline = true,
-                    Parent = slider
-                })
-
                 section.Size = UDim2.new(1, 0, 0, sectioncontent.AbsoluteContentSize + 28)
 
-                local function set(value)
-                    value = math.clamp(utility.round(value, float), min, max)
-
-                    valuetext.Text = text:gsub("%[value%]", string.format("%.14g", value))
-                    
-                    local sizeX = ((value - min) / (max - min))
-                    fill.Size = UDim2.new(sizeX, 0, 1, 0)
-
-                    library.flags[flag] = value
-                    callback(value)
-                end
-
-                set(default)
-
-                local sliding = false
-                
-                local mouseover = false
-
-                slider.MouseEnter:Connect(function()
-                    mouseover = true
-                    if not sliding then
-                        slider.Color = utility.changecolor(library.theme["Object Background"], 3)
-                    end
-                end)
-
-                slider.MouseLeave:Connect(function()
-                    mouseover = false
-                    if not sliding then
-                        slider.Color = library.theme["Object Background"]
-                    end
-                end)
-                
-                local function slide(input)
-                    local sizeX = (input.Position.X - slider.AbsolutePosition.X) / slider.AbsoluteSize.X
-                    local value = ((max - min) * sizeX) + min
-
-                    set(value)
-                end
-            
-                utility.connect(slider.InputBegan, function(input)
-                    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                        sliding = true
-                        slider.Color = utility.changecolor(library.theme["Object Background"], 6)
-                        slide(input)
-                    end
-                end)
-            
-                utility.connect(slider.InputEnded, function(input)
-                    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                        sliding = false
-                        slider.Color = mouseover and utility.changecolor(library.theme["Object Background"], 3) or library.theme["Object Background"]
-                    end
-                end)
-
-                utility.connect(fill.InputBegan, function(input)
-                    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                        sliding = true
-                        slider.Color = utility.changecolor(library.theme["Object Background"], 6)
-                        slide(input)
-                    end
-                end)
-            
-                utility.connect(fill.InputEnded, function(input)
-                    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                        sliding = false
-                        slider.Color = mouseover and utility.changecolor(library.theme["Object Background"], 3) or library.theme["Object Background"]
-                    end
-                end)
-            
-                utility.connect(services.InputService.InputChanged, function(input)
-                    if input.UserInputType == Enum.UserInputType.MouseMovement then
-                        if sliding then
-                            slide(input)
-                        end
-                    end
-                end)
-
-                flags[flag] = set
-
-                local slidertypes = utility.table({}, true)
-
-                function slidertypes:Set(value)
-                    set(value)
-                end
-
-                return slidertypes
+                return library.createslider(min, max, holder, text, default, float, flag, callback)
             end
 
             function sectiontypes:Dropdown(options)
@@ -2808,6 +3017,8 @@ function library:Load(options)
                 local default = options.default
                 local content = type(options.content) == "table" and options.content or {}
                 local max = options.max and (options.max > 1 and options.max) or nil
+                local scrollable = options.scrollable
+                local scrollingmax = options.scrollingmax or 10
                 local flag = options.flag or utility.nextflag()
                 local callback = options.callback or function() end
 
@@ -2903,17 +3114,16 @@ function library:Load(options)
                     Theme = "Object Background",
                     Size = UDim2.new(1, 0, 0, 0),
                     Position = UDim2.new(0, 0, 1, 6),
-                    ZIndex = 10,
+                    ZIndex = 12,
                     Parent = dropdown
                 })
 
                 utility.outline(contentframe, "Object Border")
 
-                
                 utility.create("Image", {
                     Size = UDim2.new(1, 0, 1, 0),
                     Transparency = 0.5,
-                    ZIndex = 11,
+                    ZIndex = 13,
                     Parent = contentframe,
                     Data = library.gradient
                 })
@@ -2925,6 +3135,10 @@ function library:Load(options)
                     Position = UDim2.new(0, 3, 0, 3),
                     Parent = contentframe
                 })
+
+                if scrollable then
+                    contentholder:MakeScrollable()
+                end
 
                 contentholder:AddListLayout(3)
 
@@ -2959,9 +3173,13 @@ function library:Load(options)
                 end)
 
                 local optioninstances = {}
+                local count = 0
+                local countindex = {}
                 
                 local function createoption(name)
                     optioninstances[name] = {}
+
+                    countindex[name] = count + 1
 
                     local button = utility.create("Square", {
                         Filled = true,
@@ -2969,7 +3187,7 @@ function library:Load(options)
                         Thickness = 0,
                         Theme = "Dropdown Option Background",
                         Size = UDim2.new(1, 0, 0, 16),
-                        ZIndex = 12,
+                        ZIndex = 14,
                         Parent = contentholder
                     })
 
@@ -2981,14 +3199,22 @@ function library:Load(options)
                         Size = 13,
                         Position = UDim2.new(0, 8, 0, 1),
                         Theme = "Disabled Text",
-                        ZIndex = 13,
+                        ZIndex = 15,
                         Outline = true,
                         Parent = button
                     })
 
                     optioninstances[name].text = title
 
-                    contentframe.Size = UDim2.new(1, 0, 0, contentholder.AbsoluteContentSize + 6)
+                    if scrollable then
+                        if count < scrollingmax then
+                            contentframe.Size = UDim2.new(1, 0, 0, contentholder.AbsoluteContentSize + 6)
+                        end
+                    else
+                        contentframe.Size = UDim2.new(1, 0, 0, contentholder.AbsoluteContentSize + 6)
+                    end
+
+                    count = count + 1
 
                     return button, title
                 end
@@ -3180,6 +3406,7 @@ function library:Load(options)
 
                 function dropdowntypes:Refresh(tbl)
                     content = table.clone(tbl)
+                    count = 0
 
                     for _, opt in next, optioninstances do
                         opt.button:Remove()
@@ -3210,8 +3437,15 @@ function library:Load(options)
 
                 function dropdowntypes:Remove(option)
                     if optioninstances[option] then
+                        count = count - 1
+
                         optioninstances[option].button:Remove()
-                        contentframe.Size = UDim2.new(1, 0, 0, contentholder.AbsoluteContentSize + 6)
+ 
+                        if scrollable then
+                            contentframe.Size = UDim2.new(1, 0, 0, math.clamp(contentholder.AbsoluteContentSize, 0, (scrollingmax * 16) + ((scrollingmax - 1) * 3)) + 6)
+                        else
+                            contentframe.Size = UDim2.new(1, 0, 0, contentholder.AbsoluteContentSize + 6)
+                        end
 
                         optioninstances[option] = nil
 
@@ -3260,10 +3494,12 @@ function library:Load(options)
                 local default = options.default or Color3.fromRGB(255, 255, 255)
                 local flag = options.flag or utility.nextflag()
                 local callback = options.callback or function() end
+                local defaultalpha = options.defaultalpha or 1
 
                 local holder = utility.create("Square", {
                     Transparency = 0,
                     Size = UDim2.new(1, 0, 0, 10),
+                    Position = UDim2.new(0, 0, 0, -1),
                     ZIndex = 7,
                     Parent = sectioncontent
                 })
@@ -3281,13 +3517,9 @@ function library:Load(options)
 
                 section.Size = UDim2.new(1, 0, 0, sectioncontent.AbsoluteContentSize + 28)
 
-                local colorpickertbl = {}
-                
-                local colorpickertypes, window = library.createcolorpicker(default, holder, 0, flag, callback, colorpickertbl)
-
-                table.insert(colorpickertbl, window)
-
                 local colorpickers = 0
+
+                local colorpickertypes = library.createcolorpicker(default, defaultalpha, holder, colorpickers, flag, callback)
 
                 function colorpickertypes:ColorPicker(options)
                     colorpickers = colorpickers + 1
@@ -3296,12 +3528,9 @@ function library:Load(options)
                     local default = options.default or Color3.fromRGB(255, 255, 255)
                     local flag = options.flag or utility.nextflag()
                     local callback = options.callback or function() end
+                    local defaultalpha = options.defaultalpha or 1
 
-                    local types, window = library.createcolorpicker(default, holder, colorpickers, flag, callback, colorpickertbl)
-
-                    table.insert(colorpickertbl, window)
-
-                    return types
+                    return library.createcolorpicker(default, defaultalpha, holder, colorpickers, flag, callback)
                 end
 
                 return colorpickertypes
@@ -3318,6 +3547,7 @@ function library:Load(options)
                 local holder = utility.create("Square", {
                     Transparency = 0,
                     Size = UDim2.new(1, 0, 0, 10),
+                    Position = UDim2.new(0, 0, 0, -1),
                     ZIndex = 7,
                     Parent = sectioncontent
                 })
@@ -3326,7 +3556,6 @@ function library:Load(options)
                     Text = name,
                     Font = Drawing.Fonts.Plex,
                     Size = 13,
-                    Position = UDim2.new(0, 0, 0, -2),
                     Theme = "Text",
                     ZIndex = 7,
                     Outline = true,
@@ -3335,7 +3564,7 @@ function library:Load(options)
 
                 section.Size = UDim2.new(1, 0, 0, sectioncontent.AbsoluteContentSize + 28)
 
-                return library.createkeybind(default, holder, blacklist, flag, callback)
+                return library.createkeybind(default, holder, blacklist, flag, callback, -1)
             end
 
             return sectiontypes
