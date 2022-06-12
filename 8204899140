@@ -1,5 +1,3 @@
-
-_G.wl_key = "547fc387b2409624ab87bdaa3c5387ea0b1d727b"
 local GameName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
 if GameName:find("Auto 3s Football") then
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/Auto3s"))()
