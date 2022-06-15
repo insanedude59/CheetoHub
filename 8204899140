@@ -4,7 +4,7 @@ if GameName:find("Auto 3s Football") then
 	print("auto 3s")
 end
 
-if GameName:find("Fusion") and not GameName:find("Practice") and not GameName:find("Play Now") then
+if not GameName:find("Auto 3s") and not GameName:find("Play Now") and not GameName:find("Practice") then
     loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/FF2"))()
     print("ff2")
 end
