@@ -2,14 +2,10 @@ local GameName = game:GetService("MarketplaceService"):GetProductInfo(game.Place
 if GameName:find("Auto 3s Football") then
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/Auto3s"))()
 	print("auto 3s")
-end
-
-if workspace:FindFirstChild("LineDown") then
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/FF2"))()
-    print("ff2")
-end
-
-if GameName:find("Practice") or GameName:find("Play Now") then
+elseif GameName:find("Practice") or GameName:find("Play Now") then
 loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/RBWorld4"))()
 print("rb world")
+else
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/FF2"))()
+    print("ff2")
 end
