@@ -1,5 +1,6 @@
 local GameName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
 loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/testt"))()
+if setfpscap then setfpscap(5000) end
 
 if GameName:find("Auto 3s Football") then
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/Auto3s"))()
