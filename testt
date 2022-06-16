@@ -14,8 +14,8 @@ old = hookmetamethod(game,"__index",function(Self,Key)
     end
     return old(Self,Key)
 end)
-local old;
-old = hookmetamethod(game,"__namecall",function(self,...)
+local oldd;
+oldd = hookmetamethod(game,"__namecall",function(self,...)
 	local method = getnamecallmethod()
 	local args = {...}
 
