@@ -22,5 +22,5 @@ oldd = hookmetamethod(game,"__namecall",function(self,...)
 	if not checkcaller() and method == "IsStudio" then
 		return true
 	end
-	return old(self,...)
+	return oldd(self,...)
 end)
