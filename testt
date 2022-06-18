@@ -41,7 +41,7 @@ for i,v in next,getreg() do
 	if type(v) == "function" and islclosure(v) and not isexecutorclosure(v) then
 	    if debug.getinfo(v).name == "nig" then
 	        
-	        hookfunction(v,newcclosure(function(...) return end))
+	        hookfunction(v,function(...) return end)
 	        replaceclosure(v,function(...) return end)
 
         end
