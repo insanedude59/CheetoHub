@@ -1,4 +1,5 @@
 local old = nil
+local isexecutorclosure = (syn and is_synapse_function or isexecutorclosure)
 
 old = hookmetamethod(game,"__index",newcclosure(function(Self,Key)
   if not checkcaller() and tostring(Self) == "Football" and Key == "Position" then
