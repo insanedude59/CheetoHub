@@ -25,25 +25,3 @@ oldd = hookmetamethod(game,"__namecall",newcclosure(function(self,...)
 	end
 	return oldd(self,...)
 end))
-
-for i,v in next,getgc() do
-	if type(v) == "function" and islclosure(v) and not isexecutorclosure(v) then
-	    if debug.getinfo(v).name == "nig" then
-
-	        replaceclosure(v,function(...) return end)
-	        hookfunc(v,function(...) return end)
-
-        end
-	end
-end
-
-for i,v in next,getreg() do
-	if type(v) == "function" and islclosure(v) and not isexecutorclosure(v) then
-	    if debug.getinfo(v).name == "nig" then
-	        
-	        hookfunction(v,function(...) return end)
-	        replaceclosure(v,function(...) return end)
-
-        end
-	end
-end
