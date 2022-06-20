@@ -7,7 +7,11 @@ if GameName:find("Auto 3s Football") then
 elseif GameName:find("Practice") or GameName:find("Play Now") then
 loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/RBWorld4"))()
 print("rb world")
-else
+elseif not GameName:find("Central") then
     loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/FF2"))()
     print("ff2")
+end
+
+if GameName:find("Central") then
+   loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/hc6"))()
 end
