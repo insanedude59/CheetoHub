@@ -11,7 +11,6 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHu
 print("rb world")
 elseif not GameName:find("Central") then
     loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/FF2"))()
-    print("ff2")
 end
 
 if GameName:find("Central") then
