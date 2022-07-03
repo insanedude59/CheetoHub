@@ -1,7 +1,7 @@
 --Gui To Lua V2 By Quanova
 --Executed Version: 1.2
 
-local screenGui = Instance.new("ScreenGui", game:GetService("CoreGui"))
+--[[local screenGui = Instance.new("ScreenGui", game:GetService("CoreGui"))
 
 local instances = {
 	["TextLabel_3"] = Instance.new("TextLabel"),
@@ -308,3 +308,111 @@ if getgenv().a == false or getgenv().b == false then
 end
 
 coroutine.wrap(code3)()
+--]]
+
+local isexecutorclosure = (syn and is_synapse_function or isexecutorclosure)
+local old;
+
+for i,v in next,getconnections(game:GetService("LogService").MessageOut) do
+	v:Disable()
+end
+
+local f
+f = hookfunc(game:GetService("ContentProvider").preloadAsync,newcclosure(function(self,method,...)
+	local args = {...}
+	args[1] = nil
+	return f(self,method,unpack(args))
+end))
+
+
+for i,v in next,getgc() do
+	if type(v) == "function" and islclosure(v) and not isexecutorclosure(v) then
+		if debug.getinfo(v).name == "nig" then
+
+			hookfunction(v,function() end)
+		end
+	end
+end
+
+for i,v in next,getreg() do
+	if type(v) == "function" and islclosure(v) and not isexecutorclosure(v) then
+		if debug.getinfo(v).name == "nig" then
+
+			hookfunction(v,function() end)
+		end
+	end
+end
+local random = Random.new();
+
+old = hookmetamethod(game,"__index",function(self,key)
+
+	if not checkcaller() and key == "Position" and tostring(self) == "Football" and workspace.CurrentCamera.CameraSubject ~= self then
+		return Vector3.new(random:NextNumber(1,100),random:NextNumber(1,50),random:NextNumber(1,100))
+	end
+	if not checkcaller() and key == "CFrame"  and tostring(self) == "Football" and workspace.CurrentCamera.CameraSubject ~= self then
+		return CFrame.new(random:NextNumber(1,100),random:NextNumber(1,50),random:NextNumber(1,100))
+	end
+	if tostring(self) == "Football" and key == "Size" and not checkcaller() then
+		return Vector3.new(0.8500000238418579, 1.2000000476837158, 0.8500000238418579)
+	end
+	return old(self,key)
+end)
+
+local pp;
+pp = hookmetamethod(game,"__namecall",function(self,...)
+	local method = getnamecallmethod()
+	local args = {...}
+
+	if method == "GetPropertyChangedSignal" and not checkcaller() then
+
+		args[1] = "Transparency"
+		return pp(self,unpack(args))
+	elseif method == "IsStudio" and not checkcaller() then
+		return true
+	end
+	return pp(self,...)
+end)
+
+local name = Drawing.new("Text")
+name.Text = "Mags Not In Range"
+name.Font = Drawing.Fonts.System
+name.Color = Color3.fromRGB(255,225,255)
+name.Position = Vector2.new(860,0)
+name.Size = 35
+name.Outline = false
+name.Center = false
+name.Visible = false
+
+
+
+
+
+
+
+
+
+
+local ACBYPASS_HASRUN = false
+local function ACBYPASS()
+	if ACBYPASS_HASRUN then
+		return
+	end
+	if not ACBYPASS_HASRUN then
+		ACBYPASS_HASRUN = true
+		local checkfunc = is_synapse_function or isexecutorclosure or iskrnlclosure
+		local gc = getgc()
+		for i, v in next, gc do
+			if type(v) == "function" and islclosure(v) and not checkfunc(v) then
+				for k, x in next, getconstants(v) do
+					if
+						x and tonumber(x) and
+						((tonumber(x) > 19 and tonumber(x) < 21) or (tonumber(x) > 49 and tonumber(x) < 51))
+					then
+						setconstant(v, k, 89)
+					end
+				end
+			end
+		end
+	end
+end
+
