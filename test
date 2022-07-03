@@ -275,9 +275,10 @@ local isexecutorclosure = (syn and is_synapse_function or isexecutorclosure)
 local old;
 
 for i,v in next,getconnections(game:GetService("LogService").MessageOut) do
-	v:Disable()
+    if not isexecutorclosure(v.Function) then
+	    hookfunc(v,function() end);
+	end
 end
-
 local f
 f = hookfunc(game:GetService("ContentProvider").preloadAsync,newcclosure(function(self,method,...)
 	local args = {...}
@@ -377,3 +378,4 @@ local function ACBYPASS()
 	end
 end
 
+print("loaded bypass.")
