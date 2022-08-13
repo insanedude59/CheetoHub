@@ -1,4 +1,9 @@
 local GameName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
+
+hookfunction(game:GetService("LogService").GetLogHistory, function()  return {} end)
+for i,v in next, getconnections(game:GetService("ScriptContext").Error) do
+	v:Disable()
+end
 repeat task.wait() until game:IsLoaded();
 _G.start = os.clock();
 
