@@ -1,4 +1,3 @@
-local GameName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
 
 hookfunction(game:GetService("LogService").GetLogHistory, function()  return {} end)
 for i,v in next, getconnections(game:GetService("ScriptContext").Error) do
@@ -7,16 +6,16 @@ end
 repeat task.wait() until game:IsLoaded();
 _G.start = os.clock();
 
-if GameName:find("Auto 3s Football") then
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/Auto3s"))()
-	print("auto 3s")
-elseif GameName:find("Practice") or GameName:find("Play Now") then
-loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/RBWorld4"))()
-print("rb world")
-elseif not GameName:find("Central") then
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/FF2"))()
-end
+local ids = {
+    ["8204899140"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/FF2",
+    ["2249486280"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/Auto3s" ,
+    ["3057370181"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/RBWorld4",
+    ["3032132418"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/hcbb"
+}
 
-if GameName:find("Central") then
-   loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/hc6"))()
+
+for i,v in pairs(ids) do
+    if tostring(game.GameId) == i then
+        loadstring(game:HttpGet(v))();
+    end
 end
