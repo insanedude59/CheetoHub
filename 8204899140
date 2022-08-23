@@ -10,7 +10,6 @@ local ids = {
     ["3150475059"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/FF2",
     ["2249486280"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/Auto3s" ,
     ["3057370181"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/RBWorld4",
-    ["3032132418"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/hcbb",
     ["2766122154"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/footballduels"
 }
 
