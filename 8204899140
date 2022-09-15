@@ -5,11 +5,12 @@ local ids = {
     ["3150475059"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/FF2",
     ["2249486280"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/Auto3s" ,
     ["3057370181"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/RBWorld4",
-    ["2766122154"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/footballduels"
+    ["2766122154"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/footballduels",
+    ["423435674"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/FBU"
 }
 
 
-for i,v in pairs(ids) do
+for i,v in next, ids do
     if tostring(game.GameId) == i or tostring(game.PlaceId) == i then
         loadstring(game:HttpGet(v))();
     end
