@@ -18,4 +18,4 @@ for i,v in next, ids do
     if tostring(game.GameId) == i or tostring(game.PlaceId) == i then
         loadstring(game:HttpGet(v))();
     end
-end8204899140
+end
