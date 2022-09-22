@@ -3,6 +3,9 @@ local function a(...)
 end
 a()
 repeat task.wait() until game:IsLoaded();
+
+getgenv().loaded_anti = true;
+
 _G.start = os.clock();
 
 local ids = {
