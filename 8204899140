@@ -1,17 +1,7 @@
 
 
 repeat task.wait() until game:IsLoaded();
-loadstring([[
-local isexecutorclosure = is_synapse_function or isexecutorclosure
-for i,v in next, getgc() do
-	if type(v) == "function" and islclosure(v) and not isexecutorclosure(v) then
-        local const = table.find(getconstants(v), 4000001) 
-        
-		if const then
-			setconstant(v, const, 1)
-		end
-	end
-end]])()
+
 
 
 
