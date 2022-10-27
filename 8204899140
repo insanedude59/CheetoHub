@@ -167,3 +167,10 @@ for i,v in next, ids do
 	break
     end
 end
+
+if not getgenv().Started then
+   task.wait(1)
+   textLabel2.Text = "The game you are in is not supported."
+   task.wait(2)
+   getgenv().Started = true
+end
