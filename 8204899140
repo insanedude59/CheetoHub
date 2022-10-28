@@ -48,7 +48,7 @@ textLabel1.TextTransparency = 1
 textLabel1.TextXAlignment = Enum.TextXAlignment.Left
 textLabel1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 textLabel1.BackgroundTransparency = 1
-textLabel1.Position = UDim2.fromScale(0.0392, 0.229)
+textLabel1.Position = UDim2.fromScale(0.0392, 0.185)
 textLabel1.Size = UDim2.fromOffset(110, 21)
 textLabel1.Parent = frame
 
