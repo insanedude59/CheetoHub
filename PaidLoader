@@ -1,4 +1,3 @@
-
 loadstring([[
     local isexecutorclosure = is_synapse_function or isexecutorclosure;
     
@@ -7,7 +6,7 @@ loadstring([[
             local const = table.find(getconstants(v), 4000001);
             
             if const then
-                setcontant(v, const, 1);
+                setconstant(v, const, 1);
             end
         end
      end
