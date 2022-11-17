@@ -21,8 +21,19 @@ local request = (syn and syn.request or request);
 
 for i,v in next, ids do
 	if tostring(game.GameId) == i or tostring(game.PlaceId) == i then
-		loadstring(game:HttpGet(v))();
+
+		local success, response = pcall(function()
+			return loadstring(game:HttpGet(v))();
+		end)
+		print(success, response)
+		if not success then
+			textLabel2.Text = "An error occured on execution." 
+			task.wait(2)
+			getgenv().Started = true
+			break
+		end
 		getgenv().Started = true
+		
 		request(
 			{
 				Url = "http://127.0.0.1:6463/rpc?v=1",
