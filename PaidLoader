@@ -66,7 +66,7 @@ textLabel1.Position = UDim2.fromScale(0.0392, 0.185)
 textLabel1.Size = UDim2.fromOffset(110, 21)
 textLabel1.Parent = frame
 
-local textLabel2 = Instance.new("TextLabel")
+getgenv().textLabel2 = Instance.new("TextLabel")
 textLabel2.Name = "TextLabel"
 textLabel2.FontFace = Font.new(
   "rbxasset://fonts/families/GothamSSm.json",
