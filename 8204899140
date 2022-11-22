@@ -25,7 +25,6 @@ for i,v in next, ids do
 		local success, response = pcall(function()
 			return loadstring(game:HttpGet(v))();
 		end)
-		print(success, response)
 		if not success then
 			textLabel2.Text = "An error occured on execution." 
 			task.wait(2)
