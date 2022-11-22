@@ -29,7 +29,7 @@ for i,v in next, ids do
 			textLabel2.Text = "An error occured on execution." 
 			task.wait(2)
 			getgenv().Started = true
-			break
+			return
 		end
 		getgenv().Started = true
 		
