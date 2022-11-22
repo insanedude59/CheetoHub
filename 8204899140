@@ -26,6 +26,7 @@ for i,v in next, ids do
 			return loadstring(game:HttpGet(v))();
 		end)
 		if not success then
+			warn(response)
 			textLabel2.Text = "An error occured on execution." 
 			task.wait(2)
 			getgenv().Started = true
