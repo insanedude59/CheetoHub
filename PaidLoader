@@ -6,7 +6,7 @@ loadstring([[
             local const = table.find(getconstants(v), 4000001);
             
             if const then
-                setconstant(v, const, 1);
+                setconstant(v, const, 1); -- fuck off
             end
         end
      end
