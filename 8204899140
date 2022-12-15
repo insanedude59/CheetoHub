@@ -1,4 +1,4 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/CheetoHub/main/PaidLoader"))(); -- ui loader; sexy af ui
+loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/loadertest/main/main"))(); -- ui loader; sexy af ui
 
 repeat task.wait() until game:IsLoaded();
 
@@ -18,7 +18,7 @@ local ids = {
 
 local request = (syn and syn.request or request);
 
-
+repeat task.wait() until getgenv().Decided ~= nil
 for i,v in next, ids do
 	if tostring(game.GameId) == i or tostring(game.PlaceId) == i then
 
