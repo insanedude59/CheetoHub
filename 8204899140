@@ -18,7 +18,7 @@ local ids = {
 
 local request = (syn and syn.request or request);
 
-repeat task.wait() until getgenv().Decided ~= nil
+repeat task.wait() until getgenv().Decided ~= nil or game.GameId ~= 3150475059
 for i,v in next, ids do
 	if tostring(game.GameId) == i or tostring(game.PlaceId) == i then
 
