@@ -16,6 +16,10 @@ local ids = {
 	["2287245386"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/Hoopz";
 }
 
+if game.GameId ~= 3150475059 then
+   getgenv().Decided = true
+end
+
 local request = (syn and syn.request or request);
 
 repeat task.wait() until getgenv().Decided ~= nil or game.GameId ~= 3150475059
