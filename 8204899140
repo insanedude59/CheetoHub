@@ -15,6 +15,8 @@ local ids = {
 	["423435674"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/FBU",
 	["2287245386"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/Hoopz";
 	["3032132418"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/hcbb";
+	["2730121456"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/HC6";
+	["111958650"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/Arsenal";
 }
 
 if game.GameId ~= 3150475059 then
