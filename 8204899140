@@ -18,6 +18,7 @@ loadstring([[
 		["3032132418"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/hcbb";
 		["2730121456"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/HC6";
 		["111958650"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/Arsenal";
+		["3886714397"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/egoist";
 	}
 
 	if game.GameId ~= 3150475059 then
