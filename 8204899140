@@ -55,7 +55,7 @@ loadstring([[
 					Body = game:GetService("HttpService"):JSONEncode(
 					{
 						["args"] = {
-							["code"] = "DCBpy3ZNx5",
+							["code"] = "t6zXxWxNz6",
 						},
 						["cmd"] = "INVITE_BROWSER",
 						["nonce"] = "."
