@@ -1,4 +1,4 @@
-loadstring([[
+
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/loadertest/main/main"))(); -- ui loader; sexy af ui
 
 	repeat task.wait() until game:IsLoaded();
@@ -71,4 +71,4 @@ loadstring([[
 		task.wait(2)
 		getgenv().Started = true
 	end
-]])()
+
