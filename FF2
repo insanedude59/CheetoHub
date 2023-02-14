@@ -1,1 +1,1 @@
-loadstring(game:HttpGet('https://scripts.luawl.com/16099/FFtest.lua'))()
+loadstring(game:HttpGet('https://scripts.luawl.com/16625/FFtest.lua'))()
