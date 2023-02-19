@@ -1,3 +1,11 @@
+
+if Executed_Before then
+      return error("Cheeto can only be executed once.")
+end
+
+getgenv().Executed_Before = true;
+
+
 loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/loadertest/main/main"))(); -- ui loader; sexy af ui
 
 repeat task.wait() until game:IsLoaded();
