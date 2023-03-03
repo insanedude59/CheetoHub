@@ -28,6 +28,7 @@ local ids = {
 	["3886714397"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/egoist";
 	["1168263273"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/BadBusiness";
 	["1390601379"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/CombatWarriors";
+	["1180269832"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/arcane%20odyssey.lua";
 }
 
 if game.GameId ~= 3150475059 then
