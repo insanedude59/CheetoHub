@@ -1,4 +1,3 @@
-
 if Executed_Before then
       return error("Cheeto can only be executed once.")
 end
@@ -6,7 +5,7 @@ end
 getgenv().Executed_Before = true;
 
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/loadertest/main/main"))(); -- ui loader; sexy af ui
+loadstring(game:HttpGet("https://cheetohub.com/scripts/loadertest.lua"))(); -- ui loader; sexy af ui
 
 repeat task.wait() until game:IsLoaded();
 
@@ -16,19 +15,19 @@ repeat task.wait() until game:IsLoaded();
 _G.start = tick();
 
 local ids = {
-	["3150475059"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/FF2",
-	["2249486280"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/Auto3s" ,
-	["3057370181"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/RBWorld4",
-	["2766122154"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/footballduels",
-	["423435674"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/FBU",
-	["2287245386"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/Hoopz";
-	["3032132418"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/hcbb";
-	["2730121456"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/HC6";
-	["111958650"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/Arsenal";
-	["3886714397"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/egoist";
-	["1168263273"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/BadBusiness";
-	["1390601379"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/CombatWarriors";
-	["1180269832"] = "https://raw.githubusercontent.com/insanedude59/CheetoHub/main/arcane%20odyssey.lua";
+	["3150475059"] = "https://cheetohub.com/scripts/FF2.lua",
+	["2249486280"] = "https://cheetohub.com/scripts/Auto3s.lua" ,
+	["3057370181"] = "https://cheetohub.com/scripts/RBWorld4.lua",
+	["2766122154"] = "https://cheetohub.com/scripts/footballduels.lua",
+	["423435674"] = "https://cheetohub.com/scripts/FBU.lua",
+	["2287245386"] = "https://cheetohub.com/scripts/Hoopz.lua";
+	["3032132418"] = "https://cheetohub.com/scripts/hcbb.lua";
+	["2730121456"] = "https://cheetohub.com/scripts/HC6.lua";
+	["111958650"] = "https://cheetohub.com/scripts/Arsenal.lua";
+	["3886714397"] = "https://cheetohub.com/scripts/egoist.lua";
+	["1168263273"] = "https://cheetohub.com/scripts/BadBusiness.lua";
+	["1390601379"] = "https://cheetohub.com/scripts/CombatWarriors.lua";
+	["1180269832"] = "https://cheetohub.com/scripts/arcaneodyssey.lua";
 }
 
 if game.GameId ~= 3150475059 then
